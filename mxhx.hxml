@@ -1,0 +1,6 @@
+--interp
+-cp src
+-cp src-dev
+-lib mxhx-parser
+--macro mxhx.macros.MXHXComponent.registerManifest("https://ns.example.com/mxhx", "src-dev/dev-manifest.xml")
+--main Main
