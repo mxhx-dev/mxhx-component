@@ -6,3 +6,4 @@ target/
 .settings/
 .classpath
 node_modules/
+**/dump/decoding_error.txt
