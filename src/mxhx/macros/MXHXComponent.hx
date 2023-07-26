@@ -1163,8 +1163,22 @@ class MXHXComponent {
 				startIndex--;
 			} else {
 				// valid start of binding if previous character is not a backslash
-				var bindingEndIndex = text.indexOf("}", bindingStartIndex + 1);
+				var bindingEndIndex = -1;
+				var stack = 1;
+				for (i in (bindingStartIndex + 1)...text.length) {
+					var char = text.charAt(i);
+					if (char == "{") {
+						stack++;
+					} else if (char == "}") {
+						stack--;
+						if (stack == 0) {
+							bindingEndIndex = i;
+							break;
+						}
+					}
+				}
 				if (bindingEndIndex != -1) {
+					var bindingContent = text.substring(bindingStartIndex + 1, bindingEndIndex);
 					errorBindingNotSupported(sourceLocation);
 					return null;
 				}
