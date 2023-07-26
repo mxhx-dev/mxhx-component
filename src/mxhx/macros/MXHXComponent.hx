@@ -587,8 +587,13 @@ class MXHXComponent {
 					initExprs.push(addEventExpr);
 				}
 			case FieldSymbol(f, t):
-				var attrValue = handleTextContent(attrData.rawValue, attrData);
-				var valueExpr = createValueExprForFieldAttribute(f, attrValue, attrData);
+				var valueExpr:Expr = null;
+				if (languageUri == LANGUAGE_URI_BASIC_2022) {
+					var attrValue = handleTextContentAsText(attrData.rawValue, attrData);
+					valueExpr = createValueExprForFieldAttribute(f, attrValue, attrData);
+				} else {
+					valueExpr = handleTextContentAsExpr(attrData.rawValue, attrData.valueStart, attrData);
+				}
 				var fieldName = f.name;
 				var setExpr = macro $i{targetIdentifier}.$fieldName = ${valueExpr};
 				initExprs.push(setExpr);
@@ -1094,7 +1099,7 @@ class MXHXComponent {
 				var textData:IMXHXTextData = cast child;
 				switch (textData.textType) {
 					case Text:
-						var content = handleTextContent(textData.content, textData);
+						var content = handleTextContentAsText(textData.content, textData);
 						if (pendingText == null) {
 							pendingText = "";
 						}
@@ -1149,7 +1154,70 @@ class MXHXComponent {
 		return initExpr;
 	}
 
-	private static function handleTextContent(text:String, sourceLocation:IMXHXSourceLocation):String {
+	private static function handleTextContentAsExpr(text:String, textStartOffset:Int, sourceLocation:IMXHXSourceLocation):Expr {
+		var expr:Expr = null;
+		var startIndex = 0;
+		var pendingText:String = "";
+		do {
+			var bindingStartIndex = text.indexOf("{", startIndex);
+			if (bindingStartIndex == -1) {
+				pendingText += text.substr(startIndex);
+				if (pendingText.length > 0) {
+					if (expr == null) {
+						expr = macro $v{pendingText};
+					} else {
+						expr = macro $expr + $v{pendingText};
+					}
+					pendingText = "";
+				}
+				break;
+			}
+			pendingText += text.substr(0, bindingStartIndex);
+			startIndex = bindingStartIndex + 1;
+			if (bindingStartIndex > 0 && text.charAt(bindingStartIndex - 1) == "\\") {
+				// the { character is escaped, so it's not binding
+				text = text.substr(0, bindingStartIndex - 1) + text.substr(bindingStartIndex);
+				startIndex--;
+			} else {
+				// valid start of binding if previous character is not a backslash
+				var bindingEndIndex = -1;
+				var stack = 1;
+				for (i in (bindingStartIndex + 1)...text.length) {
+					var char = text.charAt(i);
+					if (char == "{") {
+						stack++;
+					} else if (char == "}") {
+						stack--;
+						if (stack == 0) {
+							bindingEndIndex = i;
+							break;
+						}
+					}
+				}
+				if (bindingEndIndex != -1) {
+					if (pendingText.length > 0) {
+						if (expr == null) {
+							expr = macro $v{pendingText};
+						} else {
+							expr = macro $expr + $v{pendingText};
+						}
+						pendingText = "";
+					}
+					var bindingContent = text.substring(bindingStartIndex + 1, bindingEndIndex);
+					var bindingExpr = Context.parse(bindingContent, sourceLocationToContextPosition(sourceLocation));
+					if (expr == null) {
+						expr = macro $bindingExpr;
+					} else {
+						expr = macro $expr + $bindingExpr;
+					}
+					startIndex = bindingEndIndex + 1;
+				}
+			}
+		} while (true);
+		return expr;
+	}
+
+	private static function handleTextContentAsText(text:String, sourceLocation:IMXHXSourceLocation):String {
 		var startIndex = 0;
 		do {
 			var bindingStartIndex = text.indexOf("{", startIndex);
