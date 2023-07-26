@@ -10,8 +10,8 @@ class MXHXComponentPropertyTest extends Test {
 	public function testAnyChildElement():Void {
 		var result = MXHXComponent.withMarkup('
 			<tests:TestPropertiesClass
-				xmlns:mx="https://ns.mxhx.dev/2022/basic"
-				xmlns:tests="https://ns.mxhx.dev/2022/tests">
+				xmlns:mx="https://ns.mxhx.dev/2024/basic"
+				xmlns:tests="https://ns.mxhx.dev/2024/tests">
 				<tests:any>
 					<mx:Any float="123.4" boolean="true" string="hello">
 						<mx:object>
@@ -38,8 +38,8 @@ class MXHXComponentPropertyTest extends Test {
 	public function testStrictChildElement():Void {
 		var result = MXHXComponent.withMarkup('
 			<tests:TestPropertiesClass
-				xmlns:mx="https://ns.mxhx.dev/2022/basic"
-				xmlns:tests="https://ns.mxhx.dev/2022/tests">
+				xmlns:mx="https://ns.mxhx.dev/2024/basic"
+				xmlns:tests="https://ns.mxhx.dev/2024/tests">
 				<tests:strict>
 					<tests:TestPropertiesClass
 						boolean="true"
@@ -84,8 +84,8 @@ class MXHXComponentPropertyTest extends Test {
 	public function testArrayChildElement():Void {
 		var result = MXHXComponent.withMarkup('
 			<tests:TestPropertiesClass
-				xmlns:mx="https://ns.mxhx.dev/2022/basic"
-				xmlns:tests="https://ns.mxhx.dev/2022/tests">
+				xmlns:mx="https://ns.mxhx.dev/2024/basic"
+				xmlns:tests="https://ns.mxhx.dev/2024/tests">
 				<tests:array>
 					<mx:String>one</mx:String>
 					<mx:String>two</mx:String>
@@ -105,8 +105,8 @@ class MXHXComponentPropertyTest extends Test {
 	public function testArrayChildElementRedundant():Void {
 		var result = MXHXComponent.withMarkup('
 			<tests:TestPropertiesClass
-				xmlns:mx="https://ns.mxhx.dev/2022/basic"
-				xmlns:tests="https://ns.mxhx.dev/2022/tests">
+				xmlns:mx="https://ns.mxhx.dev/2024/basic"
+				xmlns:tests="https://ns.mxhx.dev/2024/tests">
 				<tests:array>
 					<mx:Array>
 						<mx:String>one</mx:String>
@@ -128,8 +128,8 @@ class MXHXComponentPropertyTest extends Test {
 	public function testArrayChildElementRedundantEmpty():Void {
 		var result = MXHXComponent.withMarkup('
 			<tests:TestPropertiesClass
-				xmlns:mx="https://ns.mxhx.dev/2022/basic"
-				xmlns:tests="https://ns.mxhx.dev/2022/tests">
+				xmlns:mx="https://ns.mxhx.dev/2024/basic"
+				xmlns:tests="https://ns.mxhx.dev/2024/tests">
 				<tests:array>
 					<mx:Array></mx:Array>
 				</tests:array>
@@ -144,8 +144,8 @@ class MXHXComponentPropertyTest extends Test {
 	public function testArrayChildElementRedundantEmptyExtraWhitespace():Void {
 		var result = MXHXComponent.withMarkup('
 			<tests:TestPropertiesClass
-				xmlns:mx="https://ns.mxhx.dev/2022/basic"
-				xmlns:tests="https://ns.mxhx.dev/2022/tests">
+				xmlns:mx="https://ns.mxhx.dev/2024/basic"
+				xmlns:tests="https://ns.mxhx.dev/2024/tests">
 				<tests:array>
 					<mx:Array>
 					</mx:Array>
@@ -161,8 +161,8 @@ class MXHXComponentPropertyTest extends Test {
 	public function testBoolAttribute():Void {
 		var result = MXHXComponent.withMarkup('
 			<tests:TestPropertiesClass
-				xmlns:mx="https://ns.mxhx.dev/2022/basic"
-				xmlns:tests="https://ns.mxhx.dev/2022/tests"
+				xmlns:mx="https://ns.mxhx.dev/2024/basic"
+				xmlns:tests="https://ns.mxhx.dev/2024/tests"
 				boolean="true"/>
 		');
 		Assert.notNull(result);
@@ -173,8 +173,8 @@ class MXHXComponentPropertyTest extends Test {
 	public function testBoolChildElement():Void {
 		var result = MXHXComponent.withMarkup('
 			<tests:TestPropertiesClass
-				xmlns:mx="https://ns.mxhx.dev/2022/basic"
-				xmlns:tests="https://ns.mxhx.dev/2022/tests">
+				xmlns:mx="https://ns.mxhx.dev/2024/basic"
+				xmlns:tests="https://ns.mxhx.dev/2024/tests">
 				<tests:boolean>true</tests:boolean>
 			</tests:TestPropertiesClass>
 		');
@@ -186,8 +186,8 @@ class MXHXComponentPropertyTest extends Test {
 	public function testBoolChildElementCData():Void {
 		var result = MXHXComponent.withMarkup('
 			<tests:TestPropertiesClass
-				xmlns:mx="https://ns.mxhx.dev/2022/basic"
-				xmlns:tests="https://ns.mxhx.dev/2022/tests">
+				xmlns:mx="https://ns.mxhx.dev/2024/basic"
+				xmlns:tests="https://ns.mxhx.dev/2024/tests">
 				<tests:boolean><![CDATA[true]]></tests:boolean>
 			</tests:TestPropertiesClass>
 		');
@@ -199,8 +199,8 @@ class MXHXComponentPropertyTest extends Test {
 	public function testBoolChildElementRedundant():Void {
 		var result = MXHXComponent.withMarkup('
 			<tests:TestPropertiesClass
-				xmlns:mx="https://ns.mxhx.dev/2022/basic"
-				xmlns:tests="https://ns.mxhx.dev/2022/tests">
+				xmlns:mx="https://ns.mxhx.dev/2024/basic"
+				xmlns:tests="https://ns.mxhx.dev/2024/tests">
 				<tests:boolean><mx:Bool>true</mx:Bool></tests:boolean>
 			</tests:TestPropertiesClass>
 		');
@@ -212,8 +212,8 @@ class MXHXComponentPropertyTest extends Test {
 	public function testBoolChildElementRedundantEmpty():Void {
 		var result = MXHXComponent.withMarkup('
 			<tests:TestPropertiesClass
-				xmlns:mx="https://ns.mxhx.dev/2022/basic"
-				xmlns:tests="https://ns.mxhx.dev/2022/tests">
+				xmlns:mx="https://ns.mxhx.dev/2024/basic"
+				xmlns:tests="https://ns.mxhx.dev/2024/tests">
 				<tests:boolean><mx:Bool></mx:Bool></tests:boolean>
 			</tests:TestPropertiesClass>
 		');
@@ -225,8 +225,8 @@ class MXHXComponentPropertyTest extends Test {
 	public function testBoolChildElementRedundantEmptyExtraWhitespace():Void {
 		var result = MXHXComponent.withMarkup('
 			<tests:TestPropertiesClass
-				xmlns:mx="https://ns.mxhx.dev/2022/basic"
-				xmlns:tests="https://ns.mxhx.dev/2022/tests">
+				xmlns:mx="https://ns.mxhx.dev/2024/basic"
+				xmlns:tests="https://ns.mxhx.dev/2024/tests">
 				<tests:boolean>
 					<mx:Bool>
 					</mx:Bool>
@@ -241,8 +241,8 @@ class MXHXComponentPropertyTest extends Test {
 	public function testClassAttribute():Void {
 		var result = MXHXComponent.withMarkup('
 			<tests:TestPropertiesClass
-				xmlns:mx="https://ns.mxhx.dev/2022/basic"
-				xmlns:tests="https://ns.mxhx.dev/2022/tests"
+				xmlns:mx="https://ns.mxhx.dev/2024/basic"
+				xmlns:tests="https://ns.mxhx.dev/2024/tests"
 				type="fixtures.TestClass1"/>
 		');
 		Assert.notNull(result);
@@ -253,8 +253,8 @@ class MXHXComponentPropertyTest extends Test {
 	public function testClassChildElement():Void {
 		var result = MXHXComponent.withMarkup('
 			<tests:TestPropertiesClass
-				xmlns:mx="https://ns.mxhx.dev/2022/basic"
-				xmlns:tests="https://ns.mxhx.dev/2022/tests">
+				xmlns:mx="https://ns.mxhx.dev/2024/basic"
+				xmlns:tests="https://ns.mxhx.dev/2024/tests">
 				<tests:type>fixtures.TestClass1</tests:type>
 			</tests:TestPropertiesClass>
 		');
@@ -266,8 +266,8 @@ class MXHXComponentPropertyTest extends Test {
 	public function testClassChildElementCData():Void {
 		var result = MXHXComponent.withMarkup('
 			<tests:TestPropertiesClass
-				xmlns:mx="https://ns.mxhx.dev/2022/basic"
-				xmlns:tests="https://ns.mxhx.dev/2022/tests">
+				xmlns:mx="https://ns.mxhx.dev/2024/basic"
+				xmlns:tests="https://ns.mxhx.dev/2024/tests">
 				<tests:type><![CDATA[fixtures.TestClass1]]></tests:type>
 			</tests:TestPropertiesClass>
 		');
@@ -279,8 +279,8 @@ class MXHXComponentPropertyTest extends Test {
 	public function testClassChildElementRedundant():Void {
 		var result = MXHXComponent.withMarkup('
 			<tests:TestPropertiesClass
-				xmlns:mx="https://ns.mxhx.dev/2022/basic"
-				xmlns:tests="https://ns.mxhx.dev/2022/tests">
+				xmlns:mx="https://ns.mxhx.dev/2024/basic"
+				xmlns:tests="https://ns.mxhx.dev/2024/tests">
 				<tests:type><mx:Class>fixtures.TestClass1</mx:Class></tests:type>
 			</tests:TestPropertiesClass>
 		');
@@ -292,8 +292,8 @@ class MXHXComponentPropertyTest extends Test {
 	public function testClassChildElementRedundantEmpty():Void {
 		var result = MXHXComponent.withMarkup('
 			<tests:TestPropertiesClass
-				xmlns:mx="https://ns.mxhx.dev/2022/basic"
-				xmlns:tests="https://ns.mxhx.dev/2022/tests">
+				xmlns:mx="https://ns.mxhx.dev/2024/basic"
+				xmlns:tests="https://ns.mxhx.dev/2024/tests">
 				<tests:type><mx:Class></mx:Class></tests:type>
 			</tests:TestPropertiesClass>
 		');
@@ -304,8 +304,8 @@ class MXHXComponentPropertyTest extends Test {
 	public function testClassChildElementRedundantEmptyExtraWhitespace():Void {
 		var result = MXHXComponent.withMarkup('
 			<tests:TestPropertiesClass
-				xmlns:mx="https://ns.mxhx.dev/2022/basic"
-				xmlns:tests="https://ns.mxhx.dev/2022/tests">
+				xmlns:mx="https://ns.mxhx.dev/2024/basic"
+				xmlns:tests="https://ns.mxhx.dev/2024/tests">
 				<tests:type>
 					<mx:Class>
 					</mx:Class>
@@ -319,8 +319,8 @@ class MXHXComponentPropertyTest extends Test {
 	public function testEnumValueAttribute():Void {
 		var result = MXHXComponent.withMarkup('
 			<tests:TestPropertiesClass
-				xmlns:mx="https://ns.mxhx.dev/2022/basic"
-				xmlns:tests="https://ns.mxhx.dev/2022/tests"
+				xmlns:mx="https://ns.mxhx.dev/2024/basic"
+				xmlns:tests="https://ns.mxhx.dev/2024/tests"
 				enumValue="Value2"/>
 		');
 		Assert.notNull(result);
@@ -330,8 +330,8 @@ class MXHXComponentPropertyTest extends Test {
 	public function testEnumValueChildElement():Void {
 		var result = MXHXComponent.withMarkup('
 			<tests:TestPropertiesClass
-				xmlns:mx="https://ns.mxhx.dev/2022/basic"
-				xmlns:tests="https://ns.mxhx.dev/2022/tests">
+				xmlns:mx="https://ns.mxhx.dev/2024/basic"
+				xmlns:tests="https://ns.mxhx.dev/2024/tests">
 				<tests:enumValue>Value2</tests:enumValue>
 			</tests:TestPropertiesClass>
 		');
@@ -342,8 +342,8 @@ class MXHXComponentPropertyTest extends Test {
 	public function testEnumValueChildElementCData():Void {
 		var result = MXHXComponent.withMarkup('
 			<tests:TestPropertiesClass
-				xmlns:mx="https://ns.mxhx.dev/2022/basic"
-				xmlns:tests="https://ns.mxhx.dev/2022/tests">
+				xmlns:mx="https://ns.mxhx.dev/2024/basic"
+				xmlns:tests="https://ns.mxhx.dev/2024/tests">
 				<tests:enumValue><![CDATA[Value2]]></tests:enumValue>
 			</tests:TestPropertiesClass>
 		');
@@ -354,8 +354,8 @@ class MXHXComponentPropertyTest extends Test {
 	public function testEnumValueChildElementRedundant():Void {
 		var result = MXHXComponent.withMarkup('
 			<tests:TestPropertiesClass
-				xmlns:mx="https://ns.mxhx.dev/2022/basic"
-				xmlns:tests="https://ns.mxhx.dev/2022/tests">
+				xmlns:mx="https://ns.mxhx.dev/2024/basic"
+				xmlns:tests="https://ns.mxhx.dev/2024/tests">
 				<tests:enumValue><tests:TestPropertyEnum>Value2</tests:TestPropertyEnum></tests:enumValue>
 			</tests:TestPropertiesClass>
 		');
@@ -366,8 +366,8 @@ class MXHXComponentPropertyTest extends Test {
 	public function testComplexEnumValueChildElementWithoutParameters():Void {
 		var result = MXHXComponent.withMarkup('
 			<tests:TestPropertiesClass
-				xmlns:mx="https://ns.mxhx.dev/2022/basic"
-				xmlns:tests="https://ns.mxhx.dev/2022/tests">
+				xmlns:mx="https://ns.mxhx.dev/2024/basic"
+				xmlns:tests="https://ns.mxhx.dev/2024/tests">
 				<tests:complexEnum>
 					<tests:TestComplexEnum.One/>
 				</tests:complexEnum>
@@ -380,8 +380,8 @@ class MXHXComponentPropertyTest extends Test {
 	public function testComplexEnumValueChildElementWithParameters():Void {
 		var result = MXHXComponent.withMarkup('
 			<tests:TestPropertiesClass
-				xmlns:mx="https://ns.mxhx.dev/2022/basic"
-				xmlns:tests="https://ns.mxhx.dev/2022/tests">
+				xmlns:mx="https://ns.mxhx.dev/2024/basic"
+				xmlns:tests="https://ns.mxhx.dev/2024/tests">
 				<tests:complexEnum>
 					<tests:TestComplexEnum.Two a="hello" b="123.4"/>
 				</tests:complexEnum>
@@ -399,8 +399,8 @@ class MXHXComponentPropertyTest extends Test {
 	public function testComplexEnumValueChildElementWithoutParametersRedundant():Void {
 		var result = MXHXComponent.withMarkup('
 			<tests:TestPropertiesClass
-				xmlns:mx="https://ns.mxhx.dev/2022/basic"
-				xmlns:tests="https://ns.mxhx.dev/2022/tests">
+				xmlns:mx="https://ns.mxhx.dev/2024/basic"
+				xmlns:tests="https://ns.mxhx.dev/2024/tests">
 				<tests:complexEnum>
 					<tests:TestComplexEnum>
 						<tests:TestComplexEnum.One/>
@@ -415,8 +415,8 @@ class MXHXComponentPropertyTest extends Test {
 	public function testComplexEnumValueChildElementWithParametersRedundant():Void {
 		var result = MXHXComponent.withMarkup('
 			<tests:TestPropertiesClass
-				xmlns:mx="https://ns.mxhx.dev/2022/basic"
-				xmlns:tests="https://ns.mxhx.dev/2022/tests">
+				xmlns:mx="https://ns.mxhx.dev/2024/basic"
+				xmlns:tests="https://ns.mxhx.dev/2024/tests">
 				<tests:complexEnum>
 					<tests:TestComplexEnum>
 						<tests:TestComplexEnum.Two a="hello" b="123.4"/>
@@ -436,8 +436,8 @@ class MXHXComponentPropertyTest extends Test {
 	public function testERegChildElement():Void {
 		var result = MXHXComponent.withMarkup('
 			<tests:TestPropertiesClass
-				xmlns:mx="https://ns.mxhx.dev/2022/basic"
-				xmlns:tests="https://ns.mxhx.dev/2022/tests">
+				xmlns:mx="https://ns.mxhx.dev/2024/basic"
+				xmlns:tests="https://ns.mxhx.dev/2024/tests">
 				<tests:ereg>~/[a-z]+/g</tests:ereg>
 			</tests:TestPropertiesClass>
 		');
@@ -449,8 +449,8 @@ class MXHXComponentPropertyTest extends Test {
 	public function testERegChildElementCData():Void {
 		var result = MXHXComponent.withMarkup('
 			<tests:TestPropertiesClass
-				xmlns:mx="https://ns.mxhx.dev/2022/basic"
-				xmlns:tests="https://ns.mxhx.dev/2022/tests">
+				xmlns:mx="https://ns.mxhx.dev/2024/basic"
+				xmlns:tests="https://ns.mxhx.dev/2024/tests">
 				<tests:ereg><![CDATA[~/[a-z]+/g]]></tests:ereg>
 			</tests:TestPropertiesClass>
 		');
@@ -462,8 +462,8 @@ class MXHXComponentPropertyTest extends Test {
 	public function testERegChildElementRedundant():Void {
 		var result = MXHXComponent.withMarkup('
 			<tests:TestPropertiesClass
-				xmlns:mx="https://ns.mxhx.dev/2022/basic"
-				xmlns:tests="https://ns.mxhx.dev/2022/tests">
+				xmlns:mx="https://ns.mxhx.dev/2024/basic"
+				xmlns:tests="https://ns.mxhx.dev/2024/tests">
 				<tests:ereg><mx:EReg>~/[a-z]+/g</mx:EReg></tests:ereg>
 			</tests:TestPropertiesClass>
 		');
@@ -475,8 +475,8 @@ class MXHXComponentPropertyTest extends Test {
 	public function testERegChildElementRedundantEmpty():Void {
 		var result = MXHXComponent.withMarkup('
 			<tests:TestPropertiesClass
-				xmlns:mx="https://ns.mxhx.dev/2022/basic"
-				xmlns:tests="https://ns.mxhx.dev/2022/tests">
+				xmlns:mx="https://ns.mxhx.dev/2024/basic"
+				xmlns:tests="https://ns.mxhx.dev/2024/tests">
 				<tests:ereg><mx:EReg></mx:EReg></tests:ereg>
 			</tests:TestPropertiesClass>
 		');
@@ -488,8 +488,8 @@ class MXHXComponentPropertyTest extends Test {
 	public function testERegChildElementRedundantEmptyExtraWhitespace():Void {
 		var result = MXHXComponent.withMarkup('
 			<tests:TestPropertiesClass
-				xmlns:mx="https://ns.mxhx.dev/2022/basic"
-				xmlns:tests="https://ns.mxhx.dev/2022/tests">
+				xmlns:mx="https://ns.mxhx.dev/2024/basic"
+				xmlns:tests="https://ns.mxhx.dev/2024/tests">
 				<tests:ereg>
 					<mx:EReg>
 					</mx:EReg>
@@ -504,8 +504,8 @@ class MXHXComponentPropertyTest extends Test {
 	public function testFloatAttribute():Void {
 		var result = MXHXComponent.withMarkup('
 			<tests:TestPropertiesClass
-				xmlns:mx="https://ns.mxhx.dev/2022/basic"
-				xmlns:tests="https://ns.mxhx.dev/2022/tests"
+				xmlns:mx="https://ns.mxhx.dev/2024/basic"
+				xmlns:tests="https://ns.mxhx.dev/2024/tests"
 				float="123.4"/>
 		');
 		Assert.notNull(result);
@@ -516,8 +516,8 @@ class MXHXComponentPropertyTest extends Test {
 	public function testFloatChildElement():Void {
 		var result = MXHXComponent.withMarkup('
 			<tests:TestPropertiesClass
-				xmlns:mx="https://ns.mxhx.dev/2022/basic"
-				xmlns:tests="https://ns.mxhx.dev/2022/tests">
+				xmlns:mx="https://ns.mxhx.dev/2024/basic"
+				xmlns:tests="https://ns.mxhx.dev/2024/tests">
 				<tests:float>123.4</tests:float>
 			</tests:TestPropertiesClass>
 		');
@@ -529,8 +529,8 @@ class MXHXComponentPropertyTest extends Test {
 	public function testFloatChildElementCData():Void {
 		var result = MXHXComponent.withMarkup('
 			<tests:TestPropertiesClass
-				xmlns:mx="https://ns.mxhx.dev/2022/basic"
-				xmlns:tests="https://ns.mxhx.dev/2022/tests">
+				xmlns:mx="https://ns.mxhx.dev/2024/basic"
+				xmlns:tests="https://ns.mxhx.dev/2024/tests">
 				<tests:float><![CDATA[123.4]]></tests:float>
 			</tests:TestPropertiesClass>
 		');
@@ -542,8 +542,8 @@ class MXHXComponentPropertyTest extends Test {
 	public function testFloatChildElementRedundant():Void {
 		var result = MXHXComponent.withMarkup('
 			<tests:TestPropertiesClass
-				xmlns:mx="https://ns.mxhx.dev/2022/basic"
-				xmlns:tests="https://ns.mxhx.dev/2022/tests">
+				xmlns:mx="https://ns.mxhx.dev/2024/basic"
+				xmlns:tests="https://ns.mxhx.dev/2024/tests">
 				<tests:float><mx:Float>123.4</mx:Float></tests:float>
 			</tests:TestPropertiesClass>
 		');
@@ -555,8 +555,8 @@ class MXHXComponentPropertyTest extends Test {
 	public function testFloatChildElementRedundantEmpty():Void {
 		var result = MXHXComponent.withMarkup('
 			<tests:TestPropertiesClass
-				xmlns:mx="https://ns.mxhx.dev/2022/basic"
-				xmlns:tests="https://ns.mxhx.dev/2022/tests">
+				xmlns:mx="https://ns.mxhx.dev/2024/basic"
+				xmlns:tests="https://ns.mxhx.dev/2024/tests">
 				<tests:float><mx:Float></mx:Float></tests:float>
 			</tests:TestPropertiesClass>
 		');
@@ -568,8 +568,8 @@ class MXHXComponentPropertyTest extends Test {
 	public function testFloatChildElementRedundantEmptyExtraWhitespace():Void {
 		var result = MXHXComponent.withMarkup('
 			<tests:TestPropertiesClass
-				xmlns:mx="https://ns.mxhx.dev/2022/basic"
-				xmlns:tests="https://ns.mxhx.dev/2022/tests">
+				xmlns:mx="https://ns.mxhx.dev/2024/basic"
+				xmlns:tests="https://ns.mxhx.dev/2024/tests">
 				<tests:float>
 					<mx:Float>
 					</mx:Float>
@@ -584,8 +584,8 @@ class MXHXComponentPropertyTest extends Test {
 	public function testIntAttribute():Void {
 		var result = MXHXComponent.withMarkup('
 			<tests:TestPropertiesClass
-				xmlns:mx="https://ns.mxhx.dev/2022/basic"
-				xmlns:tests="https://ns.mxhx.dev/2022/tests"
+				xmlns:mx="https://ns.mxhx.dev/2024/basic"
+				xmlns:tests="https://ns.mxhx.dev/2024/tests"
 				integer="567"/>
 		');
 		Assert.notNull(result);
@@ -596,8 +596,8 @@ class MXHXComponentPropertyTest extends Test {
 	public function testIntChildElement():Void {
 		var result = MXHXComponent.withMarkup('
 			<tests:TestPropertiesClass
-				xmlns:mx="https://ns.mxhx.dev/2022/basic"
-				xmlns:tests="https://ns.mxhx.dev/2022/tests">
+				xmlns:mx="https://ns.mxhx.dev/2024/basic"
+				xmlns:tests="https://ns.mxhx.dev/2024/tests">
 				<tests:integer>567</tests:integer>
 			</tests:TestPropertiesClass>
 		');
@@ -609,8 +609,8 @@ class MXHXComponentPropertyTest extends Test {
 	public function testIntChildElementCData():Void {
 		var result = MXHXComponent.withMarkup('
 			<tests:TestPropertiesClass
-				xmlns:mx="https://ns.mxhx.dev/2022/basic"
-				xmlns:tests="https://ns.mxhx.dev/2022/tests">
+				xmlns:mx="https://ns.mxhx.dev/2024/basic"
+				xmlns:tests="https://ns.mxhx.dev/2024/tests">
 				<tests:integer><![CDATA[567]]></tests:integer>
 			</tests:TestPropertiesClass>
 		');
@@ -622,8 +622,8 @@ class MXHXComponentPropertyTest extends Test {
 	public function testIntChildElementRedundant():Void {
 		var result = MXHXComponent.withMarkup('
 			<tests:TestPropertiesClass
-				xmlns:mx="https://ns.mxhx.dev/2022/basic"
-				xmlns:tests="https://ns.mxhx.dev/2022/tests">
+				xmlns:mx="https://ns.mxhx.dev/2024/basic"
+				xmlns:tests="https://ns.mxhx.dev/2024/tests">
 				<tests:integer><mx:Int>567</mx:Int></tests:integer>
 			</tests:TestPropertiesClass>
 		');
@@ -635,8 +635,8 @@ class MXHXComponentPropertyTest extends Test {
 	public function testIntChildElementRedundantEmpty():Void {
 		var result = MXHXComponent.withMarkup('
 			<tests:TestPropertiesClass
-				xmlns:mx="https://ns.mxhx.dev/2022/basic"
-				xmlns:tests="https://ns.mxhx.dev/2022/tests">
+				xmlns:mx="https://ns.mxhx.dev/2024/basic"
+				xmlns:tests="https://ns.mxhx.dev/2024/tests">
 				<tests:integer><mx:Int></mx:Int></tests:integer>
 			</tests:TestPropertiesClass>
 		');
@@ -648,8 +648,8 @@ class MXHXComponentPropertyTest extends Test {
 	public function testIntChildElementRedundantEmptyExtraWhitespace():Void {
 		var result = MXHXComponent.withMarkup('
 			<tests:TestPropertiesClass
-				xmlns:mx="https://ns.mxhx.dev/2022/basic"
-				xmlns:tests="https://ns.mxhx.dev/2022/tests">
+				xmlns:mx="https://ns.mxhx.dev/2024/basic"
+				xmlns:tests="https://ns.mxhx.dev/2024/tests">
 				<tests:integer>
 					<mx:Int>
 					</mx:Int>
@@ -664,8 +664,8 @@ class MXHXComponentPropertyTest extends Test {
 	public function testStringAttribute():Void {
 		var result = MXHXComponent.withMarkup('
 			<tests:TestPropertiesClass
-				xmlns:mx="https://ns.mxhx.dev/2022/basic"
-				xmlns:tests="https://ns.mxhx.dev/2022/tests"
+				xmlns:mx="https://ns.mxhx.dev/2024/basic"
+				xmlns:tests="https://ns.mxhx.dev/2024/tests"
 				string="hello"/>
 		');
 		Assert.notNull(result);
@@ -676,8 +676,8 @@ class MXHXComponentPropertyTest extends Test {
 	public function testStringAttributeEmpty():Void {
 		var result = MXHXComponent.withMarkup('
 			<tests:TestPropertiesClass
-				xmlns:mx="https://ns.mxhx.dev/2022/basic"
-				xmlns:tests="https://ns.mxhx.dev/2022/tests"
+				xmlns:mx="https://ns.mxhx.dev/2024/basic"
+				xmlns:tests="https://ns.mxhx.dev/2024/tests"
 				string=""/>
 		');
 		Assert.notNull(result);
@@ -688,8 +688,8 @@ class MXHXComponentPropertyTest extends Test {
 	public function testStringChildElement():Void {
 		var result = MXHXComponent.withMarkup('
 			<tests:TestPropertiesClass
-				xmlns:mx="https://ns.mxhx.dev/2022/basic"
-				xmlns:tests="https://ns.mxhx.dev/2022/tests">
+				xmlns:mx="https://ns.mxhx.dev/2024/basic"
+				xmlns:tests="https://ns.mxhx.dev/2024/tests">
 				<tests:string>hello</tests:string>
 			</tests:TestPropertiesClass>
 		');
@@ -701,8 +701,8 @@ class MXHXComponentPropertyTest extends Test {
 	public function testStringChildElementEmpty():Void {
 		var result = MXHXComponent.withMarkup('
 			<tests:TestPropertiesClass
-				xmlns:mx="https://ns.mxhx.dev/2022/basic"
-				xmlns:tests="https://ns.mxhx.dev/2022/tests">
+				xmlns:mx="https://ns.mxhx.dev/2024/basic"
+				xmlns:tests="https://ns.mxhx.dev/2024/tests">
 				<tests:string></tests:string>
 			</tests:TestPropertiesClass>
 		');
@@ -714,8 +714,8 @@ class MXHXComponentPropertyTest extends Test {
 	public function testStringChildElementCData():Void {
 		var result = MXHXComponent.withMarkup('
 			<tests:TestPropertiesClass
-				xmlns:mx="https://ns.mxhx.dev/2022/basic"
-				xmlns:tests="https://ns.mxhx.dev/2022/tests">
+				xmlns:mx="https://ns.mxhx.dev/2024/basic"
+				xmlns:tests="https://ns.mxhx.dev/2024/tests">
 				<tests:string><![CDATA[MXHX & Haxe are <cool/>]]></tests:string>
 			</tests:TestPropertiesClass>
 		');
@@ -727,8 +727,8 @@ class MXHXComponentPropertyTest extends Test {
 	public function testStringChildElementCDataEmpty():Void {
 		var result = MXHXComponent.withMarkup('
 			<tests:TestPropertiesClass
-				xmlns:mx="https://ns.mxhx.dev/2022/basic"
-				xmlns:tests="https://ns.mxhx.dev/2022/tests">
+				xmlns:mx="https://ns.mxhx.dev/2024/basic"
+				xmlns:tests="https://ns.mxhx.dev/2024/tests">
 				<tests:string><![CDATA[]]></tests:string>
 			</tests:TestPropertiesClass>
 		');
@@ -740,8 +740,8 @@ class MXHXComponentPropertyTest extends Test {
 	public function testStringChildElementRedundant():Void {
 		var result = MXHXComponent.withMarkup('
 			<tests:TestPropertiesClass
-				xmlns:mx="https://ns.mxhx.dev/2022/basic"
-				xmlns:tests="https://ns.mxhx.dev/2022/tests">
+				xmlns:mx="https://ns.mxhx.dev/2024/basic"
+				xmlns:tests="https://ns.mxhx.dev/2024/tests">
 				<tests:string><mx:String>hello</mx:String></tests:string>
 			</tests:TestPropertiesClass>
 		');
@@ -753,8 +753,8 @@ class MXHXComponentPropertyTest extends Test {
 	public function testStringChildElementRedundantEmpty1():Void {
 		var result = MXHXComponent.withMarkup('
 			<tests:TestPropertiesClass
-				xmlns:mx="https://ns.mxhx.dev/2022/basic"
-				xmlns:tests="https://ns.mxhx.dev/2022/tests">
+				xmlns:mx="https://ns.mxhx.dev/2024/basic"
+				xmlns:tests="https://ns.mxhx.dev/2024/tests">
 				<tests:string><mx:String></mx:String></tests:string>
 			</tests:TestPropertiesClass>
 		');
@@ -767,8 +767,8 @@ class MXHXComponentPropertyTest extends Test {
 	public function testStringChildElementRedundantEmpty2():Void {
 		var result = MXHXComponent.withMarkup('
 			<tests:TestPropertiesClass
-				xmlns:mx="https://ns.mxhx.dev/2022/basic"
-				xmlns:tests="https://ns.mxhx.dev/2022/tests">
+				xmlns:mx="https://ns.mxhx.dev/2024/basic"
+				xmlns:tests="https://ns.mxhx.dev/2024/tests">
 				<tests:string><mx:String/></tests:string>
 			</tests:TestPropertiesClass>
 		');
@@ -781,8 +781,8 @@ class MXHXComponentPropertyTest extends Test {
 	public function testStringChildElementRedundantWhitespace():Void {
 		var result = MXHXComponent.withMarkup('
 			<tests:TestPropertiesClass
-				xmlns:mx="https://ns.mxhx.dev/2022/basic"
-				xmlns:tests="https://ns.mxhx.dev/2022/tests">
+				xmlns:mx="https://ns.mxhx.dev/2024/basic"
+				xmlns:tests="https://ns.mxhx.dev/2024/tests">
 				<tests:string>
 					<mx:String>
 					</mx:String>
@@ -798,8 +798,8 @@ class MXHXComponentPropertyTest extends Test {
 	public function testStringChildElementRedundantCDataEmpty():Void {
 		var result = MXHXComponent.withMarkup('
 			<tests:TestPropertiesClass
-				xmlns:mx="https://ns.mxhx.dev/2022/basic"
-				xmlns:tests="https://ns.mxhx.dev/2022/tests">
+				xmlns:mx="https://ns.mxhx.dev/2024/basic"
+				xmlns:tests="https://ns.mxhx.dev/2024/tests">
 				<tests:string><mx:String><![CDATA[]]></mx:String></tests:string>
 			</tests:TestPropertiesClass>
 		');
@@ -812,8 +812,8 @@ class MXHXComponentPropertyTest extends Test {
 	public function testStringChildElementRedundantCDataWhitespace():Void {
 		var result = MXHXComponent.withMarkup('
 			<tests:TestPropertiesClass
-				xmlns:mx="https://ns.mxhx.dev/2022/basic"
-				xmlns:tests="https://ns.mxhx.dev/2022/tests">
+				xmlns:mx="https://ns.mxhx.dev/2024/basic"
+				xmlns:tests="https://ns.mxhx.dev/2024/tests">
 				<tests:string><mx:String><![CDATA[ ]]></mx:String></tests:string>
 			</tests:TestPropertiesClass>
 		');
@@ -825,8 +825,8 @@ class MXHXComponentPropertyTest extends Test {
 	public function testUIntAttribute():Void {
 		var result = MXHXComponent.withMarkup('
 			<tests:TestPropertiesClass
-				xmlns:mx="https://ns.mxhx.dev/2022/basic"
-				xmlns:tests="https://ns.mxhx.dev/2022/tests"
+				xmlns:mx="https://ns.mxhx.dev/2024/basic"
+				xmlns:tests="https://ns.mxhx.dev/2024/tests"
 				unsignedInteger="4000000000"/>
 		');
 		Assert.notNull(result);
@@ -838,8 +838,8 @@ class MXHXComponentPropertyTest extends Test {
 	public function testUIntChildElement():Void {
 		var result = MXHXComponent.withMarkup('
 			<tests:TestPropertiesClass
-				xmlns:mx="https://ns.mxhx.dev/2022/basic"
-				xmlns:tests="https://ns.mxhx.dev/2022/tests">
+				xmlns:mx="https://ns.mxhx.dev/2024/basic"
+				xmlns:tests="https://ns.mxhx.dev/2024/tests">
 				<tests:unsignedInteger>4000000000</tests:unsignedInteger>
 			</tests:TestPropertiesClass>
 		');
@@ -852,8 +852,8 @@ class MXHXComponentPropertyTest extends Test {
 	public function testUIntChildElementCData():Void {
 		var result = MXHXComponent.withMarkup('
 			<tests:TestPropertiesClass
-				xmlns:mx="https://ns.mxhx.dev/2022/basic"
-				xmlns:tests="https://ns.mxhx.dev/2022/tests">
+				xmlns:mx="https://ns.mxhx.dev/2024/basic"
+				xmlns:tests="https://ns.mxhx.dev/2024/tests">
 				<tests:unsignedInteger><![CDATA[4000000000]]></tests:unsignedInteger>
 			</tests:TestPropertiesClass>
 		');
@@ -866,8 +866,8 @@ class MXHXComponentPropertyTest extends Test {
 	public function testUIntChildElementRedundant():Void {
 		var result = MXHXComponent.withMarkup('
 			<tests:TestPropertiesClass
-				xmlns:mx="https://ns.mxhx.dev/2022/basic"
-				xmlns:tests="https://ns.mxhx.dev/2022/tests">
+				xmlns:mx="https://ns.mxhx.dev/2024/basic"
+				xmlns:tests="https://ns.mxhx.dev/2024/tests">
 				<tests:unsignedInteger><mx:UInt>4000000000</mx:UInt></tests:unsignedInteger>
 			</tests:TestPropertiesClass>
 		');
@@ -880,8 +880,8 @@ class MXHXComponentPropertyTest extends Test {
 	public function testUIntChildElementRedundantEmpty():Void {
 		var result = MXHXComponent.withMarkup('
 			<tests:TestPropertiesClass
-				xmlns:mx="https://ns.mxhx.dev/2022/basic"
-				xmlns:tests="https://ns.mxhx.dev/2022/tests">
+				xmlns:mx="https://ns.mxhx.dev/2024/basic"
+				xmlns:tests="https://ns.mxhx.dev/2024/tests">
 				<tests:unsignedInteger><mx:UInt></mx:UInt></tests:unsignedInteger>
 			</tests:TestPropertiesClass>
 		');
@@ -893,8 +893,8 @@ class MXHXComponentPropertyTest extends Test {
 	public function testUIntChildElementRedundantEmptyExtraWhitespace():Void {
 		var result = MXHXComponent.withMarkup('
 			<tests:TestPropertiesClass
-				xmlns:mx="https://ns.mxhx.dev/2022/basic"
-				xmlns:tests="https://ns.mxhx.dev/2022/tests">
+				xmlns:mx="https://ns.mxhx.dev/2024/basic"
+				xmlns:tests="https://ns.mxhx.dev/2024/tests">
 				<tests:unsignedInteger>
 					<mx:UInt>
 					</mx:UInt>
@@ -909,8 +909,8 @@ class MXHXComponentPropertyTest extends Test {
 	public function testDefaultPropertyClassWithSimpleValue():Void {
 		var result = MXHXComponent.withMarkup('
 			<tests:TestDefaultPropertyClass2
-				xmlns:mx="https://ns.mxhx.dev/2022/basic"
-				xmlns:tests="https://ns.mxhx.dev/2022/tests">
+				xmlns:mx="https://ns.mxhx.dev/2024/basic"
+				xmlns:tests="https://ns.mxhx.dev/2024/tests">
 				123.4
 			</tests:TestDefaultPropertyClass2>
 		');
@@ -921,8 +921,8 @@ class MXHXComponentPropertyTest extends Test {
 	public function testDefaultPropertyClassWithSimpleValueRedundant():Void {
 		var result = MXHXComponent.withMarkup('
 			<tests:TestDefaultPropertyClass2
-				xmlns:mx="https://ns.mxhx.dev/2022/basic"
-				xmlns:tests="https://ns.mxhx.dev/2022/tests">
+				xmlns:mx="https://ns.mxhx.dev/2024/basic"
+				xmlns:tests="https://ns.mxhx.dev/2024/tests">
 				<mx:Float>123.4</mx:Float>
 			</tests:TestDefaultPropertyClass2>
 		');
@@ -933,8 +933,8 @@ class MXHXComponentPropertyTest extends Test {
 	public function testDefaultPropertyClassWithArrayValue():Void {
 		var result = MXHXComponent.withMarkup('
 			<tests:TestDefaultPropertyClass1
-				xmlns:mx="https://ns.mxhx.dev/2022/basic"
-				xmlns:tests="https://ns.mxhx.dev/2022/tests">
+				xmlns:mx="https://ns.mxhx.dev/2024/basic"
+				xmlns:tests="https://ns.mxhx.dev/2024/tests">
 				<mx:String>one</mx:String>
 				<mx:String>two</mx:String>
 				<mx:String>three</mx:String>
@@ -952,8 +952,8 @@ class MXHXComponentPropertyTest extends Test {
 	public function testDefaultPropertyClassWithArrayValueRedundant():Void {
 		var result = MXHXComponent.withMarkup('
 			<tests:TestDefaultPropertyClass1
-				xmlns:mx="https://ns.mxhx.dev/2022/basic"
-				xmlns:tests="https://ns.mxhx.dev/2022/tests">
+				xmlns:mx="https://ns.mxhx.dev/2024/basic"
+				xmlns:tests="https://ns.mxhx.dev/2024/tests">
 				<mx:Array>
 					<mx:String>one</mx:String>
 					<mx:String>two</mx:String>
@@ -973,8 +973,8 @@ class MXHXComponentPropertyTest extends Test {
 	public function testDefaultPropertyClassWithArrayValueAndOtherPropertyBefore():Void {
 		var result = MXHXComponent.withMarkup('
 			<tests:TestDefaultPropertyClass1
-				xmlns:mx="https://ns.mxhx.dev/2022/basic"
-				xmlns:tests="https://ns.mxhx.dev/2022/tests">
+				xmlns:mx="https://ns.mxhx.dev/2024/basic"
+				xmlns:tests="https://ns.mxhx.dev/2024/tests">
 				<tests:other>four</tests:other>
 				<mx:String>one</mx:String>
 				<mx:String>two</mx:String>
@@ -994,8 +994,8 @@ class MXHXComponentPropertyTest extends Test {
 	public function testDefaultPropertyClassWithArrayValueAndOtherPropertyAfter():Void {
 		var result = MXHXComponent.withMarkup('
 			<tests:TestDefaultPropertyClass1
-				xmlns:mx="https://ns.mxhx.dev/2022/basic"
-				xmlns:tests="https://ns.mxhx.dev/2022/tests">
+				xmlns:mx="https://ns.mxhx.dev/2024/basic"
+				xmlns:tests="https://ns.mxhx.dev/2024/tests">
 				<mx:String>one</mx:String>
 				<mx:String>two</mx:String>
 				<mx:String>three</mx:String>
@@ -1015,8 +1015,8 @@ class MXHXComponentPropertyTest extends Test {
 	public function testDefaultPropertyClassWithArrayValueAndOtherPropertyBetween():Void {
 		var result = MXHXComponent.withMarkup('
 			<tests:TestDefaultPropertyClass1
-				xmlns:mx="https://ns.mxhx.dev/2022/basic"
-				xmlns:tests="https://ns.mxhx.dev/2022/tests">
+				xmlns:mx="https://ns.mxhx.dev/2024/basic"
+				xmlns:tests="https://ns.mxhx.dev/2024/tests">
 				<mx:String>one</mx:String>
 				<tests:other>four</tests:other>
 				<mx:String>two</mx:String>

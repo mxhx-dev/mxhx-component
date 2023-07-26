@@ -37,7 +37,7 @@ import haxe.io.Path;
 	```haxe
 	var instance = XmlComponent.withMarkup(
 		'<f:LayoutGroup
-			xmlns:mx="https://ns.mxhx.dev/2022/basic"
+			xmlns:mx="https://ns.mxhx.dev/2024/basic"
 			xmlns:f="https://ns.feathersui.com/mxhx">
 			<f:layout>
 				<f:HorizontalLayout gap="10" horizontalAlign="RIGHT"/>
@@ -62,12 +62,12 @@ import haxe.io.Path;
 class MXHXComponent {
 	#if macro
 	private static final FILE_PATH_TO_TYPE_DEFINITION:Map<String, TypeDefinition> = [];
-	private static final LANGUAGE_URI_BASIC_2022 = "https://ns.mxhx.dev/2022/basic";
-	private static final LANGUAGE_URI_FULL_2022 = "https://ns.mxhx.dev/2022/mxhx";
+	private static final LANGUAGE_URI_BASIC_2024 = "https://ns.mxhx.dev/2024/basic";
+	private static final LANGUAGE_URI_FULL_2024 = "https://ns.mxhx.dev/2024/mxhx";
 	private static final LANGUAGE_URIS = [
 		// @:formatter:off
-		LANGUAGE_URI_BASIC_2022,
-		LANGUAGE_URI_FULL_2022,
+		LANGUAGE_URI_BASIC_2024,
+		LANGUAGE_URI_FULL_2024,
 		// @:formatter:on
 	];
 	private static final PACKAGE_RESERVED = ["mxhx", "_reserved"];
@@ -109,7 +109,7 @@ class MXHXComponent {
 	private static final TAG_SCRIPT = "Script";
 	private static final TAG_STYLE = "Style";
 	private static final INIT_FUNCTION_NAME = "MXHXComponent_initMXHX";
-	private static final LANGUAGE_MAPPINGS_2022 = [
+	private static final LANGUAGE_MAPPINGS_2024 = [
 		// @:formatter:off
 		TYPE_ANY => TYPE_ANY,
 		TYPE_ARRAY => TYPE_ARRAY,
@@ -322,8 +322,8 @@ class MXHXComponent {
 
 	private static function createResolver():Void {
 		mxhxResolver = new MXHXMacroResolver();
-		mxhxResolver.registerManifest(LANGUAGE_URI_BASIC_2022, LANGUAGE_MAPPINGS_2022);
-		mxhxResolver.registerManifest(LANGUAGE_URI_FULL_2022, LANGUAGE_MAPPINGS_2022);
+		mxhxResolver.registerManifest(LANGUAGE_URI_BASIC_2024, LANGUAGE_MAPPINGS_2024);
+		mxhxResolver.registerManifest(LANGUAGE_URI_FULL_2024, LANGUAGE_MAPPINGS_2024);
 		for (uri => mappings in manifests) {
 			mxhxResolver.registerManifest(uri, mappings);
 		}
@@ -405,13 +405,15 @@ class MXHXComponent {
 			for (uri in prefixMap.getAllUris()) {
 				if (LANGUAGE_URIS.indexOf(uri) != -1) {
 					languageUris.push(uri);
-					if (uri == LANGUAGE_URI_FULL_2022) {
+					if (uri == LANGUAGE_URI_FULL_2024) {
 						var prefixes = prefixMap.getPrefixesForUri(uri);
 						for (prefix in prefixes) {
 							var attrData = tagData.getAttributeData('xmlns:$prefix');
 							if (attrData != null) {
-								Context.warning('Namespace \'$uri\' is experimental. Using namespace \'$LANGUAGE_URI_BASIC_2022\' instead is recommended.',
-									sourceLocationToContextPosition(attrData));
+								if (!Context.defined("mxhx-disable-experimental-warning")) {
+									Context.warning('Namespace \'$uri\' is experimental. Using namespace \'$LANGUAGE_URI_BASIC_2024\' instead is recommended.',
+										sourceLocationToContextPosition(attrData));
+								}
 							}
 						}
 					}
@@ -577,7 +579,7 @@ class MXHXComponent {
 		}
 		switch (resolved) {
 			case EventSymbol(e, t):
-				if (languageUri == LANGUAGE_URI_BASIC_2022) {
+				if (languageUri == LANGUAGE_URI_BASIC_2024) {
 					errorEventsNotSupported(attrData);
 					return;
 				} else {
@@ -588,31 +590,11 @@ class MXHXComponent {
 				}
 			case FieldSymbol(f, t):
 				var valueExpr:Expr = null;
-				if (languageUri == LANGUAGE_URI_BASIC_2022) {
+				if (languageUri == LANGUAGE_URI_BASIC_2024) {
 					var attrValue = handleTextContentAsText(attrData.rawValue, attrData);
 					valueExpr = createValueExprForFieldAttribute(f, attrValue, attrData);
 				} else {
-					var baseType:BaseType = null;
-					var currentFieldType:Type = f.type;
-					if (currentFieldType != null) {
-						while (baseType == null) {
-							switch (currentFieldType) {
-								case TInst(t, params):
-									baseType = t.get();
-									break;
-								case TAbstract(t, params):
-									baseType = t.get();
-									break;
-								case TEnum(t, params):
-									baseType = t.get();
-									break;
-								case TLazy(f):
-									currentFieldType = f();
-								default:
-									break;
-							}
-						}
-					}
+					var baseType = typeToBaseType(f.type);
 					valueExpr = handleTextContentAsExpr(attrData.rawValue, baseType, attrData.valueStart, attrData);
 				}
 				var fieldName = f.name;
@@ -1108,7 +1090,7 @@ class MXHXComponent {
 		if (child != null && (child is IMXHXTextData) && child.getNextSiblingUnit() == null) {
 			var textData = cast(child, IMXHXTextData);
 			if (textData.textType == Text && isLanguageTypeAssignableFromText(t)) {
-				if (languageUri == LANGUAGE_URI_BASIC_2022) {
+				if (languageUri == LANGUAGE_URI_BASIC_2024) {
 					var value = handleTextContentAsText(textData.content, textData);
 					initExpr = createValueExprForBaseType(t, value, false, textData);
 				} else {
@@ -1541,7 +1523,7 @@ class MXHXComponent {
 			} else {
 				switch (resolvedTag) {
 					case EventSymbol(e, t):
-						if (languageUri == LANGUAGE_URI_BASIC_2022) {
+						if (languageUri == LANGUAGE_URI_BASIC_2024) {
 							errorEventsNotSupported(tagData);
 							return;
 						} else {
@@ -1644,29 +1626,10 @@ class MXHXComponent {
 			fieldType = field.type;
 		}
 
-		var baseType:BaseType = null;
-		if (fieldType != null) {
-			var currentFieldType:Type = fieldType;
-			while (baseType == null) {
-				switch (currentFieldType) {
-					case TInst(t, params):
-						var classType = t.get();
-						isArray = classType.pack.length == 0 && classType.name == TYPE_ARRAY;
-						isString = classType.pack.length == 0 && classType.name == TYPE_STRING;
-						baseType = classType;
-						break;
-					case TAbstract(t, params):
-						baseType = t.get();
-						break;
-					case TEnum(t, params):
-						baseType = t.get();
-						break;
-					case TLazy(f):
-						currentFieldType = f();
-					default:
-						break;
-				}
-			}
+		var baseType = typeToBaseType(fieldType);
+		if (baseType != null) {
+			isArray = baseType.pack.length == 0 && baseType.name == TYPE_ARRAY;
+			isString = baseType.pack.length == 0 && baseType.name == TYPE_STRING;
 		}
 
 		var firstChildIsArrayTag = false;
@@ -1677,7 +1640,7 @@ class MXHXComponent {
 			if (current == firstChild && (current is IMXHXTextData) && current.getNextSiblingUnit() == null) {
 				var textData = cast(current, IMXHXTextData);
 				if (textData.textType == Text && isLanguageTypeAssignableFromText(baseType)) {
-					if (languageUri == LANGUAGE_URI_BASIC_2022) {
+					if (languageUri == LANGUAGE_URI_BASIC_2024) {
 						var value = handleTextContentAsText(textData.content, textData);
 						return createValueExprForBaseType(baseType, value, false, textData);
 					} else {
@@ -2023,6 +1986,27 @@ class MXHXComponent {
 			return null;
 		}
 		return propertyName;
+	}
+
+	private static function typeToBaseType(type:Type):BaseType {
+		if (type == null) {
+			return null;
+		}
+		while (true) {
+			switch (type) {
+				case TInst(t, params):
+					return t.get();
+				case TAbstract(t, params):
+					return t.get();
+				case TEnum(t, params):
+					return t.get();
+				case TLazy(f):
+					type = f();
+				default:
+					return null;
+			}
+		}
+		return null;
 	}
 
 	private static function errorTagNotSupported(tagData:IMXHXTagData):Void {

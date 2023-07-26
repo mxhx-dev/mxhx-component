@@ -9,7 +9,7 @@ import utest.Test;
 class MXHXComponentDeclarationsTest extends Test {
 	public function testDeclarationsEmpty():Void {
 		var result = MXHXComponent.withMarkup('
-			<tests:TestClass1 xmlns:mx="https://ns.mxhx.dev/2022/basic" xmlns:tests="https://ns.mxhx.dev/2022/tests">
+			<tests:TestClass1 xmlns:mx="https://ns.mxhx.dev/2024/basic" xmlns:tests="https://ns.mxhx.dev/2024/tests">
 				<mx:Declarations></mx:Declarations>
 			</tests:TestClass1>
 		');
@@ -18,7 +18,7 @@ class MXHXComponentDeclarationsTest extends Test {
 
 	public function testDeclarationsEmptyExtraWhitespace():Void {
 		var result = MXHXComponent.withMarkup('
-			<tests:TestClass1 xmlns:mx="https://ns.mxhx.dev/2022/basic" xmlns:tests="https://ns.mxhx.dev/2022/tests">
+			<tests:TestClass1 xmlns:mx="https://ns.mxhx.dev/2024/basic" xmlns:tests="https://ns.mxhx.dev/2024/tests">
 				<mx:Declarations>
 				</mx:Declarations>
 			</tests:TestClass1>
@@ -28,7 +28,7 @@ class MXHXComponentDeclarationsTest extends Test {
 
 	public function testDeclarationsComment1():Void {
 		var result = MXHXComponent.withMarkup('
-			<tests:TestClass1 xmlns:mx="https://ns.mxhx.dev/2022/basic" xmlns:tests="https://ns.mxhx.dev/2022/tests">
+			<tests:TestClass1 xmlns:mx="https://ns.mxhx.dev/2024/basic" xmlns:tests="https://ns.mxhx.dev/2024/tests">
 				<mx:Declarations><!-- comment --></mx:Declarations>
 			</tests:TestClass1>
 		');
@@ -37,7 +37,7 @@ class MXHXComponentDeclarationsTest extends Test {
 
 	public function testDeclarationsComment2():Void {
 		var result = MXHXComponent.withMarkup('
-			<tests:TestClass1 xmlns:mx="https://ns.mxhx.dev/2022/basic" xmlns:tests="https://ns.mxhx.dev/2022/tests">
+			<tests:TestClass1 xmlns:mx="https://ns.mxhx.dev/2024/basic" xmlns:tests="https://ns.mxhx.dev/2024/tests">
 				<mx:Declarations>
 					<!-- comment -->
 				</mx:Declarations>
@@ -48,7 +48,7 @@ class MXHXComponentDeclarationsTest extends Test {
 
 	public function testDeclarationsDocComment1():Void {
 		var result = MXHXComponent.withMarkup('
-			<tests:TestClass1 xmlns:mx="https://ns.mxhx.dev/2022/basic" xmlns:tests="https://ns.mxhx.dev/2022/tests">
+			<tests:TestClass1 xmlns:mx="https://ns.mxhx.dev/2024/basic" xmlns:tests="https://ns.mxhx.dev/2024/tests">
 				<mx:Declarations><!--- doc comment --></mx:Declarations>
 			</tests:TestClass1>
 		');
@@ -57,7 +57,7 @@ class MXHXComponentDeclarationsTest extends Test {
 
 	public function testDeclarationsDocComment2():Void {
 		var result = MXHXComponent.withMarkup('
-			<tests:TestClass1 xmlns:mx="https://ns.mxhx.dev/2022/basic" xmlns:tests="https://ns.mxhx.dev/2022/tests">
+			<tests:TestClass1 xmlns:mx="https://ns.mxhx.dev/2024/basic" xmlns:tests="https://ns.mxhx.dev/2024/tests">
 				<mx:Declarations>
 					<!--- doc comment -->
 				</mx:Declarations>
@@ -68,7 +68,7 @@ class MXHXComponentDeclarationsTest extends Test {
 
 	public function testAny():Void {
 		var result = MXHXComponent.withMarkup('
-			<tests:TestClass1 xmlns:mx="https://ns.mxhx.dev/2022/basic" xmlns:tests="https://ns.mxhx.dev/2022/tests">
+			<tests:TestClass1 xmlns:mx="https://ns.mxhx.dev/2024/basic" xmlns:tests="https://ns.mxhx.dev/2024/tests">
 				<mx:Declarations>
 					<mx:Any id="any" float="123.4" floatHex="0xbeef" nan="NaN" boolean_true="true" boolean_false="false" string="hello">
 						<mx:object>
@@ -100,7 +100,7 @@ class MXHXComponentDeclarationsTest extends Test {
 
 	public function testAnyEmpty():Void {
 		var result = MXHXComponent.withMarkup('
-			<tests:TestClass1 xmlns:mx="https://ns.mxhx.dev/2022/basic" xmlns:tests="https://ns.mxhx.dev/2022/tests">
+			<tests:TestClass1 xmlns:mx="https://ns.mxhx.dev/2024/basic" xmlns:tests="https://ns.mxhx.dev/2024/tests">
 				<mx:Declarations>
 					<mx:Any id="any"></mx:Any>
 				</mx:Declarations>
@@ -113,7 +113,7 @@ class MXHXComponentDeclarationsTest extends Test {
 
 	public function testAnyEmptyExtraWhitespace():Void {
 		var result = MXHXComponent.withMarkup('
-			<tests:TestClass1 xmlns:mx="https://ns.mxhx.dev/2022/basic" xmlns:tests="https://ns.mxhx.dev/2022/tests">
+			<tests:TestClass1 xmlns:mx="https://ns.mxhx.dev/2024/basic" xmlns:tests="https://ns.mxhx.dev/2024/tests">
 				<mx:Declarations>
 					<mx:Any id="any">
 					</mx:Any>
@@ -127,7 +127,7 @@ class MXHXComponentDeclarationsTest extends Test {
 
 	public function testAnyOnlyComment1():Void {
 		var result = MXHXComponent.withMarkup('
-			<tests:TestClass1 xmlns:mx="https://ns.mxhx.dev/2022/basic" xmlns:tests="https://ns.mxhx.dev/2022/tests">
+			<tests:TestClass1 xmlns:mx="https://ns.mxhx.dev/2024/basic" xmlns:tests="https://ns.mxhx.dev/2024/tests">
 				<mx:Declarations>
 					<mx:Any id="any"><!-- comment --></mx:Any>
 				</mx:Declarations>
@@ -140,7 +140,7 @@ class MXHXComponentDeclarationsTest extends Test {
 
 	public function testAnyOnlyComment2():Void {
 		var result = MXHXComponent.withMarkup('
-			<tests:TestClass1 xmlns:mx="https://ns.mxhx.dev/2022/basic" xmlns:tests="https://ns.mxhx.dev/2022/tests">
+			<tests:TestClass1 xmlns:mx="https://ns.mxhx.dev/2024/basic" xmlns:tests="https://ns.mxhx.dev/2024/tests">
 				<mx:Declarations>
 					<mx:Any id="any">
 						<!-- comment -->
@@ -155,7 +155,7 @@ class MXHXComponentDeclarationsTest extends Test {
 
 	public function testAnyOnlyDocComment():Void {
 		var result = MXHXComponent.withMarkup('
-			<tests:TestClass1 xmlns:mx="https://ns.mxhx.dev/2022/basic" xmlns:tests="https://ns.mxhx.dev/2022/tests">
+			<tests:TestClass1 xmlns:mx="https://ns.mxhx.dev/2024/basic" xmlns:tests="https://ns.mxhx.dev/2024/tests">
 				<mx:Declarations>
 					<mx:Any id="any">
 						<!--- comment -->
@@ -170,7 +170,7 @@ class MXHXComponentDeclarationsTest extends Test {
 
 	public function testStrict():Void {
 		var result = MXHXComponent.withMarkup('
-			<tests:TestClass1 xmlns:mx="https://ns.mxhx.dev/2022/basic" xmlns:tests="https://ns.mxhx.dev/2022/tests">
+			<tests:TestClass1 xmlns:mx="https://ns.mxhx.dev/2024/basic" xmlns:tests="https://ns.mxhx.dev/2024/tests">
 				<mx:Declarations>
 					<tests:TestPropertiesClass
 						id="strict"
@@ -215,7 +215,7 @@ class MXHXComponentDeclarationsTest extends Test {
 
 	public function testEnumValue():Void {
 		var result = MXHXComponent.withMarkup('
-			<tests:TestClass1 xmlns:mx="https://ns.mxhx.dev/2022/basic" xmlns:tests="https://ns.mxhx.dev/2022/tests">
+			<tests:TestClass1 xmlns:mx="https://ns.mxhx.dev/2024/basic" xmlns:tests="https://ns.mxhx.dev/2024/tests">
 				<mx:Declarations>
 					<tests:TestPropertyEnum id="enumValue">Value2</tests:TestPropertyEnum>
 				</mx:Declarations>
@@ -227,7 +227,7 @@ class MXHXComponentDeclarationsTest extends Test {
 
 	public function testEnumValueExtraWhitespace():Void {
 		var result = MXHXComponent.withMarkup('
-			<tests:TestClass1 xmlns:mx="https://ns.mxhx.dev/2022/basic" xmlns:tests="https://ns.mxhx.dev/2022/tests">
+			<tests:TestClass1 xmlns:mx="https://ns.mxhx.dev/2024/basic" xmlns:tests="https://ns.mxhx.dev/2024/tests">
 				<mx:Declarations>
 					<tests:TestPropertyEnum id="enumValue">
 						Value2
@@ -241,7 +241,7 @@ class MXHXComponentDeclarationsTest extends Test {
 
 	public function testEnumValueComment1():Void {
 		var result = MXHXComponent.withMarkup('
-			<tests:TestClass1 xmlns:mx="https://ns.mxhx.dev/2022/basic" xmlns:tests="https://ns.mxhx.dev/2022/tests">
+			<tests:TestClass1 xmlns:mx="https://ns.mxhx.dev/2024/basic" xmlns:tests="https://ns.mxhx.dev/2024/tests">
 				<mx:Declarations>
 					<tests:TestPropertyEnum id="enumValue">Value2<!-- comment --></tests:TestPropertyEnum>
 				</mx:Declarations>
@@ -253,7 +253,7 @@ class MXHXComponentDeclarationsTest extends Test {
 
 	public function testEnumValueComment2():Void {
 		var result = MXHXComponent.withMarkup('
-			<tests:TestClass1 xmlns:mx="https://ns.mxhx.dev/2022/basic" xmlns:tests="https://ns.mxhx.dev/2022/tests">
+			<tests:TestClass1 xmlns:mx="https://ns.mxhx.dev/2024/basic" xmlns:tests="https://ns.mxhx.dev/2024/tests">
 				<mx:Declarations>
 					<tests:TestPropertyEnum id="enumValue"><!-- comment -->Value2</tests:TestPropertyEnum>
 				</mx:Declarations>
@@ -265,7 +265,7 @@ class MXHXComponentDeclarationsTest extends Test {
 
 	public function testEnumValueComment3():Void {
 		var result = MXHXComponent.withMarkup('
-			<tests:TestClass1 xmlns:mx="https://ns.mxhx.dev/2022/basic" xmlns:tests="https://ns.mxhx.dev/2022/tests">
+			<tests:TestClass1 xmlns:mx="https://ns.mxhx.dev/2024/basic" xmlns:tests="https://ns.mxhx.dev/2024/tests">
 				<mx:Declarations>
 					<tests:TestPropertyEnum id="enumValue">Val<!-- comment -->ue2</tests:TestPropertyEnum>
 				</mx:Declarations>
@@ -277,7 +277,7 @@ class MXHXComponentDeclarationsTest extends Test {
 
 	public function testEnumValueCData():Void {
 		var result = MXHXComponent.withMarkup('
-			<tests:TestClass1 xmlns:mx="https://ns.mxhx.dev/2022/basic" xmlns:tests="https://ns.mxhx.dev/2022/tests">
+			<tests:TestClass1 xmlns:mx="https://ns.mxhx.dev/2024/basic" xmlns:tests="https://ns.mxhx.dev/2024/tests">
 				<mx:Declarations>
 					<tests:TestPropertyEnum id="enumValue"><![CDATA[Value2]]></tests:TestPropertyEnum>
 				</mx:Declarations>
@@ -289,7 +289,7 @@ class MXHXComponentDeclarationsTest extends Test {
 
 	public function testEReg():Void {
 		var result = MXHXComponent.withMarkup('
-			<tests:TestClass1 xmlns:mx="https://ns.mxhx.dev/2022/basic" xmlns:tests="https://ns.mxhx.dev/2022/tests">
+			<tests:TestClass1 xmlns:mx="https://ns.mxhx.dev/2024/basic" xmlns:tests="https://ns.mxhx.dev/2024/tests">
 				<mx:Declarations>
 					<mx:EReg id="ereg">~/[a-z]+/g</mx:EReg>
 				</mx:Declarations>
@@ -302,7 +302,7 @@ class MXHXComponentDeclarationsTest extends Test {
 
 	public function testERegExtraWhitespace():Void {
 		var result = MXHXComponent.withMarkup('
-			<tests:TestClass1 xmlns:mx="https://ns.mxhx.dev/2022/basic" xmlns:tests="https://ns.mxhx.dev/2022/tests">
+			<tests:TestClass1 xmlns:mx="https://ns.mxhx.dev/2024/basic" xmlns:tests="https://ns.mxhx.dev/2024/tests">
 				<mx:Declarations>
 					<mx:EReg id="ereg">
 						~/[a-z]+/g
@@ -317,7 +317,7 @@ class MXHXComponentDeclarationsTest extends Test {
 
 	public function testERegComment1():Void {
 		var result = MXHXComponent.withMarkup('
-			<tests:TestClass1 xmlns:mx="https://ns.mxhx.dev/2022/basic" xmlns:tests="https://ns.mxhx.dev/2022/tests">
+			<tests:TestClass1 xmlns:mx="https://ns.mxhx.dev/2024/basic" xmlns:tests="https://ns.mxhx.dev/2024/tests">
 				<mx:Declarations>
 					<mx:EReg id="ereg">~/[a-z]+/g<!-- comment --></mx:EReg>
 				</mx:Declarations>
@@ -330,7 +330,7 @@ class MXHXComponentDeclarationsTest extends Test {
 
 	public function testERegComment2():Void {
 		var result = MXHXComponent.withMarkup('
-			<tests:TestClass1 xmlns:mx="https://ns.mxhx.dev/2022/basic" xmlns:tests="https://ns.mxhx.dev/2022/tests">
+			<tests:TestClass1 xmlns:mx="https://ns.mxhx.dev/2024/basic" xmlns:tests="https://ns.mxhx.dev/2024/tests">
 				<mx:Declarations>
 					<mx:EReg id="ereg"><!-- comment -->~/[a-z]+/g</mx:EReg>
 				</mx:Declarations>
@@ -343,7 +343,7 @@ class MXHXComponentDeclarationsTest extends Test {
 
 	public function testERegEmpty():Void {
 		var result = MXHXComponent.withMarkup('
-			<tests:TestClass1 xmlns:mx="https://ns.mxhx.dev/2022/basic" xmlns:tests="https://ns.mxhx.dev/2022/tests">
+			<tests:TestClass1 xmlns:mx="https://ns.mxhx.dev/2024/basic" xmlns:tests="https://ns.mxhx.dev/2024/tests">
 				<mx:Declarations>
 					<mx:EReg id="ereg"></mx:EReg>
 				</mx:Declarations>
@@ -356,7 +356,7 @@ class MXHXComponentDeclarationsTest extends Test {
 
 	public function testERegEmptyExtraWhitespace():Void {
 		var result = MXHXComponent.withMarkup('
-			<tests:TestClass1 xmlns:mx="https://ns.mxhx.dev/2022/basic" xmlns:tests="https://ns.mxhx.dev/2022/tests">
+			<tests:TestClass1 xmlns:mx="https://ns.mxhx.dev/2024/basic" xmlns:tests="https://ns.mxhx.dev/2024/tests">
 				<mx:Declarations>
 					<mx:EReg id="ereg">
 					</mx:EReg>
@@ -370,7 +370,7 @@ class MXHXComponentDeclarationsTest extends Test {
 
 	public function testERegOnlyComment1():Void {
 		var result = MXHXComponent.withMarkup('
-			<tests:TestClass1 xmlns:mx="https://ns.mxhx.dev/2022/basic" xmlns:tests="https://ns.mxhx.dev/2022/tests">
+			<tests:TestClass1 xmlns:mx="https://ns.mxhx.dev/2024/basic" xmlns:tests="https://ns.mxhx.dev/2024/tests">
 				<mx:Declarations>
 					<mx:EReg id="ereg"><!-- comment --></mx:EReg>
 				</mx:Declarations>
@@ -383,7 +383,7 @@ class MXHXComponentDeclarationsTest extends Test {
 
 	public function testERegOnlyComment2():Void {
 		var result = MXHXComponent.withMarkup('
-			<tests:TestClass1 xmlns:mx="https://ns.mxhx.dev/2022/basic" xmlns:tests="https://ns.mxhx.dev/2022/tests">
+			<tests:TestClass1 xmlns:mx="https://ns.mxhx.dev/2024/basic" xmlns:tests="https://ns.mxhx.dev/2024/tests">
 				<mx:Declarations>
 					<mx:EReg id="ereg">
 						<!-- comment -->
@@ -398,7 +398,7 @@ class MXHXComponentDeclarationsTest extends Test {
 
 	public function testERegOnlyDocComment1():Void {
 		var result = MXHXComponent.withMarkup('
-			<tests:TestClass1 xmlns:mx="https://ns.mxhx.dev/2022/basic" xmlns:tests="https://ns.mxhx.dev/2022/tests">
+			<tests:TestClass1 xmlns:mx="https://ns.mxhx.dev/2024/basic" xmlns:tests="https://ns.mxhx.dev/2024/tests">
 				<mx:Declarations>
 					<mx:EReg id="ereg"><!--- doc comment --></mx:EReg>
 				</mx:Declarations>
@@ -411,7 +411,7 @@ class MXHXComponentDeclarationsTest extends Test {
 
 	public function testERegOnlyDocComment2():Void {
 		var result = MXHXComponent.withMarkup('
-			<tests:TestClass1 xmlns:mx="https://ns.mxhx.dev/2022/basic" xmlns:tests="https://ns.mxhx.dev/2022/tests">
+			<tests:TestClass1 xmlns:mx="https://ns.mxhx.dev/2024/basic" xmlns:tests="https://ns.mxhx.dev/2024/tests">
 				<mx:Declarations>
 					<mx:EReg id="ereg">
 						<!--- doc comment -->
@@ -426,7 +426,7 @@ class MXHXComponentDeclarationsTest extends Test {
 
 	public function testERegNoExpression():Void {
 		var result = MXHXComponent.withMarkup('
-			<tests:TestClass1 xmlns:mx="https://ns.mxhx.dev/2022/basic" xmlns:tests="https://ns.mxhx.dev/2022/tests">
+			<tests:TestClass1 xmlns:mx="https://ns.mxhx.dev/2024/basic" xmlns:tests="https://ns.mxhx.dev/2024/tests">
 				<mx:Declarations>
 					<mx:EReg id="ereg">~//</mx:EReg>
 				</mx:Declarations>
@@ -439,7 +439,7 @@ class MXHXComponentDeclarationsTest extends Test {
 
 	public function testERegCData():Void {
 		var result = MXHXComponent.withMarkup('
-			<tests:TestClass1 xmlns:mx="https://ns.mxhx.dev/2022/basic" xmlns:tests="https://ns.mxhx.dev/2022/tests">
+			<tests:TestClass1 xmlns:mx="https://ns.mxhx.dev/2024/basic" xmlns:tests="https://ns.mxhx.dev/2024/tests">
 				<mx:Declarations>
 					<mx:EReg id="ereg"><![CDATA[~/[a-z]+/g]]></mx:EReg>
 				</mx:Declarations>
@@ -452,7 +452,7 @@ class MXHXComponentDeclarationsTest extends Test {
 
 	public function testFloat():Void {
 		var result = MXHXComponent.withMarkup('
-			<tests:TestClass1 xmlns:mx="https://ns.mxhx.dev/2022/basic" xmlns:tests="https://ns.mxhx.dev/2022/tests">
+			<tests:TestClass1 xmlns:mx="https://ns.mxhx.dev/2024/basic" xmlns:tests="https://ns.mxhx.dev/2024/tests">
 				<mx:Declarations>
 					<mx:Float id="float">123.4</mx:Float>
 				</mx:Declarations>
@@ -465,7 +465,7 @@ class MXHXComponentDeclarationsTest extends Test {
 
 	public function testFloatExtraWhitespace():Void {
 		var result = MXHXComponent.withMarkup('
-			<tests:TestClass1 xmlns:mx="https://ns.mxhx.dev/2022/basic" xmlns:tests="https://ns.mxhx.dev/2022/tests">
+			<tests:TestClass1 xmlns:mx="https://ns.mxhx.dev/2024/basic" xmlns:tests="https://ns.mxhx.dev/2024/tests">
 				<mx:Declarations>
 					<mx:Float id="float">
 						123.4
@@ -480,7 +480,7 @@ class MXHXComponentDeclarationsTest extends Test {
 
 	public function testFloatComment1():Void {
 		var result = MXHXComponent.withMarkup('
-			<tests:TestClass1 xmlns:mx="https://ns.mxhx.dev/2022/basic" xmlns:tests="https://ns.mxhx.dev/2022/tests">
+			<tests:TestClass1 xmlns:mx="https://ns.mxhx.dev/2024/basic" xmlns:tests="https://ns.mxhx.dev/2024/tests">
 				<mx:Declarations>
 					<mx:Float id="float">123.4<!-- comment --></mx:Float>
 				</mx:Declarations>
@@ -493,7 +493,7 @@ class MXHXComponentDeclarationsTest extends Test {
 
 	public function testFloatComment2():Void {
 		var result = MXHXComponent.withMarkup('
-			<tests:TestClass1 xmlns:mx="https://ns.mxhx.dev/2022/basic" xmlns:tests="https://ns.mxhx.dev/2022/tests">
+			<tests:TestClass1 xmlns:mx="https://ns.mxhx.dev/2024/basic" xmlns:tests="https://ns.mxhx.dev/2024/tests">
 				<mx:Declarations>
 					<mx:Float id="float"><!-- comment -->123.4</mx:Float>
 				</mx:Declarations>
@@ -506,7 +506,7 @@ class MXHXComponentDeclarationsTest extends Test {
 
 	public function testFloatComment3():Void {
 		var result = MXHXComponent.withMarkup('
-			<tests:TestClass1 xmlns:mx="https://ns.mxhx.dev/2022/basic" xmlns:tests="https://ns.mxhx.dev/2022/tests">
+			<tests:TestClass1 xmlns:mx="https://ns.mxhx.dev/2024/basic" xmlns:tests="https://ns.mxhx.dev/2024/tests">
 				<mx:Declarations>
 					<mx:Float id="float">12<!-- comment -->3.4</mx:Float>
 				</mx:Declarations>
@@ -519,7 +519,7 @@ class MXHXComponentDeclarationsTest extends Test {
 
 	public function testFloatEmpty():Void {
 		var result = MXHXComponent.withMarkup('
-			<tests:TestClass1 xmlns:mx="https://ns.mxhx.dev/2022/basic" xmlns:tests="https://ns.mxhx.dev/2022/tests">
+			<tests:TestClass1 xmlns:mx="https://ns.mxhx.dev/2024/basic" xmlns:tests="https://ns.mxhx.dev/2024/tests">
 				<mx:Declarations>
 					<mx:Float id="float"></mx:Float>
 				</mx:Declarations>
@@ -532,7 +532,7 @@ class MXHXComponentDeclarationsTest extends Test {
 
 	public function testFloatEmptyExtraWhitespace():Void {
 		var result = MXHXComponent.withMarkup('
-			<tests:TestClass1 xmlns:mx="https://ns.mxhx.dev/2022/basic" xmlns:tests="https://ns.mxhx.dev/2022/tests">
+			<tests:TestClass1 xmlns:mx="https://ns.mxhx.dev/2024/basic" xmlns:tests="https://ns.mxhx.dev/2024/tests">
 				<mx:Declarations>
 					<mx:Float id="float">
 					</mx:Float>
@@ -546,7 +546,7 @@ class MXHXComponentDeclarationsTest extends Test {
 
 	public function testFloatOnlyComment1():Void {
 		var result = MXHXComponent.withMarkup('
-			<tests:TestClass1 xmlns:mx="https://ns.mxhx.dev/2022/basic" xmlns:tests="https://ns.mxhx.dev/2022/tests">
+			<tests:TestClass1 xmlns:mx="https://ns.mxhx.dev/2024/basic" xmlns:tests="https://ns.mxhx.dev/2024/tests">
 				<mx:Declarations>
 					<mx:Float id="float"><!-- comment --></mx:Float>
 				</mx:Declarations>
@@ -559,7 +559,7 @@ class MXHXComponentDeclarationsTest extends Test {
 
 	public function testFloatOnlyComment2():Void {
 		var result = MXHXComponent.withMarkup('
-			<tests:TestClass1 xmlns:mx="https://ns.mxhx.dev/2022/basic" xmlns:tests="https://ns.mxhx.dev/2022/tests">
+			<tests:TestClass1 xmlns:mx="https://ns.mxhx.dev/2024/basic" xmlns:tests="https://ns.mxhx.dev/2024/tests">
 				<mx:Declarations>
 					<mx:Float id="float">
 						<!-- comment -->
@@ -574,7 +574,7 @@ class MXHXComponentDeclarationsTest extends Test {
 
 	public function testFloatOnlyDocComment1():Void {
 		var result = MXHXComponent.withMarkup('
-			<tests:TestClass1 xmlns:mx="https://ns.mxhx.dev/2022/basic" xmlns:tests="https://ns.mxhx.dev/2022/tests">
+			<tests:TestClass1 xmlns:mx="https://ns.mxhx.dev/2024/basic" xmlns:tests="https://ns.mxhx.dev/2024/tests">
 				<mx:Declarations>
 					<mx:Float id="float"><!--- comment --></mx:Float>
 				</mx:Declarations>
@@ -587,7 +587,7 @@ class MXHXComponentDeclarationsTest extends Test {
 
 	public function testFloatOnlyDocComment2():Void {
 		var result = MXHXComponent.withMarkup('
-			<tests:TestClass1 xmlns:mx="https://ns.mxhx.dev/2022/basic" xmlns:tests="https://ns.mxhx.dev/2022/tests">
+			<tests:TestClass1 xmlns:mx="https://ns.mxhx.dev/2024/basic" xmlns:tests="https://ns.mxhx.dev/2024/tests">
 				<mx:Declarations>
 					<mx:Float id="float">
 						<!--- doc comment -->
@@ -602,7 +602,7 @@ class MXHXComponentDeclarationsTest extends Test {
 
 	public function testFloatNegative():Void {
 		var result = MXHXComponent.withMarkup('
-			<tests:TestClass1 xmlns:mx="https://ns.mxhx.dev/2022/basic" xmlns:tests="https://ns.mxhx.dev/2022/tests">
+			<tests:TestClass1 xmlns:mx="https://ns.mxhx.dev/2024/basic" xmlns:tests="https://ns.mxhx.dev/2024/tests">
 				<mx:Declarations>
 					<mx:Float id="float">-123.4</mx:Float>
 				</mx:Declarations>
@@ -615,7 +615,7 @@ class MXHXComponentDeclarationsTest extends Test {
 
 	public function testFloatInt():Void {
 		var result = MXHXComponent.withMarkup('
-			<tests:TestClass1 xmlns:mx="https://ns.mxhx.dev/2022/basic" xmlns:tests="https://ns.mxhx.dev/2022/tests">
+			<tests:TestClass1 xmlns:mx="https://ns.mxhx.dev/2024/basic" xmlns:tests="https://ns.mxhx.dev/2024/tests">
 				<mx:Declarations>
 					<mx:Float id="float">456</mx:Float>
 				</mx:Declarations>
@@ -628,7 +628,7 @@ class MXHXComponentDeclarationsTest extends Test {
 
 	public function testFloatIntNegative():Void {
 		var result = MXHXComponent.withMarkup('
-			<tests:TestClass1 xmlns:mx="https://ns.mxhx.dev/2022/basic" xmlns:tests="https://ns.mxhx.dev/2022/tests">
+			<tests:TestClass1 xmlns:mx="https://ns.mxhx.dev/2024/basic" xmlns:tests="https://ns.mxhx.dev/2024/tests">
 				<mx:Declarations>
 					<mx:Float id="float">-456</mx:Float>
 				</mx:Declarations>
@@ -641,7 +641,7 @@ class MXHXComponentDeclarationsTest extends Test {
 
 	public function testFloatHexLowerCase():Void {
 		var result = MXHXComponent.withMarkup('
-			<tests:TestClass1 xmlns:mx="https://ns.mxhx.dev/2022/basic" xmlns:tests="https://ns.mxhx.dev/2022/tests">
+			<tests:TestClass1 xmlns:mx="https://ns.mxhx.dev/2024/basic" xmlns:tests="https://ns.mxhx.dev/2024/tests">
 				<mx:Declarations>
 					<mx:Float id="float">0xbeef</mx:Float>
 				</mx:Declarations>
@@ -654,7 +654,7 @@ class MXHXComponentDeclarationsTest extends Test {
 
 	public function testFloatHexUpperCase():Void {
 		var result = MXHXComponent.withMarkup('
-			<tests:TestClass1 xmlns:mx="https://ns.mxhx.dev/2022/basic" xmlns:tests="https://ns.mxhx.dev/2022/tests">
+			<tests:TestClass1 xmlns:mx="https://ns.mxhx.dev/2024/basic" xmlns:tests="https://ns.mxhx.dev/2024/tests">
 				<mx:Declarations>
 					<mx:Float id="float">0xBEEF</mx:Float>
 				</mx:Declarations>
@@ -667,7 +667,7 @@ class MXHXComponentDeclarationsTest extends Test {
 
 	public function testFloatHexNegative():Void {
 		var result = MXHXComponent.withMarkup('
-			<tests:TestClass1 xmlns:mx="https://ns.mxhx.dev/2022/basic" xmlns:tests="https://ns.mxhx.dev/2022/tests">
+			<tests:TestClass1 xmlns:mx="https://ns.mxhx.dev/2024/basic" xmlns:tests="https://ns.mxhx.dev/2024/tests">
 				<mx:Declarations>
 					<mx:Float id="float">-0xbeef</mx:Float>
 				</mx:Declarations>
@@ -680,7 +680,7 @@ class MXHXComponentDeclarationsTest extends Test {
 
 	public function testFloatExponent():Void {
 		var result = MXHXComponent.withMarkup('
-			<tests:TestClass1 xmlns:mx="https://ns.mxhx.dev/2022/basic" xmlns:tests="https://ns.mxhx.dev/2022/tests">
+			<tests:TestClass1 xmlns:mx="https://ns.mxhx.dev/2024/basic" xmlns:tests="https://ns.mxhx.dev/2024/tests">
 				<mx:Declarations>
 					<mx:Float id="float">123.4e5</mx:Float>
 				</mx:Declarations>
@@ -693,7 +693,7 @@ class MXHXComponentDeclarationsTest extends Test {
 
 	public function testFloatNegativeExponent():Void {
 		var result = MXHXComponent.withMarkup('
-			<tests:TestClass1 xmlns:mx="https://ns.mxhx.dev/2022/basic" xmlns:tests="https://ns.mxhx.dev/2022/tests">
+			<tests:TestClass1 xmlns:mx="https://ns.mxhx.dev/2024/basic" xmlns:tests="https://ns.mxhx.dev/2024/tests">
 				<mx:Declarations>
 					<mx:Float id="float">123.4e-5</mx:Float>
 				</mx:Declarations>
@@ -706,7 +706,7 @@ class MXHXComponentDeclarationsTest extends Test {
 
 	public function testFloatNaN():Void {
 		var result = MXHXComponent.withMarkup('
-			<tests:TestClass1 xmlns:mx="https://ns.mxhx.dev/2022/basic" xmlns:tests="https://ns.mxhx.dev/2022/tests">
+			<tests:TestClass1 xmlns:mx="https://ns.mxhx.dev/2024/basic" xmlns:tests="https://ns.mxhx.dev/2024/tests">
 				<mx:Declarations>
 					<mx:Float id="float">NaN</mx:Float>
 				</mx:Declarations>
@@ -719,7 +719,7 @@ class MXHXComponentDeclarationsTest extends Test {
 
 	public function testFloatInfinity():Void {
 		var result = MXHXComponent.withMarkup('
-			<tests:TestClass1 xmlns:mx="https://ns.mxhx.dev/2022/basic" xmlns:tests="https://ns.mxhx.dev/2022/tests">
+			<tests:TestClass1 xmlns:mx="https://ns.mxhx.dev/2024/basic" xmlns:tests="https://ns.mxhx.dev/2024/tests">
 				<mx:Declarations>
 					<mx:Float id="float">Infinity</mx:Float>
 				</mx:Declarations>
@@ -732,7 +732,7 @@ class MXHXComponentDeclarationsTest extends Test {
 
 	public function testFloatNegativeInfinity():Void {
 		var result = MXHXComponent.withMarkup('
-			<tests:TestClass1 xmlns:mx="https://ns.mxhx.dev/2022/basic" xmlns:tests="https://ns.mxhx.dev/2022/tests">
+			<tests:TestClass1 xmlns:mx="https://ns.mxhx.dev/2024/basic" xmlns:tests="https://ns.mxhx.dev/2024/tests">
 				<mx:Declarations>
 					<mx:Float id="float">-Infinity</mx:Float>
 				</mx:Declarations>
@@ -745,7 +745,7 @@ class MXHXComponentDeclarationsTest extends Test {
 
 	public function testFloatCData():Void {
 		var result = MXHXComponent.withMarkup('
-			<tests:TestClass1 xmlns:mx="https://ns.mxhx.dev/2022/basic" xmlns:tests="https://ns.mxhx.dev/2022/tests">
+			<tests:TestClass1 xmlns:mx="https://ns.mxhx.dev/2024/basic" xmlns:tests="https://ns.mxhx.dev/2024/tests">
 				<mx:Declarations>
 					<mx:Float id="float"><![CDATA[123.4]]></mx:Float>
 				</mx:Declarations>
@@ -758,7 +758,7 @@ class MXHXComponentDeclarationsTest extends Test {
 
 	public function testBool():Void {
 		var result = MXHXComponent.withMarkup('
-			<tests:TestClass1 xmlns:mx="https://ns.mxhx.dev/2022/basic" xmlns:tests="https://ns.mxhx.dev/2022/tests">
+			<tests:TestClass1 xmlns:mx="https://ns.mxhx.dev/2024/basic" xmlns:tests="https://ns.mxhx.dev/2024/tests">
 				<mx:Declarations>
 					<mx:Bool id="boolean">true</mx:Bool>
 				</mx:Declarations>
@@ -771,7 +771,7 @@ class MXHXComponentDeclarationsTest extends Test {
 
 	public function testBoolExtraWhitespace():Void {
 		var result = MXHXComponent.withMarkup('
-			<tests:TestClass1 xmlns:mx="https://ns.mxhx.dev/2022/basic" xmlns:tests="https://ns.mxhx.dev/2022/tests">
+			<tests:TestClass1 xmlns:mx="https://ns.mxhx.dev/2024/basic" xmlns:tests="https://ns.mxhx.dev/2024/tests">
 				<mx:Declarations>
 					<mx:Bool id="boolean">
 						true
@@ -786,7 +786,7 @@ class MXHXComponentDeclarationsTest extends Test {
 
 	public function testBoolComment1():Void {
 		var result = MXHXComponent.withMarkup('
-			<tests:TestClass1 xmlns:mx="https://ns.mxhx.dev/2022/basic" xmlns:tests="https://ns.mxhx.dev/2022/tests">
+			<tests:TestClass1 xmlns:mx="https://ns.mxhx.dev/2024/basic" xmlns:tests="https://ns.mxhx.dev/2024/tests">
 				<mx:Declarations>
 					<mx:Bool id="boolean">true<!-- comment --></mx:Bool>
 				</mx:Declarations>
@@ -799,7 +799,7 @@ class MXHXComponentDeclarationsTest extends Test {
 
 	public function testBoolComment2():Void {
 		var result = MXHXComponent.withMarkup('
-			<tests:TestClass1 xmlns:mx="https://ns.mxhx.dev/2022/basic" xmlns:tests="https://ns.mxhx.dev/2022/tests">
+			<tests:TestClass1 xmlns:mx="https://ns.mxhx.dev/2024/basic" xmlns:tests="https://ns.mxhx.dev/2024/tests">
 				<mx:Declarations>
 					<mx:Bool id="boolean"><!-- comment -->true</mx:Bool>
 				</mx:Declarations>
@@ -811,7 +811,7 @@ class MXHXComponentDeclarationsTest extends Test {
 
 	public function testBoolComment3():Void {
 		var result = MXHXComponent.withMarkup('
-			<tests:TestClass1 xmlns:mx="https://ns.mxhx.dev/2022/basic" xmlns:tests="https://ns.mxhx.dev/2022/tests">
+			<tests:TestClass1 xmlns:mx="https://ns.mxhx.dev/2024/basic" xmlns:tests="https://ns.mxhx.dev/2024/tests">
 				<mx:Declarations>
 					<mx:Bool id="boolean">tr<!-- comment -->ue</mx:Bool>
 				</mx:Declarations>
@@ -824,7 +824,7 @@ class MXHXComponentDeclarationsTest extends Test {
 
 	public function testBoolEmpty():Void {
 		var result = MXHXComponent.withMarkup('
-			<tests:TestClass1 xmlns:mx="https://ns.mxhx.dev/2022/basic" xmlns:tests="https://ns.mxhx.dev/2022/tests">
+			<tests:TestClass1 xmlns:mx="https://ns.mxhx.dev/2024/basic" xmlns:tests="https://ns.mxhx.dev/2024/tests">
 				<mx:Declarations>
 					<mx:Bool id="boolean"></mx:Bool>
 				</mx:Declarations>
@@ -837,7 +837,7 @@ class MXHXComponentDeclarationsTest extends Test {
 
 	public function testBoolEmptyExtraWhitespace():Void {
 		var result = MXHXComponent.withMarkup('
-			<tests:TestClass1 xmlns:mx="https://ns.mxhx.dev/2022/basic" xmlns:tests="https://ns.mxhx.dev/2022/tests">
+			<tests:TestClass1 xmlns:mx="https://ns.mxhx.dev/2024/basic" xmlns:tests="https://ns.mxhx.dev/2024/tests">
 				<mx:Declarations>
 					<mx:Bool id="boolean">
 					</mx:Bool>
@@ -850,7 +850,7 @@ class MXHXComponentDeclarationsTest extends Test {
 
 	public function testBoolOnlyComment1():Void {
 		var result = MXHXComponent.withMarkup('
-			<tests:TestClass1 xmlns:mx="https://ns.mxhx.dev/2022/basic" xmlns:tests="https://ns.mxhx.dev/2022/tests">
+			<tests:TestClass1 xmlns:mx="https://ns.mxhx.dev/2024/basic" xmlns:tests="https://ns.mxhx.dev/2024/tests">
 				<mx:Declarations>
 					<mx:Bool id="boolean"><!-- comment --></mx:Bool>
 				</mx:Declarations>
@@ -863,7 +863,7 @@ class MXHXComponentDeclarationsTest extends Test {
 
 	public function testBoolOnlyComment2():Void {
 		var result = MXHXComponent.withMarkup('
-			<tests:TestClass1 xmlns:mx="https://ns.mxhx.dev/2022/basic" xmlns:tests="https://ns.mxhx.dev/2022/tests">
+			<tests:TestClass1 xmlns:mx="https://ns.mxhx.dev/2024/basic" xmlns:tests="https://ns.mxhx.dev/2024/tests">
 				<mx:Declarations>
 					<mx:Bool id="boolean">
 						<!-- comment -->
@@ -878,7 +878,7 @@ class MXHXComponentDeclarationsTest extends Test {
 
 	public function testBoolCData():Void {
 		var result = MXHXComponent.withMarkup('
-			<tests:TestClass1 xmlns:mx="https://ns.mxhx.dev/2022/basic" xmlns:tests="https://ns.mxhx.dev/2022/tests">
+			<tests:TestClass1 xmlns:mx="https://ns.mxhx.dev/2024/basic" xmlns:tests="https://ns.mxhx.dev/2024/tests">
 				<mx:Declarations>
 					<mx:Bool id="boolean"><![CDATA[true]]></mx:Bool>
 				</mx:Declarations>
@@ -891,7 +891,7 @@ class MXHXComponentDeclarationsTest extends Test {
 
 	public function testClass():Void {
 		var result = MXHXComponent.withMarkup('
-			<tests:TestClass1 xmlns:mx="https://ns.mxhx.dev/2022/basic" xmlns:tests="https://ns.mxhx.dev/2022/tests">
+			<tests:TestClass1 xmlns:mx="https://ns.mxhx.dev/2024/basic" xmlns:tests="https://ns.mxhx.dev/2024/tests">
 				<mx:Declarations>
 					<mx:Class id="type">fixtures.TestClass1</mx:Class>
 				</mx:Declarations>
@@ -904,7 +904,7 @@ class MXHXComponentDeclarationsTest extends Test {
 
 	public function testClassExtraWhitespace():Void {
 		var result = MXHXComponent.withMarkup('
-			<tests:TestClass1 xmlns:mx="https://ns.mxhx.dev/2022/basic" xmlns:tests="https://ns.mxhx.dev/2022/tests">
+			<tests:TestClass1 xmlns:mx="https://ns.mxhx.dev/2024/basic" xmlns:tests="https://ns.mxhx.dev/2024/tests">
 				<mx:Declarations>
 					<mx:Class id="type">
 						fixtures.TestClass1
@@ -919,7 +919,7 @@ class MXHXComponentDeclarationsTest extends Test {
 
 	public function testClassComment1():Void {
 		var result = MXHXComponent.withMarkup('
-			<tests:TestClass1 xmlns:mx="https://ns.mxhx.dev/2022/basic" xmlns:tests="https://ns.mxhx.dev/2022/tests">
+			<tests:TestClass1 xmlns:mx="https://ns.mxhx.dev/2024/basic" xmlns:tests="https://ns.mxhx.dev/2024/tests">
 				<mx:Declarations>
 					<mx:Class id="type">fixtures.TestClass1<!-- comment --></mx:Class>
 				</mx:Declarations>
@@ -932,7 +932,7 @@ class MXHXComponentDeclarationsTest extends Test {
 
 	public function testClassComment2():Void {
 		var result = MXHXComponent.withMarkup('
-			<tests:TestClass1 xmlns:mx="https://ns.mxhx.dev/2022/basic" xmlns:tests="https://ns.mxhx.dev/2022/tests">
+			<tests:TestClass1 xmlns:mx="https://ns.mxhx.dev/2024/basic" xmlns:tests="https://ns.mxhx.dev/2024/tests">
 				<mx:Declarations>
 					<mx:Class id="type"><!-- comment -->fixtures.TestClass1</mx:Class>
 				</mx:Declarations>
@@ -945,7 +945,7 @@ class MXHXComponentDeclarationsTest extends Test {
 
 	public function testClassComment3():Void {
 		var result = MXHXComponent.withMarkup('
-			<tests:TestClass1 xmlns:mx="https://ns.mxhx.dev/2022/basic" xmlns:tests="https://ns.mxhx.dev/2022/tests">
+			<tests:TestClass1 xmlns:mx="https://ns.mxhx.dev/2024/basic" xmlns:tests="https://ns.mxhx.dev/2024/tests">
 				<mx:Declarations>
 					<mx:Class id="type">fixtures.<!-- comment -->TestClass1</mx:Class>
 				</mx:Declarations>
@@ -958,7 +958,7 @@ class MXHXComponentDeclarationsTest extends Test {
 
 	public function testClassEmpty():Void {
 		var result = MXHXComponent.withMarkup('
-			<tests:TestClass1 xmlns:mx="https://ns.mxhx.dev/2022/basic" xmlns:tests="https://ns.mxhx.dev/2022/tests">
+			<tests:TestClass1 xmlns:mx="https://ns.mxhx.dev/2024/basic" xmlns:tests="https://ns.mxhx.dev/2024/tests">
 				<mx:Declarations>
 					<mx:Class id="type"></mx:Class>
 				</mx:Declarations>
@@ -970,7 +970,7 @@ class MXHXComponentDeclarationsTest extends Test {
 
 	public function testClassEmptyExtraWhitespace():Void {
 		var result = MXHXComponent.withMarkup('
-			<tests:TestClass1 xmlns:mx="https://ns.mxhx.dev/2022/basic" xmlns:tests="https://ns.mxhx.dev/2022/tests">
+			<tests:TestClass1 xmlns:mx="https://ns.mxhx.dev/2024/basic" xmlns:tests="https://ns.mxhx.dev/2024/tests">
 				<mx:Declarations>
 					<mx:Class id="type">
 					</mx:Class>
@@ -983,7 +983,7 @@ class MXHXComponentDeclarationsTest extends Test {
 
 	public function testClassOnlyComment1():Void {
 		var result = MXHXComponent.withMarkup('
-			<tests:TestClass1 xmlns:mx="https://ns.mxhx.dev/2022/basic" xmlns:tests="https://ns.mxhx.dev/2022/tests">
+			<tests:TestClass1 xmlns:mx="https://ns.mxhx.dev/2024/basic" xmlns:tests="https://ns.mxhx.dev/2024/tests">
 				<mx:Declarations>
 					<mx:Class id="type"><!-- comment --></mx:Class>
 				</mx:Declarations>
@@ -995,7 +995,7 @@ class MXHXComponentDeclarationsTest extends Test {
 
 	public function testClassOnlyComment2():Void {
 		var result = MXHXComponent.withMarkup('
-			<tests:TestClass1 xmlns:mx="https://ns.mxhx.dev/2022/basic" xmlns:tests="https://ns.mxhx.dev/2022/tests">
+			<tests:TestClass1 xmlns:mx="https://ns.mxhx.dev/2024/basic" xmlns:tests="https://ns.mxhx.dev/2024/tests">
 				<mx:Declarations>
 					<mx:Class id="type">
 						<!-- comment -->
@@ -1009,7 +1009,7 @@ class MXHXComponentDeclarationsTest extends Test {
 
 	public function testClassCData():Void {
 		var result = MXHXComponent.withMarkup('
-			<tests:TestClass1 xmlns:mx="https://ns.mxhx.dev/2022/basic" xmlns:tests="https://ns.mxhx.dev/2022/tests">
+			<tests:TestClass1 xmlns:mx="https://ns.mxhx.dev/2024/basic" xmlns:tests="https://ns.mxhx.dev/2024/tests">
 				<mx:Declarations>
 					<mx:Class id="type"><![CDATA[fixtures.TestClass1]]></mx:Class>
 				</mx:Declarations>
@@ -1022,7 +1022,7 @@ class MXHXComponentDeclarationsTest extends Test {
 
 	public function testInt():Void {
 		var result = MXHXComponent.withMarkup('
-			<tests:TestClass1 xmlns:mx="https://ns.mxhx.dev/2022/basic" xmlns:tests="https://ns.mxhx.dev/2022/tests">
+			<tests:TestClass1 xmlns:mx="https://ns.mxhx.dev/2024/basic" xmlns:tests="https://ns.mxhx.dev/2024/tests">
 				<mx:Declarations>
 					<mx:Int id="integer">123</mx:Int>
 				</mx:Declarations>
@@ -1035,7 +1035,7 @@ class MXHXComponentDeclarationsTest extends Test {
 
 	public function testIntExtraWhitespace():Void {
 		var result = MXHXComponent.withMarkup('
-			<tests:TestClass1 xmlns:mx="https://ns.mxhx.dev/2022/basic" xmlns:tests="https://ns.mxhx.dev/2022/tests">
+			<tests:TestClass1 xmlns:mx="https://ns.mxhx.dev/2024/basic" xmlns:tests="https://ns.mxhx.dev/2024/tests">
 				<mx:Declarations>
 					<mx:Int id="integer">
 						123
@@ -1050,7 +1050,7 @@ class MXHXComponentDeclarationsTest extends Test {
 
 	public function testIntComment1():Void {
 		var result = MXHXComponent.withMarkup('
-			<tests:TestClass1 xmlns:mx="https://ns.mxhx.dev/2022/basic" xmlns:tests="https://ns.mxhx.dev/2022/tests">
+			<tests:TestClass1 xmlns:mx="https://ns.mxhx.dev/2024/basic" xmlns:tests="https://ns.mxhx.dev/2024/tests">
 				<mx:Declarations>
 					<mx:Int id="integer">123<!-- comment --></mx:Int>
 				</mx:Declarations>
@@ -1063,7 +1063,7 @@ class MXHXComponentDeclarationsTest extends Test {
 
 	public function testIntComment2():Void {
 		var result = MXHXComponent.withMarkup('
-			<tests:TestClass1 xmlns:mx="https://ns.mxhx.dev/2022/basic" xmlns:tests="https://ns.mxhx.dev/2022/tests">
+			<tests:TestClass1 xmlns:mx="https://ns.mxhx.dev/2024/basic" xmlns:tests="https://ns.mxhx.dev/2024/tests">
 				<mx:Declarations>
 					<mx:Int id="integer"><!-- comment -->123</mx:Int>
 				</mx:Declarations>
@@ -1076,7 +1076,7 @@ class MXHXComponentDeclarationsTest extends Test {
 
 	public function testIntComment3():Void {
 		var result = MXHXComponent.withMarkup('
-			<tests:TestClass1 xmlns:mx="https://ns.mxhx.dev/2022/basic" xmlns:tests="https://ns.mxhx.dev/2022/tests">
+			<tests:TestClass1 xmlns:mx="https://ns.mxhx.dev/2024/basic" xmlns:tests="https://ns.mxhx.dev/2024/tests">
 				<mx:Declarations>
 					<mx:Int id="integer">12<!-- comment -->3</mx:Int>
 				</mx:Declarations>
@@ -1089,7 +1089,7 @@ class MXHXComponentDeclarationsTest extends Test {
 
 	public function testIntEmpty():Void {
 		var result = MXHXComponent.withMarkup('
-			<tests:TestClass1 xmlns:mx="https://ns.mxhx.dev/2022/basic" xmlns:tests="https://ns.mxhx.dev/2022/tests">
+			<tests:TestClass1 xmlns:mx="https://ns.mxhx.dev/2024/basic" xmlns:tests="https://ns.mxhx.dev/2024/tests">
 				<mx:Declarations>
 					<mx:Int id="integer"></mx:Int>
 				</mx:Declarations>
@@ -1102,7 +1102,7 @@ class MXHXComponentDeclarationsTest extends Test {
 
 	public function testIntEmptyExtraWhitespace():Void {
 		var result = MXHXComponent.withMarkup('
-			<tests:TestClass1 xmlns:mx="https://ns.mxhx.dev/2022/basic" xmlns:tests="https://ns.mxhx.dev/2022/tests">
+			<tests:TestClass1 xmlns:mx="https://ns.mxhx.dev/2024/basic" xmlns:tests="https://ns.mxhx.dev/2024/tests">
 				<mx:Declarations>
 					<mx:Int id="integer">
 					</mx:Int>
@@ -1116,7 +1116,7 @@ class MXHXComponentDeclarationsTest extends Test {
 
 	public function testIntOnlyComment1():Void {
 		var result = MXHXComponent.withMarkup('
-			<tests:TestClass1 xmlns:mx="https://ns.mxhx.dev/2022/basic" xmlns:tests="https://ns.mxhx.dev/2022/tests">
+			<tests:TestClass1 xmlns:mx="https://ns.mxhx.dev/2024/basic" xmlns:tests="https://ns.mxhx.dev/2024/tests">
 				<mx:Declarations>
 					<mx:Int id="integer"><!-- comment --></mx:Int>
 				</mx:Declarations>
@@ -1129,7 +1129,7 @@ class MXHXComponentDeclarationsTest extends Test {
 
 	public function testIntOnlyComment2():Void {
 		var result = MXHXComponent.withMarkup('
-			<tests:TestClass1 xmlns:mx="https://ns.mxhx.dev/2022/basic" xmlns:tests="https://ns.mxhx.dev/2022/tests">
+			<tests:TestClass1 xmlns:mx="https://ns.mxhx.dev/2024/basic" xmlns:tests="https://ns.mxhx.dev/2024/tests">
 				<mx:Declarations>
 					<mx:Int id="integer">
 						<!-- comment -->
@@ -1144,7 +1144,7 @@ class MXHXComponentDeclarationsTest extends Test {
 
 	public function testIntNegative():Void {
 		var result = MXHXComponent.withMarkup('
-			<tests:TestClass1 xmlns:mx="https://ns.mxhx.dev/2022/basic" xmlns:tests="https://ns.mxhx.dev/2022/tests">
+			<tests:TestClass1 xmlns:mx="https://ns.mxhx.dev/2024/basic" xmlns:tests="https://ns.mxhx.dev/2024/tests">
 				<mx:Declarations>
 					<mx:Int id="integer">-123</mx:Int>
 				</mx:Declarations>
@@ -1157,7 +1157,7 @@ class MXHXComponentDeclarationsTest extends Test {
 
 	public function testIntHexLowerCase():Void {
 		var result = MXHXComponent.withMarkup('
-			<tests:TestClass1 xmlns:mx="https://ns.mxhx.dev/2022/basic" xmlns:tests="https://ns.mxhx.dev/2022/tests">
+			<tests:TestClass1 xmlns:mx="https://ns.mxhx.dev/2024/basic" xmlns:tests="https://ns.mxhx.dev/2024/tests">
 				<mx:Declarations>
 					<mx:Int id="integer">0xbeef</mx:Int>
 				</mx:Declarations>
@@ -1170,7 +1170,7 @@ class MXHXComponentDeclarationsTest extends Test {
 
 	public function testIntHexUpperCase():Void {
 		var result = MXHXComponent.withMarkup('
-			<tests:TestClass1 xmlns:mx="https://ns.mxhx.dev/2022/basic" xmlns:tests="https://ns.mxhx.dev/2022/tests">
+			<tests:TestClass1 xmlns:mx="https://ns.mxhx.dev/2024/basic" xmlns:tests="https://ns.mxhx.dev/2024/tests">
 				<mx:Declarations>
 					<mx:Int id="integer">0xBEEF</mx:Int>
 				</mx:Declarations>
@@ -1183,7 +1183,7 @@ class MXHXComponentDeclarationsTest extends Test {
 
 	public function testIntHexNegative():Void {
 		var result = MXHXComponent.withMarkup('
-			<tests:TestClass1 xmlns:mx="https://ns.mxhx.dev/2022/basic" xmlns:tests="https://ns.mxhx.dev/2022/tests">
+			<tests:TestClass1 xmlns:mx="https://ns.mxhx.dev/2024/basic" xmlns:tests="https://ns.mxhx.dev/2024/tests">
 				<mx:Declarations>
 					<mx:Int id="integer">-0xbeef</mx:Int>
 				</mx:Declarations>
@@ -1196,7 +1196,7 @@ class MXHXComponentDeclarationsTest extends Test {
 
 	public function testIntCData():Void {
 		var result = MXHXComponent.withMarkup('
-			<tests:TestClass1 xmlns:mx="https://ns.mxhx.dev/2022/basic" xmlns:tests="https://ns.mxhx.dev/2022/tests">
+			<tests:TestClass1 xmlns:mx="https://ns.mxhx.dev/2024/basic" xmlns:tests="https://ns.mxhx.dev/2024/tests">
 				<mx:Declarations>
 					<mx:Int id="integer"><![CDATA[123]]></mx:Int>
 				</mx:Declarations>
@@ -1209,7 +1209,7 @@ class MXHXComponentDeclarationsTest extends Test {
 
 	public function testString():Void {
 		var result = MXHXComponent.withMarkup('
-			<tests:TestClass1 xmlns:mx="https://ns.mxhx.dev/2022/basic" xmlns:tests="https://ns.mxhx.dev/2022/tests">
+			<tests:TestClass1 xmlns:mx="https://ns.mxhx.dev/2024/basic" xmlns:tests="https://ns.mxhx.dev/2024/tests">
 				<mx:Declarations>
 					<mx:String id="string">hello</mx:String>
 				</mx:Declarations>
@@ -1222,7 +1222,7 @@ class MXHXComponentDeclarationsTest extends Test {
 
 	public function testStringComment1():Void {
 		var result = MXHXComponent.withMarkup('
-			<tests:TestClass1 xmlns:mx="https://ns.mxhx.dev/2022/basic" xmlns:tests="https://ns.mxhx.dev/2022/tests">
+			<tests:TestClass1 xmlns:mx="https://ns.mxhx.dev/2024/basic" xmlns:tests="https://ns.mxhx.dev/2024/tests">
 				<mx:Declarations>
 					<mx:String id="string">hello<!-- comment --></mx:String>
 				</mx:Declarations>
@@ -1235,7 +1235,7 @@ class MXHXComponentDeclarationsTest extends Test {
 
 	public function testStringComment2():Void {
 		var result = MXHXComponent.withMarkup('
-			<tests:TestClass1 xmlns:mx="https://ns.mxhx.dev/2022/basic" xmlns:tests="https://ns.mxhx.dev/2022/tests">
+			<tests:TestClass1 xmlns:mx="https://ns.mxhx.dev/2024/basic" xmlns:tests="https://ns.mxhx.dev/2024/tests">
 				<mx:Declarations>
 					<mx:String id="string"><!-- comment -->hello</mx:String>
 				</mx:Declarations>
@@ -1248,7 +1248,7 @@ class MXHXComponentDeclarationsTest extends Test {
 
 	public function testStringComment3():Void {
 		var result = MXHXComponent.withMarkup('
-			<tests:TestClass1 xmlns:mx="https://ns.mxhx.dev/2022/basic" xmlns:tests="https://ns.mxhx.dev/2022/tests">
+			<tests:TestClass1 xmlns:mx="https://ns.mxhx.dev/2024/basic" xmlns:tests="https://ns.mxhx.dev/2024/tests">
 				<mx:Declarations>
 					<mx:String id="string">hello<!-- comment -->world</mx:String>
 				</mx:Declarations>
@@ -1261,7 +1261,7 @@ class MXHXComponentDeclarationsTest extends Test {
 
 	public function testStringEmpty1():Void {
 		var result = MXHXComponent.withMarkup('
-			<tests:TestClass1 xmlns:mx="https://ns.mxhx.dev/2022/basic" xmlns:tests="https://ns.mxhx.dev/2022/tests">
+			<tests:TestClass1 xmlns:mx="https://ns.mxhx.dev/2024/basic" xmlns:tests="https://ns.mxhx.dev/2024/tests">
 				<mx:Declarations>
 					<mx:String id="string"></mx:String>
 				</mx:Declarations>
@@ -1274,7 +1274,7 @@ class MXHXComponentDeclarationsTest extends Test {
 
 	public function testStringEmpty2():Void {
 		var result = MXHXComponent.withMarkup('
-			<tests:TestClass1 xmlns:mx="https://ns.mxhx.dev/2022/basic" xmlns:tests="https://ns.mxhx.dev/2022/tests">
+			<tests:TestClass1 xmlns:mx="https://ns.mxhx.dev/2024/basic" xmlns:tests="https://ns.mxhx.dev/2024/tests">
 				<mx:Declarations>
 					<mx:String id="string"/>
 				</mx:Declarations>
@@ -1287,7 +1287,7 @@ class MXHXComponentDeclarationsTest extends Test {
 
 	public function testStringEmptyExtraWhitespace():Void {
 		var result = MXHXComponent.withMarkup('
-			<tests:TestClass1 xmlns:mx="https://ns.mxhx.dev/2022/basic" xmlns:tests="https://ns.mxhx.dev/2022/tests">
+			<tests:TestClass1 xmlns:mx="https://ns.mxhx.dev/2024/basic" xmlns:tests="https://ns.mxhx.dev/2024/tests">
 				<mx:Declarations>
 					<mx:String id="string">
 					</mx:String>
@@ -1301,7 +1301,7 @@ class MXHXComponentDeclarationsTest extends Test {
 
 	public function testStringCData():Void {
 		var result = MXHXComponent.withMarkup('
-			<tests:TestClass1 xmlns:mx="https://ns.mxhx.dev/2022/basic" xmlns:tests="https://ns.mxhx.dev/2022/tests">
+			<tests:TestClass1 xmlns:mx="https://ns.mxhx.dev/2024/basic" xmlns:tests="https://ns.mxhx.dev/2024/tests">
 				<mx:Declarations>
 					<mx:String id="string"><![CDATA[MXHX & Haxe are <cool/>]]></mx:String>
 				</mx:Declarations>
@@ -1314,7 +1314,7 @@ class MXHXComponentDeclarationsTest extends Test {
 
 	public function testStringCDataEmpty():Void {
 		var result = MXHXComponent.withMarkup('
-			<tests:TestClass1 xmlns:mx="https://ns.mxhx.dev/2022/basic" xmlns:tests="https://ns.mxhx.dev/2022/tests">
+			<tests:TestClass1 xmlns:mx="https://ns.mxhx.dev/2024/basic" xmlns:tests="https://ns.mxhx.dev/2024/tests">
 				<mx:Declarations>
 					<mx:String id="string"><![CDATA[]]></mx:String>
 				</mx:Declarations>
@@ -1327,7 +1327,7 @@ class MXHXComponentDeclarationsTest extends Test {
 
 	public function testStringCDataEmptyExtraWhitespace():Void {
 		var result = MXHXComponent.withMarkup('
-			<tests:TestClass1 xmlns:mx="https://ns.mxhx.dev/2022/basic" xmlns:tests="https://ns.mxhx.dev/2022/tests">
+			<tests:TestClass1 xmlns:mx="https://ns.mxhx.dev/2024/basic" xmlns:tests="https://ns.mxhx.dev/2024/tests">
 				<mx:Declarations>
 					<mx:String id="string"><![CDATA[ ]]></mx:String>
 				</mx:Declarations>
@@ -1340,7 +1340,7 @@ class MXHXComponentDeclarationsTest extends Test {
 
 	public function testUInt():Void {
 		var result = MXHXComponent.withMarkup('
-			<tests:TestClass1 xmlns:mx="https://ns.mxhx.dev/2022/basic" xmlns:tests="https://ns.mxhx.dev/2022/tests">
+			<tests:TestClass1 xmlns:mx="https://ns.mxhx.dev/2024/basic" xmlns:tests="https://ns.mxhx.dev/2024/tests">
 				<mx:Declarations>
 					<mx:UInt id="uint">4000000000</mx:UInt>
 				</mx:Declarations>
@@ -1354,7 +1354,7 @@ class MXHXComponentDeclarationsTest extends Test {
 
 	public function testUIntExtraWhitespace():Void {
 		var result = MXHXComponent.withMarkup('
-			<tests:TestClass1 xmlns:mx="https://ns.mxhx.dev/2022/basic" xmlns:tests="https://ns.mxhx.dev/2022/tests">
+			<tests:TestClass1 xmlns:mx="https://ns.mxhx.dev/2024/basic" xmlns:tests="https://ns.mxhx.dev/2024/tests">
 				<mx:Declarations>
 					<mx:UInt id="uint">
 						4000000000
@@ -1370,7 +1370,7 @@ class MXHXComponentDeclarationsTest extends Test {
 
 	public function testUIntComment1():Void {
 		var result = MXHXComponent.withMarkup('
-			<tests:TestClass1 xmlns:mx="https://ns.mxhx.dev/2022/basic" xmlns:tests="https://ns.mxhx.dev/2022/tests">
+			<tests:TestClass1 xmlns:mx="https://ns.mxhx.dev/2024/basic" xmlns:tests="https://ns.mxhx.dev/2024/tests">
 				<mx:Declarations>
 					<mx:UInt id="uint">4000000000<!-- comment --></mx:UInt>
 				</mx:Declarations>
@@ -1384,7 +1384,7 @@ class MXHXComponentDeclarationsTest extends Test {
 
 	public function testUIntComment2():Void {
 		var result = MXHXComponent.withMarkup('
-			<tests:TestClass1 xmlns:mx="https://ns.mxhx.dev/2022/basic" xmlns:tests="https://ns.mxhx.dev/2022/tests">
+			<tests:TestClass1 xmlns:mx="https://ns.mxhx.dev/2024/basic" xmlns:tests="https://ns.mxhx.dev/2024/tests">
 				<mx:Declarations>
 					<mx:UInt id="uint"><!-- comment -->4000000000</mx:UInt>
 				</mx:Declarations>
@@ -1398,7 +1398,7 @@ class MXHXComponentDeclarationsTest extends Test {
 
 	public function testUIntComment3():Void {
 		var result = MXHXComponent.withMarkup('
-			<tests:TestClass1 xmlns:mx="https://ns.mxhx.dev/2022/basic" xmlns:tests="https://ns.mxhx.dev/2022/tests">
+			<tests:TestClass1 xmlns:mx="https://ns.mxhx.dev/2024/basic" xmlns:tests="https://ns.mxhx.dev/2024/tests">
 				<mx:Declarations>
 					<mx:UInt id="uint">4000000<!-- comment -->000</mx:UInt>
 				</mx:Declarations>
@@ -1412,7 +1412,7 @@ class MXHXComponentDeclarationsTest extends Test {
 
 	public function testUIntEmpty():Void {
 		var result = MXHXComponent.withMarkup('
-			<tests:TestClass1 xmlns:mx="https://ns.mxhx.dev/2022/basic" xmlns:tests="https://ns.mxhx.dev/2022/tests">
+			<tests:TestClass1 xmlns:mx="https://ns.mxhx.dev/2024/basic" xmlns:tests="https://ns.mxhx.dev/2024/tests">
 				<mx:Declarations>
 					<mx:UInt id="uint"></mx:UInt>
 				</mx:Declarations>
@@ -1425,7 +1425,7 @@ class MXHXComponentDeclarationsTest extends Test {
 
 	public function testUIntEmptyExtraWhitespace():Void {
 		var result = MXHXComponent.withMarkup('
-			<tests:TestClass1 xmlns:mx="https://ns.mxhx.dev/2022/basic" xmlns:tests="https://ns.mxhx.dev/2022/tests">
+			<tests:TestClass1 xmlns:mx="https://ns.mxhx.dev/2024/basic" xmlns:tests="https://ns.mxhx.dev/2024/tests">
 				<mx:Declarations>
 					<mx:UInt id="uint">
 					</mx:UInt>
@@ -1439,7 +1439,7 @@ class MXHXComponentDeclarationsTest extends Test {
 
 	public function testUIntEmptyOnlyComment1():Void {
 		var result = MXHXComponent.withMarkup('
-			<tests:TestClass1 xmlns:mx="https://ns.mxhx.dev/2022/basic" xmlns:tests="https://ns.mxhx.dev/2022/tests">
+			<tests:TestClass1 xmlns:mx="https://ns.mxhx.dev/2024/basic" xmlns:tests="https://ns.mxhx.dev/2024/tests">
 				<mx:Declarations>
 					<mx:UInt id="uint"><!-- comment --></mx:UInt>
 				</mx:Declarations>
@@ -1452,7 +1452,7 @@ class MXHXComponentDeclarationsTest extends Test {
 
 	public function testUIntEmptyOnlyComment2():Void {
 		var result = MXHXComponent.withMarkup('
-			<tests:TestClass1 xmlns:mx="https://ns.mxhx.dev/2022/basic" xmlns:tests="https://ns.mxhx.dev/2022/tests">
+			<tests:TestClass1 xmlns:mx="https://ns.mxhx.dev/2024/basic" xmlns:tests="https://ns.mxhx.dev/2024/tests">
 				<mx:Declarations>
 					<mx:UInt id="uint">
 						<!-- comment -->
@@ -1467,7 +1467,7 @@ class MXHXComponentDeclarationsTest extends Test {
 
 	public function testUIntHexLowerCase():Void {
 		var result = MXHXComponent.withMarkup('
-			<tests:TestClass1 xmlns:mx="https://ns.mxhx.dev/2022/basic" xmlns:tests="https://ns.mxhx.dev/2022/tests">
+			<tests:TestClass1 xmlns:mx="https://ns.mxhx.dev/2024/basic" xmlns:tests="https://ns.mxhx.dev/2024/tests">
 				<mx:Declarations>
 					<mx:UInt id="uint">0xee6b2800</mx:UInt>
 				</mx:Declarations>
@@ -1481,7 +1481,7 @@ class MXHXComponentDeclarationsTest extends Test {
 
 	public function testUIntHexUpperCase():Void {
 		var result = MXHXComponent.withMarkup('
-			<tests:TestClass1 xmlns:mx="https://ns.mxhx.dev/2022/basic" xmlns:tests="https://ns.mxhx.dev/2022/tests">
+			<tests:TestClass1 xmlns:mx="https://ns.mxhx.dev/2024/basic" xmlns:tests="https://ns.mxhx.dev/2024/tests">
 				<mx:Declarations>
 					<mx:UInt id="uint">0xEE6B2800</mx:UInt>
 				</mx:Declarations>
@@ -1495,7 +1495,7 @@ class MXHXComponentDeclarationsTest extends Test {
 
 	public function testUIntCData():Void {
 		var result = MXHXComponent.withMarkup('
-			<tests:TestClass1 xmlns:mx="https://ns.mxhx.dev/2022/basic" xmlns:tests="https://ns.mxhx.dev/2022/tests">
+			<tests:TestClass1 xmlns:mx="https://ns.mxhx.dev/2024/basic" xmlns:tests="https://ns.mxhx.dev/2024/tests">
 				<mx:Declarations>
 					<mx:UInt id="uint"><![CDATA[4000000000]]></mx:UInt>
 				</mx:Declarations>
@@ -1509,7 +1509,7 @@ class MXHXComponentDeclarationsTest extends Test {
 
 	public function testArray():Void {
 		var result = MXHXComponent.withMarkup('
-			<tests:TestClass1 xmlns:mx="https://ns.mxhx.dev/2022/basic" xmlns:tests="https://ns.mxhx.dev/2022/tests">
+			<tests:TestClass1 xmlns:mx="https://ns.mxhx.dev/2024/basic" xmlns:tests="https://ns.mxhx.dev/2024/tests">
 				<mx:Declarations>
 					<mx:Array id="array">
 						<mx:String>one</mx:String>
@@ -1530,7 +1530,7 @@ class MXHXComponentDeclarationsTest extends Test {
 
 	public function testArrayType():Void {
 		var result = MXHXComponent.withMarkup('
-			<tests:TestClass1 xmlns:mx="https://ns.mxhx.dev/2022/basic" xmlns:tests="https://ns.mxhx.dev/2022/tests">
+			<tests:TestClass1 xmlns:mx="https://ns.mxhx.dev/2024/basic" xmlns:tests="https://ns.mxhx.dev/2024/tests">
 				<mx:Declarations>
 					<mx:Array id="array" type="String">
 						<mx:String>one</mx:String>
@@ -1551,7 +1551,7 @@ class MXHXComponentDeclarationsTest extends Test {
 
 	public function testArrayComment1():Void {
 		var result = MXHXComponent.withMarkup('
-			<tests:TestClass1 xmlns:mx="https://ns.mxhx.dev/2022/basic" xmlns:tests="https://ns.mxhx.dev/2022/tests">
+			<tests:TestClass1 xmlns:mx="https://ns.mxhx.dev/2024/basic" xmlns:tests="https://ns.mxhx.dev/2024/tests">
 				<mx:Declarations>
 					<mx:Array id="array">
 						<mx:String>one</mx:String>
@@ -1573,7 +1573,7 @@ class MXHXComponentDeclarationsTest extends Test {
 
 	public function testArrayComment2():Void {
 		var result = MXHXComponent.withMarkup('
-			<tests:TestClass1 xmlns:mx="https://ns.mxhx.dev/2022/basic" xmlns:tests="https://ns.mxhx.dev/2022/tests">
+			<tests:TestClass1 xmlns:mx="https://ns.mxhx.dev/2024/basic" xmlns:tests="https://ns.mxhx.dev/2024/tests">
 				<mx:Declarations>
 					<mx:Array id="array">
 						<!-- comment -->
@@ -1595,7 +1595,7 @@ class MXHXComponentDeclarationsTest extends Test {
 
 	public function testArrayComment3():Void {
 		var result = MXHXComponent.withMarkup('
-			<tests:TestClass1 xmlns:mx="https://ns.mxhx.dev/2022/basic" xmlns:tests="https://ns.mxhx.dev/2022/tests">
+			<tests:TestClass1 xmlns:mx="https://ns.mxhx.dev/2024/basic" xmlns:tests="https://ns.mxhx.dev/2024/tests">
 				<mx:Declarations>
 					<mx:Array id="array">
 						<mx:String>one</mx:String>
@@ -1617,7 +1617,7 @@ class MXHXComponentDeclarationsTest extends Test {
 
 	public function testArrayEmpty():Void {
 		var result = MXHXComponent.withMarkup('
-			<tests:TestClass1 xmlns:mx="https://ns.mxhx.dev/2022/basic" xmlns:tests="https://ns.mxhx.dev/2022/tests">
+			<tests:TestClass1 xmlns:mx="https://ns.mxhx.dev/2024/basic" xmlns:tests="https://ns.mxhx.dev/2024/tests">
 				<mx:Declarations>
 					<mx:Array id="array"></mx:Array>
 				</mx:Declarations>
@@ -1631,7 +1631,7 @@ class MXHXComponentDeclarationsTest extends Test {
 
 	public function testArrayEmptyExtraWhitespace():Void {
 		var result = MXHXComponent.withMarkup('
-			<tests:TestClass1 xmlns:mx="https://ns.mxhx.dev/2022/basic" xmlns:tests="https://ns.mxhx.dev/2022/tests">
+			<tests:TestClass1 xmlns:mx="https://ns.mxhx.dev/2024/basic" xmlns:tests="https://ns.mxhx.dev/2024/tests">
 				<mx:Declarations>
 					<mx:Array id="array">
 					</mx:Array>
@@ -1646,7 +1646,7 @@ class MXHXComponentDeclarationsTest extends Test {
 
 	public function testArrayOnlyComment1():Void {
 		var result = MXHXComponent.withMarkup('
-			<tests:TestClass1 xmlns:mx="https://ns.mxhx.dev/2022/basic" xmlns:tests="https://ns.mxhx.dev/2022/tests">
+			<tests:TestClass1 xmlns:mx="https://ns.mxhx.dev/2024/basic" xmlns:tests="https://ns.mxhx.dev/2024/tests">
 				<mx:Declarations>
 					<mx:Array id="array"><!-- comment --></mx:Array>
 				</mx:Declarations>
@@ -1660,7 +1660,7 @@ class MXHXComponentDeclarationsTest extends Test {
 
 	public function testArrayOnlyComment2():Void {
 		var result = MXHXComponent.withMarkup('
-			<tests:TestClass1 xmlns:mx="https://ns.mxhx.dev/2022/basic" xmlns:tests="https://ns.mxhx.dev/2022/tests">
+			<tests:TestClass1 xmlns:mx="https://ns.mxhx.dev/2024/basic" xmlns:tests="https://ns.mxhx.dev/2024/tests">
 				<mx:Declarations>
 					<mx:Array id="array">
 						<!-- comment -->
@@ -1676,7 +1676,7 @@ class MXHXComponentDeclarationsTest extends Test {
 
 	public function testArrayStrictUnify():Void {
 		var result = MXHXComponent.withMarkup('
-			<tests:TestClass1 xmlns:mx="https://ns.mxhx.dev/2022/basic" xmlns:tests="https://ns.mxhx.dev/2022/tests">
+			<tests:TestClass1 xmlns:mx="https://ns.mxhx.dev/2024/basic" xmlns:tests="https://ns.mxhx.dev/2024/tests">
 				<mx:Declarations>
 					<mx:Array id="array">
 						<tests:TestPropertiesSubclass1/>
@@ -1693,7 +1693,7 @@ class MXHXComponentDeclarationsTest extends Test {
 
 	public function testArrayEmptyStrings():Void {
 		var result = MXHXComponent.withMarkup('
-			<tests:TestClass1 xmlns:mx="https://ns.mxhx.dev/2022/basic" xmlns:tests="https://ns.mxhx.dev/2022/tests">
+			<tests:TestClass1 xmlns:mx="https://ns.mxhx.dev/2024/basic" xmlns:tests="https://ns.mxhx.dev/2024/tests">
 				<mx:Declarations>
 					<mx:Array id="array">
 						<mx:String></mx:String>
@@ -1720,7 +1720,7 @@ class MXHXComponentDeclarationsTest extends Test {
 
 	public function testXmlEmpty():Void {
 		var result = MXHXComponent.withMarkup('
-			<tests:TestClass1 xmlns:mx="https://ns.mxhx.dev/2022/basic" xmlns:tests="https://ns.mxhx.dev/2022/tests">
+			<tests:TestClass1 xmlns:mx="https://ns.mxhx.dev/2024/basic" xmlns:tests="https://ns.mxhx.dev/2024/tests">
 				<mx:Declarations>
 					<mx:Xml id="xml"></mx:Xml>
 				</mx:Declarations>
@@ -1739,7 +1739,7 @@ class MXHXComponentDeclarationsTest extends Test {
 
 	public function testXmlElement():Void {
 		var result = MXHXComponent.withMarkup('
-			<tests:TestClass1 xmlns:mx="https://ns.mxhx.dev/2022/basic" xmlns:tests="https://ns.mxhx.dev/2022/tests">
+			<tests:TestClass1 xmlns:mx="https://ns.mxhx.dev/2024/basic" xmlns:tests="https://ns.mxhx.dev/2024/tests">
 				<mx:Declarations>
 					<mx:Xml id="xml"><element/></mx:Xml>
 				</mx:Declarations>
@@ -1761,7 +1761,7 @@ class MXHXComponentDeclarationsTest extends Test {
 
 	public function testXmlElementWithAttribute():Void {
 		var result = MXHXComponent.withMarkup('
-			<tests:TestClass1 xmlns:mx="https://ns.mxhx.dev/2022/basic" xmlns:tests="https://ns.mxhx.dev/2022/tests">
+			<tests:TestClass1 xmlns:mx="https://ns.mxhx.dev/2024/basic" xmlns:tests="https://ns.mxhx.dev/2024/tests">
 				<mx:Declarations>
 					<mx:Xml id="xml"><element attr="value"/></mx:Xml>
 				</mx:Declarations>
@@ -1788,7 +1788,7 @@ class MXHXComponentDeclarationsTest extends Test {
 
 	public function testXmlElementWithMultipleAttributes():Void {
 		var result = MXHXComponent.withMarkup('
-			<tests:TestClass1 xmlns:mx="https://ns.mxhx.dev/2022/basic" xmlns:tests="https://ns.mxhx.dev/2022/tests">
+			<tests:TestClass1 xmlns:mx="https://ns.mxhx.dev/2024/basic" xmlns:tests="https://ns.mxhx.dev/2024/tests">
 				<mx:Declarations>
 					<mx:Xml id="xml"><element attr1="value1" attr2="value2"/></mx:Xml>
 				</mx:Declarations>
@@ -1819,7 +1819,7 @@ class MXHXComponentDeclarationsTest extends Test {
 
 	public function testXmlOpenCloseElement():Void {
 		var result = MXHXComponent.withMarkup('
-			<tests:TestClass1 xmlns:mx="https://ns.mxhx.dev/2022/basic" xmlns:tests="https://ns.mxhx.dev/2022/tests">
+			<tests:TestClass1 xmlns:mx="https://ns.mxhx.dev/2024/basic" xmlns:tests="https://ns.mxhx.dev/2024/tests">
 				<mx:Declarations>
 					<mx:Xml id="xml"><element></element></mx:Xml>
 				</mx:Declarations>
@@ -1841,7 +1841,7 @@ class MXHXComponentDeclarationsTest extends Test {
 
 	public function testXmlElementChild():Void {
 		var result = MXHXComponent.withMarkup('
-			<tests:TestClass1 xmlns:mx="https://ns.mxhx.dev/2022/basic" xmlns:tests="https://ns.mxhx.dev/2022/tests">
+			<tests:TestClass1 xmlns:mx="https://ns.mxhx.dev/2024/basic" xmlns:tests="https://ns.mxhx.dev/2024/tests">
 				<mx:Declarations>
 					<mx:Xml id="xml"><element><child/></element></mx:Xml>
 				</mx:Declarations>
@@ -1870,7 +1870,7 @@ class MXHXComponentDeclarationsTest extends Test {
 
 	public function testXmlElementMultipleChildren():Void {
 		var result = MXHXComponent.withMarkup('
-			<tests:TestClass1 xmlns:mx="https://ns.mxhx.dev/2022/basic" xmlns:tests="https://ns.mxhx.dev/2022/tests">
+			<tests:TestClass1 xmlns:mx="https://ns.mxhx.dev/2024/basic" xmlns:tests="https://ns.mxhx.dev/2024/tests">
 				<mx:Declarations>
 					<mx:Xml id="xml"><element><child1/><child2></child2></element></mx:Xml>
 				</mx:Declarations>
@@ -1905,7 +1905,7 @@ class MXHXComponentDeclarationsTest extends Test {
 
 	public function testXmlChildElementComplex():Void {
 		var result = MXHXComponent.withMarkup('
-			<tests:TestClass1 xmlns:mx="https://ns.mxhx.dev/2022/basic" xmlns:tests="https://ns.mxhx.dev/2022/tests">
+			<tests:TestClass1 xmlns:mx="https://ns.mxhx.dev/2024/basic" xmlns:tests="https://ns.mxhx.dev/2024/tests">
 				<mx:Declarations>
 					<mx:Xml id="xml"><element><child1><gchild/></child1><child2/></element></mx:Xml>
 				</mx:Declarations>
@@ -1946,7 +1946,7 @@ class MXHXComponentDeclarationsTest extends Test {
 
 	public function testXmlText():Void {
 		var result = MXHXComponent.withMarkup('
-			<tests:TestClass1 xmlns:mx="https://ns.mxhx.dev/2022/basic" xmlns:tests="https://ns.mxhx.dev/2022/tests">
+			<tests:TestClass1 xmlns:mx="https://ns.mxhx.dev/2024/basic" xmlns:tests="https://ns.mxhx.dev/2024/tests">
 				<mx:Declarations>
 					<mx:Xml id="xml">this is text</mx:Xml>
 				</mx:Declarations>
@@ -1965,7 +1965,7 @@ class MXHXComponentDeclarationsTest extends Test {
 
 	public function testXmlTextChild():Void {
 		var result = MXHXComponent.withMarkup('
-			<tests:TestClass1 xmlns:mx="https://ns.mxhx.dev/2022/basic" xmlns:tests="https://ns.mxhx.dev/2022/tests">
+			<tests:TestClass1 xmlns:mx="https://ns.mxhx.dev/2024/basic" xmlns:tests="https://ns.mxhx.dev/2024/tests">
 				<mx:Declarations>
 					<mx:Xml id="xml"><element>this is text</element></mx:Xml>
 				</mx:Declarations>
@@ -1992,7 +1992,7 @@ class MXHXComponentDeclarationsTest extends Test {
 
 	public function testXmlCData():Void {
 		var result = MXHXComponent.withMarkup('
-			<tests:TestClass1 xmlns:mx="https://ns.mxhx.dev/2022/basic" xmlns:tests="https://ns.mxhx.dev/2022/tests">
+			<tests:TestClass1 xmlns:mx="https://ns.mxhx.dev/2024/basic" xmlns:tests="https://ns.mxhx.dev/2024/tests">
 				<mx:Declarations>
 					<mx:Xml id="xml"><![CDATA[this is cdata]]></mx:Xml>
 				</mx:Declarations>
@@ -2011,7 +2011,7 @@ class MXHXComponentDeclarationsTest extends Test {
 
 	public function testXmlCDataChild():Void {
 		var result = MXHXComponent.withMarkup('
-			<tests:TestClass1 xmlns:mx="https://ns.mxhx.dev/2022/basic" xmlns:tests="https://ns.mxhx.dev/2022/tests">
+			<tests:TestClass1 xmlns:mx="https://ns.mxhx.dev/2024/basic" xmlns:tests="https://ns.mxhx.dev/2024/tests">
 				<mx:Declarations>
 					<mx:Xml id="xml"><element><![CDATA[this is cdata]]></element></mx:Xml>
 				</mx:Declarations>
@@ -2038,7 +2038,7 @@ class MXHXComponentDeclarationsTest extends Test {
 
 	public function testXmlComment():Void {
 		var result = MXHXComponent.withMarkup('
-			<tests:TestClass1 xmlns:mx="https://ns.mxhx.dev/2022/basic" xmlns:tests="https://ns.mxhx.dev/2022/tests">
+			<tests:TestClass1 xmlns:mx="https://ns.mxhx.dev/2024/basic" xmlns:tests="https://ns.mxhx.dev/2024/tests">
 				<mx:Declarations>
 					<mx:Xml id="xml"><!-- comment --></mx:Xml>
 				</mx:Declarations>
@@ -2057,7 +2057,7 @@ class MXHXComponentDeclarationsTest extends Test {
 
 	public function testXmlCommentChild():Void {
 		var result = MXHXComponent.withMarkup('
-			<tests:TestClass1 xmlns:mx="https://ns.mxhx.dev/2022/basic" xmlns:tests="https://ns.mxhx.dev/2022/tests">
+			<tests:TestClass1 xmlns:mx="https://ns.mxhx.dev/2024/basic" xmlns:tests="https://ns.mxhx.dev/2024/tests">
 				<mx:Declarations>
 					<mx:Xml id="xml"><element><!-- comment --></element></mx:Xml>
 				</mx:Declarations>
@@ -2084,7 +2084,7 @@ class MXHXComponentDeclarationsTest extends Test {
 
 	public function testComplexEnumValueWithoutParameters():Void {
 		var result = MXHXComponent.withMarkup('
-			<tests:TestClass1 xmlns:mx="https://ns.mxhx.dev/2022/basic" xmlns:tests="https://ns.mxhx.dev/2022/tests">
+			<tests:TestClass1 xmlns:mx="https://ns.mxhx.dev/2024/basic" xmlns:tests="https://ns.mxhx.dev/2024/tests">
 				<mx:Declarations>
 					<tests:TestComplexEnum id="enumValue">
 						<tests:TestComplexEnum.One/>
@@ -2098,7 +2098,7 @@ class MXHXComponentDeclarationsTest extends Test {
 
 	public function testComplexEnumValueWithParameters():Void {
 		var result = MXHXComponent.withMarkup('
-			<tests:TestClass1 xmlns:mx="https://ns.mxhx.dev/2022/basic" xmlns:tests="https://ns.mxhx.dev/2022/tests">
+			<tests:TestClass1 xmlns:mx="https://ns.mxhx.dev/2024/basic" xmlns:tests="https://ns.mxhx.dev/2024/tests">
 				<mx:Declarations>
 					<tests:TestComplexEnum id="enumValue">
 						<tests:TestComplexEnum.Two a="hello" b="123.4"/>

@@ -8,7 +8,7 @@ import utest.Test;
 class MXHXComponentBindingTest extends Test {
 	public function testEscapedBindingInsideElement():Void {
 		var result = MXHXComponent.withMarkup('
-			<tests:TestClass1 xmlns:mx="https://ns.mxhx.dev/2022/basic" xmlns:tests="https://ns.mxhx.dev/2022/tests">
+			<tests:TestClass1 xmlns:mx="https://ns.mxhx.dev/2024/basic" xmlns:tests="https://ns.mxhx.dev/2024/tests">
 				<mx:Declarations>
 					<mx:String id="string">\\{this is not binding}</mx:String>
 				</mx:Declarations>
@@ -20,7 +20,7 @@ class MXHXComponentBindingTest extends Test {
 
 	public function testMultipleEscapedBindingInsideElement():Void {
 		var result = MXHXComponent.withMarkup('
-			<tests:TestClass1 xmlns:mx="https://ns.mxhx.dev/2022/basic" xmlns:tests="https://ns.mxhx.dev/2022/tests">
+			<tests:TestClass1 xmlns:mx="https://ns.mxhx.dev/2024/basic" xmlns:tests="https://ns.mxhx.dev/2024/tests">
 				<mx:Declarations>
 					<mx:String id="string">\\{this is not binding} \\{nor is this}</mx:String>
 				</mx:Declarations>
@@ -32,7 +32,7 @@ class MXHXComponentBindingTest extends Test {
 
 	public function testUnclosedNonEscapedBindingInsideElement():Void {
 		var result = MXHXComponent.withMarkup('
-			<tests:TestClass1 xmlns:mx="https://ns.mxhx.dev/2022/basic" xmlns:tests="https://ns.mxhx.dev/2022/tests">
+			<tests:TestClass1 xmlns:mx="https://ns.mxhx.dev/2024/basic" xmlns:tests="https://ns.mxhx.dev/2024/tests">
 				<mx:Declarations>
 					<mx:String id="string">{this is not binding</mx:String>
 				</mx:Declarations>
@@ -44,7 +44,7 @@ class MXHXComponentBindingTest extends Test {
 
 	public function testMultipleUnclosedConsecutiveEscapedBindingInsideElement():Void {
 		var result = MXHXComponent.withMarkup('
-			<tests:TestClass1 xmlns:mx="https://ns.mxhx.dev/2022/basic" xmlns:tests="https://ns.mxhx.dev/2022/tests">
+			<tests:TestClass1 xmlns:mx="https://ns.mxhx.dev/2024/basic" xmlns:tests="https://ns.mxhx.dev/2024/tests">
 				<mx:Declarations>
 					<mx:String id="string">\\{\\{</mx:String>
 				</mx:Declarations>
@@ -56,7 +56,7 @@ class MXHXComponentBindingTest extends Test {
 
 	public function testEscapedBindingInsideAttribute():Void {
 		var result = MXHXComponent.withMarkup('
-			<tests:TestClass1 xmlns:mx="https://ns.mxhx.dev/2022/basic" xmlns:tests="https://ns.mxhx.dev/2022/tests">
+			<tests:TestClass1 xmlns:mx="https://ns.mxhx.dev/2024/basic" xmlns:tests="https://ns.mxhx.dev/2024/tests">
 				<mx:Declarations>
 					<tests:TestPropertiesClass id="strict" string="\\{this is not binding}"/>
 				</mx:Declarations>
@@ -68,7 +68,7 @@ class MXHXComponentBindingTest extends Test {
 
 	public function testMultipleEscapedBindingInsideAttribute():Void {
 		var result = MXHXComponent.withMarkup('
-			<tests:TestClass1 xmlns:mx="https://ns.mxhx.dev/2022/basic" xmlns:tests="https://ns.mxhx.dev/2022/tests">
+			<tests:TestClass1 xmlns:mx="https://ns.mxhx.dev/2024/basic" xmlns:tests="https://ns.mxhx.dev/2024/tests">
 				<mx:Declarations>
 					<tests:TestPropertiesClass id="strict" string="\\{this is not binding} \\{nor is this}"/>
 				</mx:Declarations>
@@ -80,7 +80,7 @@ class MXHXComponentBindingTest extends Test {
 
 	public function testMultipleUnclosedConsecutiveEscapedBindingInsideAttribute():Void {
 		var result = MXHXComponent.withMarkup('
-			<tests:TestClass1 xmlns:mx="https://ns.mxhx.dev/2022/basic" xmlns:tests="https://ns.mxhx.dev/2022/tests">
+			<tests:TestClass1 xmlns:mx="https://ns.mxhx.dev/2024/basic" xmlns:tests="https://ns.mxhx.dev/2024/tests">
 				<mx:Declarations>
 					<tests:TestPropertiesClass id="strict" string="\\{\\{"/>
 				</mx:Declarations>
@@ -92,7 +92,7 @@ class MXHXComponentBindingTest extends Test {
 
 	public function testUnclosedNonEscapedBindingInsideAttribute():Void {
 		var result = MXHXComponent.withMarkup('
-			<tests:TestClass1 xmlns:mx="https://ns.mxhx.dev/2022/basic" xmlns:tests="https://ns.mxhx.dev/2022/tests">
+			<tests:TestClass1 xmlns:mx="https://ns.mxhx.dev/2024/basic" xmlns:tests="https://ns.mxhx.dev/2024/tests">
 				<mx:Declarations>
 					<tests:TestPropertiesClass id="strict" string="{this is not binding"/>
 				</mx:Declarations>

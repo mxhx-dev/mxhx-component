@@ -1,6 +1,6 @@
 <tests:TestClass1
-	xmlns:mx="https://ns.mxhx.dev/2022/basic"
-	xmlns:tests="https://ns.mxhx.dev/2022/tests"
+	xmlns:mx="https://ns.mxhx.dev/2024/basic"
+	xmlns:tests="https://ns.mxhx.dev/2024/tests"
 	xmlns:fixtures="fixtures.*">
 	<mx:Declarations>
 		<fixtures:TestBuildMacro id="nested"/>

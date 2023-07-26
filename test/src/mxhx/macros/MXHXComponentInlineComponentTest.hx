@@ -7,7 +7,7 @@ import utest.Test;
 class MXHXComponentInlineComponentTest extends Test {
 	public function testEscapedBindingInsideElement():Void {
 		var result = MXHXComponent.withMarkup('
-			<tests:TestInlineComponentClass xmlns:mx="https://ns.mxhx.dev/2022/basic" xmlns:tests="https://ns.mxhx.dev/2022/tests">
+			<tests:TestInlineComponentClass xmlns:mx="https://ns.mxhx.dev/2024/basic" xmlns:tests="https://ns.mxhx.dev/2024/tests">
 				<tests:classProperty>
 					<mx:Component>
 						<tests:TestClass1/>
