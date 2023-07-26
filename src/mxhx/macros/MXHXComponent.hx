@@ -592,7 +592,28 @@ class MXHXComponent {
 					var attrValue = handleTextContentAsText(attrData.rawValue, attrData);
 					valueExpr = createValueExprForFieldAttribute(f, attrValue, attrData);
 				} else {
-					valueExpr = handleTextContentAsExpr(attrData.rawValue, attrData.valueStart, attrData);
+					var baseType:BaseType = null;
+					var currentFieldType:Type = f.type;
+					if (currentFieldType != null) {
+						while (baseType == null) {
+							switch (currentFieldType) {
+								case TInst(t, params):
+									baseType = t.get();
+									break;
+								case TAbstract(t, params):
+									baseType = t.get();
+									break;
+								case TEnum(t, params):
+									baseType = t.get();
+									break;
+								case TLazy(f):
+									currentFieldType = f();
+								default:
+									break;
+							}
+						}
+					}
+					valueExpr = handleTextContentAsExpr(attrData.rawValue, baseType, attrData.valueStart, attrData);
 				}
 				var fieldName = f.name;
 				var setExpr = macro $i{targetIdentifier}.$fieldName = ${valueExpr};
@@ -1084,58 +1105,71 @@ class MXHXComponent {
 	private static function handleInstanceTagAssignableFromText(tagData:IMXHXTagData, t:BaseType, e:EnumType, generatedFields:Array<Field>):Expr {
 		var initExpr:Expr = null;
 		var child = tagData.getFirstChildUnit();
-		var pendingText:String = null;
-		var pendingTextIncludesCData = false;
-		do {
-			if (child == null) {
-				if (initExpr != null) {
-					errorTagUnexpected(tagData);
+		if (child != null && (child is IMXHXTextData) && child.getNextSiblingUnit() == null) {
+			var textData = cast(child, IMXHXTextData);
+			if (textData.textType == Text && isLanguageTypeAssignableFromText(t)) {
+				if (languageUri == LANGUAGE_URI_BASIC_2022) {
+					var value = handleTextContentAsText(textData.content, textData);
+					initExpr = createValueExprForBaseType(t, value, false, textData);
 				} else {
-					initExpr = createDefaultValueExprForBaseType(t, tagData);
+					initExpr = handleTextContentAsExpr(textData.content, t, 0, textData);
 				}
-				// no more children
-				break;
-			} else if ((child is IMXHXTextData)) {
-				var textData:IMXHXTextData = cast child;
-				switch (textData.textType) {
-					case Text:
-						var content = handleTextContentAsText(textData.content, textData);
-						if (pendingText == null) {
-							pendingText = "";
-						}
-						pendingText += content;
-					case CData:
-						if (pendingText == null) {
-							pendingText = "";
-						}
-						pendingText += textData.content;
-						pendingTextIncludesCData = true;
-					case Whitespace:
-						if (t.name == TYPE_STRING && t.pack.length == 0) {
+			}
+		}
+		if (initExpr == null) {
+			var pendingText:String = null;
+			var pendingTextIncludesCData = false;
+			do {
+				if (child == null) {
+					if (initExpr != null) {
+						errorTagUnexpected(tagData);
+					} else {
+						initExpr = createDefaultValueExprForBaseType(t, tagData);
+					}
+					// no more children
+					break;
+				} else if ((child is IMXHXTextData)) {
+					var textData:IMXHXTextData = cast child;
+					switch (textData.textType) {
+						case Text:
+							var content = handleTextContentAsText(textData.content, textData);
+							if (pendingText == null) {
+								pendingText = "";
+							}
+							pendingText += content;
+						case CData:
 							if (pendingText == null) {
 								pendingText = "";
 							}
 							pendingText += textData.content;
-						}
-					default:
-						if (!canIgnoreTextData(textData)) {
-							errorTextUnexpected(textData);
-							break;
-						}
-				}
-			} else {
-				errorUnexpected(child);
-			}
-			child = child.getNextSiblingUnit();
-			if (child == null && pendingText != null) {
-				if (e != null) {
-					var value = StringTools.trim(pendingText);
-					initExpr = macro $i{value};
+							pendingTextIncludesCData = true;
+						case Whitespace:
+							if (t.name == TYPE_STRING && t.pack.length == 0) {
+								if (pendingText == null) {
+									pendingText = "";
+								}
+								pendingText += textData.content;
+							}
+						default:
+							if (!canIgnoreTextData(textData)) {
+								errorTextUnexpected(textData);
+								break;
+							}
+					}
 				} else {
-					initExpr = createValueExprForBaseType(t, pendingText, pendingTextIncludesCData, tagData);
+					errorUnexpected(child);
 				}
-			}
-		} while (child != null || initExpr == null);
+				child = child.getNextSiblingUnit();
+				if (child == null && pendingText != null) {
+					if (e != null) {
+						var value = StringTools.trim(pendingText);
+						initExpr = macro $i{value};
+					} else {
+						initExpr = createValueExprForBaseType(t, pendingText, pendingTextIncludesCData, tagData);
+					}
+				}
+			} while (child != null || initExpr == null);
+		}
 		var idAttr = tagData.getAttributeData(PROPERTY_ID);
 		if (idAttr != null) {
 			var id = idAttr.rawValue;
@@ -1154,13 +1188,16 @@ class MXHXComponent {
 		return initExpr;
 	}
 
-	private static function handleTextContentAsExpr(text:String, textStartOffset:Int, sourceLocation:IMXHXSourceLocation):Expr {
+	private static function handleTextContentAsExpr(text:String, baseType:BaseType, textStartOffset:Int, sourceLocation:IMXHXSourceLocation):Expr {
 		var expr:Expr = null;
 		var startIndex = 0;
 		var pendingText:String = "";
 		do {
 			var bindingStartIndex = text.indexOf("{", startIndex);
 			if (bindingStartIndex == -1) {
+				if (expr == null && pendingText.length == 0) {
+					return createValueExprForBaseType(baseType, text, false, sourceLocation);
+				}
 				pendingText += text.substr(startIndex);
 				if (pendingText.length > 0) {
 					if (expr == null) {
@@ -1606,24 +1643,48 @@ class MXHXComponent {
 			fieldName = field.name;
 			fieldType = field.type;
 		}
-		var currentFieldType = fieldType;
-		while (currentFieldType != null) {
-			switch (currentFieldType) {
-				case TInst(t, params):
-					var classType = t.get();
-					isArray = classType.pack.length == 0 && classType.name == TYPE_ARRAY;
-					isString = classType.pack.length == 0 && classType.name == TYPE_STRING;
-					currentFieldType = null;
-				case TLazy(f):
-					currentFieldType = f();
-				default:
-					currentFieldType = null;
+
+		var baseType:BaseType = null;
+		if (fieldType != null) {
+			var currentFieldType:Type = fieldType;
+			while (baseType == null) {
+				switch (currentFieldType) {
+					case TInst(t, params):
+						var classType = t.get();
+						isArray = classType.pack.length == 0 && classType.name == TYPE_ARRAY;
+						isString = classType.pack.length == 0 && classType.name == TYPE_STRING;
+						baseType = classType;
+						break;
+					case TAbstract(t, params):
+						baseType = t.get();
+						break;
+					case TEnum(t, params):
+						baseType = t.get();
+						break;
+					case TLazy(f):
+						currentFieldType = f();
+					default:
+						break;
+				}
 			}
 		}
+
 		var firstChildIsArrayTag = false;
 		var valueExprs:Array<Expr> = [];
-		var current = (childUnits != null) ? childUnits.shift() : tagData.getFirstChildUnit();
+		var firstChild = (childUnits != null) ? childUnits.shift() : tagData.getFirstChildUnit();
+		var current = firstChild;
 		while (current != null) {
+			if (current == firstChild && (current is IMXHXTextData) && current.getNextSiblingUnit() == null) {
+				var textData = cast(current, IMXHXTextData);
+				if (textData.textType == Text && isLanguageTypeAssignableFromText(baseType)) {
+					if (languageUri == LANGUAGE_URI_BASIC_2022) {
+						var value = handleTextContentAsText(textData.content, textData);
+						return createValueExprForBaseType(baseType, value, false, textData);
+					} else {
+						return handleTextContentAsExpr(textData.content, baseType, 0, textData);
+					}
+				}
+			}
 			if (!isArray && valueExprs.length > 0) {
 				// when the type is not array, multiple children are not allowed
 				var isWhitespace = (current is IMXHXTextData) && cast(current, IMXHXTextData).textType == Whitespace;
