@@ -399,37 +399,40 @@ class MXHXComponent {
 	private static function handleRootTag(tagData:IMXHXTagData, initFunctionName:String, outerDocumentTypePath:TypePath, buildFields:Array<Field>):MXHXSymbol {
 		objectCounter = 0;
 		var prefixMap = tagData.parent.getPrefixMapForTag(tagData);
-		var languageUris:Array<String> = [];
-		for (uri in prefixMap.getAllUris()) {
-			if (LANGUAGE_URIS.indexOf(uri) != -1) {
-				languageUris.push(uri);
-				if (uri == LANGUAGE_URI_FULL_2022) {
-					var prefixes = prefixMap.getPrefixesForUri(uri);
-					for (prefix in prefixes) {
-						var attrData = tagData.getAttributeData('xmlns:$prefix');
-						if (attrData != null) {
-							Context.warning('Namespace \'$uri\' is experimental. Using namespace \'$LANGUAGE_URI_BASIC_2022\' instead is recommended.',
-								sourceLocationToContextPosition(attrData));
+		if (tagData.parentTag == null) {
+			// inline components inherit the language URI from the outer document
+			var languageUris:Array<String> = [];
+			for (uri in prefixMap.getAllUris()) {
+				if (LANGUAGE_URIS.indexOf(uri) != -1) {
+					languageUris.push(uri);
+					if (uri == LANGUAGE_URI_FULL_2022) {
+						var prefixes = prefixMap.getPrefixesForUri(uri);
+						for (prefix in prefixes) {
+							var attrData = tagData.getAttributeData('xmlns:$prefix');
+							if (attrData != null) {
+								Context.warning('Namespace \'$uri\' is experimental. Using namespace \'$LANGUAGE_URI_BASIC_2022\' instead is recommended.',
+									sourceLocationToContextPosition(attrData));
+							}
 						}
 					}
 				}
 			}
-		}
-		if (languageUris.length > 1) {
-			for (uri in languageUris) {
-				var prefixes = prefixMap.getPrefixesForUri(uri);
-				for (prefix in prefixes) {
-					var attrData = tagData.getAttributeData('xmlns:$prefix');
-					if (attrData != null) {
-						reportError("Only one language namespace may be used in an MXHX document.", sourceLocationToContextPosition(attrData));
+			if (languageUris.length > 1) {
+				for (uri in languageUris) {
+					var prefixes = prefixMap.getPrefixesForUri(uri);
+					for (prefix in prefixes) {
+						var attrData = tagData.getAttributeData('xmlns:$prefix');
+						if (attrData != null) {
+							reportError("Only one language namespace may be used in an MXHX document.", sourceLocationToContextPosition(attrData));
+						}
 					}
 				}
 			}
-		}
-		if (languageUris.length > 0) {
-			languageUri = languageUris[0];
-		} else {
-			languageUri = null;
+			if (languageUris.length > 0) {
+				languageUri = languageUris[0];
+			} else {
+				languageUri = null;
+			}
 		}
 		var resolvedTag = mxhxResolver.resolveTag(tagData);
 		var generatedFields:Array<Field> = [];
