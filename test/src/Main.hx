@@ -6,7 +6,8 @@ class Main {
 		var runner = new Runner();
 		runner.addCase(new mxhx.macros.MXHXComponentDeclarationsTest());
 		runner.addCase(new mxhx.macros.MXHXComponentPropertyTest());
-		runner.addCase(new mxhx.macros.MXHXComponentBindingTest());
+		runner.addCase(new mxhx.macros.MXHXComponentBasicBindingTest());
+		runner.addCase(new mxhx.macros.MXHXComponentFullBindingTest());
 		runner.addCase(new mxhx.macros.MXHXComponentBuildMacroTest());
 		runner.addCase(new mxhx.macros.MXHXComponentWithFileTest());
 		runner.addCase(new mxhx.macros.MXHXComponentInlineComponentTest());

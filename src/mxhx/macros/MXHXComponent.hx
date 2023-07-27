@@ -1180,7 +1180,7 @@ class MXHXComponent {
 				if (expr == null && pendingText.length == 0) {
 					return createValueExprForBaseType(baseType, text, false, sourceLocation);
 				}
-				pendingText += text.substr(startIndex);
+				pendingText += text.substring(startIndex);
 				if (pendingText.length > 0) {
 					if (expr == null) {
 						expr = macro $v{pendingText};
@@ -1191,13 +1191,13 @@ class MXHXComponent {
 				}
 				break;
 			}
-			pendingText += text.substr(0, bindingStartIndex);
-			startIndex = bindingStartIndex + 1;
 			if (bindingStartIndex > 0 && text.charAt(bindingStartIndex - 1) == "\\") {
 				// the { character is escaped, so it's not binding
-				text = text.substr(0, bindingStartIndex - 1) + text.substr(bindingStartIndex);
-				startIndex--;
+				pendingText += text.substring(startIndex, bindingStartIndex - 1) + "{";
+				startIndex = bindingStartIndex + 1;
 			} else {
+				pendingText += text.substring(startIndex, bindingStartIndex);
+				startIndex = bindingStartIndex + 1;
 				// valid start of binding if previous character is not a backslash
 				var bindingEndIndex = -1;
 				var stack = 1;

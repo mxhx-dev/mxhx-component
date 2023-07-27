@@ -5,7 +5,7 @@ import fixtures.TestPropertyEnum;
 import utest.Assert;
 import utest.Test;
 
-class MXHXComponentBindingTest extends Test {
+class MXHXComponentBasicBindingTest extends Test {
 	public function testEscapedBindingInsideElement():Void {
 		var result = MXHXComponent.withMarkup('
 			<tests:TestClass1 xmlns:mx="https://ns.mxhx.dev/2024/basic" xmlns:tests="https://ns.mxhx.dev/2024/tests">
