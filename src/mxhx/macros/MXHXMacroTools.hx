@@ -36,17 +36,21 @@ class MXHXMacroTools {
 		if (typedExprDef == null) {
 			return null;
 		}
-		return switch (typedExprDef) {
-			case TConst(TString(s)): s;
-			case TField(e, FStatic(c, cf)):
-				var classField = cf.get();
-				var expr = classField.expr().expr;
-				switch (expr) {
-					case TConst(TString(s)): s;
-					default: null;
-				}
-			default: null;
-		};
+		var result:String = null;
+		while (true) {
+			switch (typedExprDef) {
+				case TConst(TString(s)):
+					return s;
+				case TCast(e, _):
+					typedExprDef = e.expr;
+				case TField(e, FStatic(c, cf)):
+					var classField = cf.get();
+					typedExprDef = classField.expr().expr;
+				default:
+					return null;
+			}
+		}
+		return null;
 	}
 
 	/**
