@@ -104,21 +104,24 @@ class MXHXComponent {
 	private static final TAG_LIBRARY = "Library";
 	private static final TAG_METADATA = "Metadata";
 	private static final TAG_MODEL = "Model";
+	private static final TAG_OBJECT = "Object";
 	private static final TAG_PRIVATE = "Private";
 	private static final TAG_REPARENT = "Reparent";
 	private static final TAG_SCRIPT = "Script";
+	private static final TAG_STRUCT = "Struct";
 	private static final TAG_STYLE = "Style";
 	private static final INIT_FUNCTION_NAME = "MXHXComponent_initMXHX";
 	private static final LANGUAGE_MAPPINGS_2024 = [
 		// @:formatter:off
-		TYPE_ANY => TYPE_ANY,
 		TYPE_ARRAY => TYPE_ARRAY,
 		TYPE_BOOL => TYPE_BOOL,
 		TYPE_CLASS => TYPE_CLASS,
 		TYPE_EREG => TYPE_EREG,
 		TYPE_FLOAT => TYPE_FLOAT,
 		TYPE_INT => TYPE_INT,
+		TAG_OBJECT => TYPE_ANY,
 		TYPE_STRING => TYPE_STRING,
+		TAG_STRUCT => TYPE_DYNAMIC,
 		TYPE_UINT => TYPE_UINT,
 		TYPE_XML => TYPE_XML,
 		// @:formatter:on
@@ -375,7 +378,9 @@ class MXHXComponent {
 			var superClassTypePath = {name: resolvedClass.name, pack: resolvedClass.pack};
 			typeDef = macro class $componentName extends $superClassTypePath {};
 		} else if (resolvedType != null) {
-			reportError('Tag ${rootTag.name} cannot be used as a base class', sourceLocationToContextPosition(rootTag));
+			if (!isObjectTag(rootTag)) {
+				reportError('Tag ${rootTag.name} cannot be used as a base class', sourceLocationToContextPosition(rootTag));
+			}
 			typeDef = macro class $componentName {};
 		} else {
 			reportError('Tag ${rootTag.name} could not be resolved to a class', sourceLocationToContextPosition(rootTag));
@@ -766,6 +771,10 @@ class MXHXComponent {
 	}
 
 	private static function handleInstanceTag(tagData:IMXHXTagData, assignedToType:Type, outerDocumentTypePath:TypePath, generatedFields:Array<Field>):Expr {
+		if (isObjectTag(tagData)) {
+			reportError('Tag \'<${tagData.name}>\' must only be used as a base class. Did you mean \'<${tagData.prefix}:${TAG_STRUCT}/>\'?',
+				sourceLocationToContextPosition(tagData));
+		}
 		var resolvedTag = mxhxResolver.resolveTag(tagData);
 		if (resolvedTag == null) {
 			errorTagUnexpected(tagData);
@@ -1736,6 +1745,10 @@ class MXHXComponent {
 			errorUnexpected(unitData);
 			return null;
 		}
+	}
+
+	private static function isObjectTag(tagData:IMXHXTagData):Bool {
+		return tagData != null && tagData.shortName == TAG_OBJECT && LANGUAGE_URIS.indexOf(tagData.uri) != -1;
 	}
 
 	private static function isComponentTag(tagData:IMXHXTagData):Bool {

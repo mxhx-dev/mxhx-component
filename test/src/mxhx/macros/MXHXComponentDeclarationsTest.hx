@@ -70,102 +70,102 @@ class MXHXComponentDeclarationsTest extends Test {
 		var result = MXHXComponent.withMarkup('
 			<tests:TestClass1 xmlns:mx="https://ns.mxhx.dev/2024/basic" xmlns:tests="https://ns.mxhx.dev/2024/tests">
 				<mx:Declarations>
-					<mx:Any id="any" float="123.4" floatHex="0xbeef" nan="NaN" boolean_true="true" boolean_false="false" string="hello">
+					<mx:Struct id="struct" float="123.4" floatHex="0xbeef" nan="NaN" boolean_true="true" boolean_false="false" string="hello">
 						<mx:object>
-							<mx:Any integer="567"/>
+							<mx:Struct integer="567"/>
 						</mx:object>
-					</mx:Any>
+					</mx:Struct>
 				</mx:Declarations>
 			</tests:TestClass1>
 		');
 		Assert.notNull(result);
-		Assert.notNull(result.any);
-		Assert.equals(7, Reflect.fields(result.any).length);
-		Assert.isTrue(Reflect.hasField(result.any, "float"));
-		Assert.isTrue(Reflect.hasField(result.any, "floatHex"));
-		Assert.isTrue(Reflect.hasField(result.any, "nan"));
-		Assert.isTrue(Reflect.hasField(result.any, "boolean_true"));
-		Assert.isTrue(Reflect.hasField(result.any, "boolean_false"));
-		Assert.isTrue(Reflect.hasField(result.any, "string"));
-		Assert.isTrue(Reflect.hasField(result.any, "object"));
-		Assert.equals(123.4, Reflect.field(result.any, "float"));
-		Assert.equals(0xbeef, Reflect.field(result.any, "floatHex"));
-		Assert.isTrue(Math.isNaN(Reflect.field(result.any, "nan")));
-		Assert.isTrue(Reflect.field(result.any, "boolean_true"));
-		Assert.isFalse(Reflect.field(result.any, "boolean_false"));
-		Assert.equals("hello", Reflect.field(result.any, "string"));
-		Assert.notNull(Reflect.field(result.any, "object"));
-		Assert.equals(567, Reflect.field(Reflect.field(result.any, "object"), "integer"));
+		Assert.notNull(result.struct);
+		Assert.equals(7, Reflect.fields(result.struct).length);
+		Assert.isTrue(Reflect.hasField(result.struct, "float"));
+		Assert.isTrue(Reflect.hasField(result.struct, "floatHex"));
+		Assert.isTrue(Reflect.hasField(result.struct, "nan"));
+		Assert.isTrue(Reflect.hasField(result.struct, "boolean_true"));
+		Assert.isTrue(Reflect.hasField(result.struct, "boolean_false"));
+		Assert.isTrue(Reflect.hasField(result.struct, "string"));
+		Assert.isTrue(Reflect.hasField(result.struct, "object"));
+		Assert.equals(123.4, Reflect.field(result.struct, "float"));
+		Assert.equals(0xbeef, Reflect.field(result.struct, "floatHex"));
+		Assert.isTrue(Math.isNaN(Reflect.field(result.struct, "nan")));
+		Assert.isTrue(Reflect.field(result.struct, "boolean_true"));
+		Assert.isFalse(Reflect.field(result.struct, "boolean_false"));
+		Assert.equals("hello", Reflect.field(result.struct, "string"));
+		Assert.notNull(Reflect.field(result.struct, "object"));
+		Assert.equals(567, Reflect.field(Reflect.field(result.struct, "object"), "integer"));
 	}
 
 	public function testAnyEmpty():Void {
 		var result = MXHXComponent.withMarkup('
 			<tests:TestClass1 xmlns:mx="https://ns.mxhx.dev/2024/basic" xmlns:tests="https://ns.mxhx.dev/2024/tests">
 				<mx:Declarations>
-					<mx:Any id="any"></mx:Any>
+					<mx:Struct id="struct"></mx:Struct>
 				</mx:Declarations>
 			</tests:TestClass1>
 		');
 		Assert.notNull(result);
-		Assert.notNull(result.any);
-		Assert.equals(0, Reflect.fields(result.any).length);
+		Assert.notNull(result.struct);
+		Assert.equals(0, Reflect.fields(result.struct).length);
 	}
 
 	public function testAnyEmptyExtraWhitespace():Void {
 		var result = MXHXComponent.withMarkup('
 			<tests:TestClass1 xmlns:mx="https://ns.mxhx.dev/2024/basic" xmlns:tests="https://ns.mxhx.dev/2024/tests">
 				<mx:Declarations>
-					<mx:Any id="any">
-					</mx:Any>
+					<mx:Struct id="struct">
+					</mx:Struct>
 				</mx:Declarations>
 			</tests:TestClass1>
 		');
 		Assert.notNull(result);
-		Assert.notNull(result.any);
-		Assert.equals(0, Reflect.fields(result.any).length);
+		Assert.notNull(result.struct);
+		Assert.equals(0, Reflect.fields(result.struct).length);
 	}
 
 	public function testAnyOnlyComment1():Void {
 		var result = MXHXComponent.withMarkup('
 			<tests:TestClass1 xmlns:mx="https://ns.mxhx.dev/2024/basic" xmlns:tests="https://ns.mxhx.dev/2024/tests">
 				<mx:Declarations>
-					<mx:Any id="any"><!-- comment --></mx:Any>
+					<mx:Struct id="struct"><!-- comment --></mx:Struct>
 				</mx:Declarations>
 			</tests:TestClass1>
 		');
 		Assert.notNull(result);
-		Assert.notNull(result.any);
-		Assert.equals(0, Reflect.fields(result.any).length);
+		Assert.notNull(result.struct);
+		Assert.equals(0, Reflect.fields(result.struct).length);
 	}
 
 	public function testAnyOnlyComment2():Void {
 		var result = MXHXComponent.withMarkup('
 			<tests:TestClass1 xmlns:mx="https://ns.mxhx.dev/2024/basic" xmlns:tests="https://ns.mxhx.dev/2024/tests">
 				<mx:Declarations>
-					<mx:Any id="any">
+					<mx:Struct id="struct">
 						<!-- comment -->
-					</mx:Any>
+					</mx:Struct>
 				</mx:Declarations>
 			</tests:TestClass1>
 		');
 		Assert.notNull(result);
-		Assert.notNull(result.any);
-		Assert.equals(0, Reflect.fields(result.any).length);
+		Assert.notNull(result.struct);
+		Assert.equals(0, Reflect.fields(result.struct).length);
 	}
 
 	public function testAnyOnlyDocComment():Void {
 		var result = MXHXComponent.withMarkup('
 			<tests:TestClass1 xmlns:mx="https://ns.mxhx.dev/2024/basic" xmlns:tests="https://ns.mxhx.dev/2024/tests">
 				<mx:Declarations>
-					<mx:Any id="any">
+					<mx:Struct id="struct">
 						<!--- comment -->
-					</mx:Any>
+					</mx:Struct>
 				</mx:Declarations>
 			</tests:TestClass1>
 		');
 		Assert.notNull(result);
-		Assert.notNull(result.any);
-		Assert.equals(0, Reflect.fields(result.any).length);
+		Assert.notNull(result.struct);
+		Assert.equals(0, Reflect.fields(result.struct).length);
 	}
 
 	public function testStrict():Void {
@@ -173,44 +173,44 @@ class MXHXComponentDeclarationsTest extends Test {
 			<tests:TestClass1 xmlns:mx="https://ns.mxhx.dev/2024/basic" xmlns:tests="https://ns.mxhx.dev/2024/tests">
 				<mx:Declarations>
 					<tests:TestPropertiesClass
-						id="strict"
+						id="strictlyTyped"
 						boolean="true"
 						float="123.4"
 						integer="567"
 						string="hello">
-						<tests:any>
-							<mx:Any float="123.4" boolean="true" string="hello">
+						<tests:struct>
+							<mx:Struct float="123.4" boolean="true" string="hello">
 								<mx:float>123.4</mx:float>
 								<mx:boolean>true</mx:boolean>
 								<mx:string>hello</mx:string>
 								<mx:object>
-									<mx:Any>
+									<mx:Struct>
 										<mx:integer>567</mx:integer>
-									</mx:Any>
+									</mx:Struct>
 								</mx:object>
-							</mx:Any>
-						</tests:any>
+							</mx:Struct>
+						</tests:struct>
 					</tests:TestPropertiesClass>
 				</mx:Declarations>
 			</tests:TestClass1>
 		');
 		Assert.notNull(result);
-		Assert.notNull(result.strict);
-		Assert.isTrue(result.strict.boolean);
-		Assert.equals(123.4, result.strict.float);
-		Assert.equals("hello", result.strict.string);
-		Assert.equals(567, result.strict.integer);
-		Assert.notNull(result.strict.any);
-		Assert.equals(4, Reflect.fields(result.strict.any).length);
-		Assert.isTrue(Reflect.hasField(result.strict.any, "float"));
-		Assert.isTrue(Reflect.hasField(result.strict.any, "boolean"));
-		Assert.isTrue(Reflect.hasField(result.strict.any, "string"));
-		Assert.isTrue(Reflect.hasField(result.strict.any, "object"));
-		Assert.equals(123.4, Reflect.field(result.strict.any, "float"));
-		Assert.isTrue(Reflect.field(result.strict.any, "boolean"));
-		Assert.equals("hello", Reflect.field(result.strict.any, "string"));
-		Assert.notNull(Reflect.field(result.strict.any, "object"));
-		Assert.equals(567, Reflect.field(Reflect.field(result.strict.any, "object"), "integer"));
+		Assert.notNull(result.strictlyTyped);
+		Assert.isTrue(result.strictlyTyped.boolean);
+		Assert.equals(123.4, result.strictlyTyped.float);
+		Assert.equals("hello", result.strictlyTyped.string);
+		Assert.equals(567, result.strictlyTyped.integer);
+		Assert.notNull(result.strictlyTyped.struct);
+		Assert.equals(4, Reflect.fields(result.strictlyTyped.struct).length);
+		Assert.isTrue(Reflect.hasField(result.strictlyTyped.struct, "float"));
+		Assert.isTrue(Reflect.hasField(result.strictlyTyped.struct, "boolean"));
+		Assert.isTrue(Reflect.hasField(result.strictlyTyped.struct, "string"));
+		Assert.isTrue(Reflect.hasField(result.strictlyTyped.struct, "object"));
+		Assert.equals(123.4, Reflect.field(result.strictlyTyped.struct, "float"));
+		Assert.isTrue(Reflect.field(result.strictlyTyped.struct, "boolean"));
+		Assert.equals("hello", Reflect.field(result.strictlyTyped.struct, "string"));
+		Assert.notNull(Reflect.field(result.strictlyTyped.struct, "object"));
+		Assert.equals(567, Reflect.field(Reflect.field(result.strictlyTyped.struct, "object"), "integer"));
 	}
 
 	public function testEnumValue():Void {

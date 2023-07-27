@@ -12,27 +12,27 @@ class MXHXComponentPropertyTest extends Test {
 			<tests:TestPropertiesClass
 				xmlns:mx="https://ns.mxhx.dev/2024/basic"
 				xmlns:tests="https://ns.mxhx.dev/2024/tests">
-				<tests:any>
-					<mx:Any float="123.4" boolean="true" string="hello">
+				<tests:struct>
+					<mx:Struct float="123.4" boolean="true" string="hello">
 						<mx:object>
-							<mx:Any integer="567"/>
+							<mx:Struct integer="567"/>
 						</mx:object>
-					</mx:Any>
-				</tests:any>
+					</mx:Struct>
+				</tests:struct>
 			</tests:TestPropertiesClass>
 		');
 		Assert.notNull(result);
-		Assert.notNull(result.any);
-		Assert.equals(4, Reflect.fields(result.any).length);
-		Assert.isTrue(Reflect.hasField(result.any, "float"));
-		Assert.isTrue(Reflect.hasField(result.any, "boolean"));
-		Assert.isTrue(Reflect.hasField(result.any, "string"));
-		Assert.isTrue(Reflect.hasField(result.any, "object"));
-		Assert.equals(123.4, Reflect.field(result.any, "float"));
-		Assert.isTrue(Reflect.field(result.any, "boolean"));
-		Assert.equals("hello", Reflect.field(result.any, "string"));
-		Assert.notNull(Reflect.field(result.any, "object"));
-		Assert.equals(567, Reflect.field(Reflect.field(result.any, "object"), "integer"));
+		Assert.notNull(result.struct);
+		Assert.equals(4, Reflect.fields(result.struct).length);
+		Assert.isTrue(Reflect.hasField(result.struct, "float"));
+		Assert.isTrue(Reflect.hasField(result.struct, "boolean"));
+		Assert.isTrue(Reflect.hasField(result.struct, "string"));
+		Assert.isTrue(Reflect.hasField(result.struct, "object"));
+		Assert.equals(123.4, Reflect.field(result.struct, "float"));
+		Assert.isTrue(Reflect.field(result.struct, "boolean"));
+		Assert.equals("hello", Reflect.field(result.struct, "string"));
+		Assert.notNull(Reflect.field(result.struct, "object"));
+		Assert.equals(567, Reflect.field(Reflect.field(result.struct, "object"), "integer"));
 	}
 
 	public function testStrictChildElement():Void {
@@ -40,45 +40,45 @@ class MXHXComponentPropertyTest extends Test {
 			<tests:TestPropertiesClass
 				xmlns:mx="https://ns.mxhx.dev/2024/basic"
 				xmlns:tests="https://ns.mxhx.dev/2024/tests">
-				<tests:strict>
+				<tests:strictlyTyped>
 					<tests:TestPropertiesClass
 						boolean="true"
 						float="123.4"
 						integer="567"
 						string="hello">
-						<tests:any>
-							<mx:Any float="123.4" boolean="true" string="hello">
+						<tests:struct>
+							<mx:Struct float="123.4" boolean="true" string="hello">
 								<mx:float>123.4</mx:float>
 								<mx:boolean>true</mx:boolean>
 								<mx:string>hello</mx:string>
 								<mx:object>
-									<mx:Any>
+									<mx:Struct>
 										<mx:integer>567</mx:integer>
-									</mx:Any>
+									</mx:Struct>
 								</mx:object>
-							</mx:Any>
-						</tests:any>
+							</mx:Struct>
+						</tests:struct>
 					</tests:TestPropertiesClass>
-				</tests:strict>
+				</tests:strictlyTyped>
 			</tests:TestPropertiesClass>
 		');
 		Assert.notNull(result);
-		Assert.notNull(result.strict);
-		Assert.isTrue(result.strict.boolean);
-		Assert.equals(123.4, result.strict.float);
-		Assert.equals("hello", result.strict.string);
-		Assert.equals(567, result.strict.integer);
-		Assert.notNull(result.strict.any);
-		Assert.equals(4, Reflect.fields(result.strict.any).length);
-		Assert.isTrue(Reflect.hasField(result.strict.any, "float"));
-		Assert.isTrue(Reflect.hasField(result.strict.any, "boolean"));
-		Assert.isTrue(Reflect.hasField(result.strict.any, "string"));
-		Assert.isTrue(Reflect.hasField(result.strict.any, "object"));
-		Assert.equals(123.4, Reflect.field(result.strict.any, "float"));
-		Assert.isTrue(Reflect.field(result.strict.any, "boolean"));
-		Assert.equals("hello", Reflect.field(result.strict.any, "string"));
-		Assert.notNull(Reflect.field(result.strict.any, "object"));
-		Assert.equals(567, Reflect.field(Reflect.field(result.strict.any, "object"), "integer"));
+		Assert.notNull(result.strictlyTyped);
+		Assert.isTrue(result.strictlyTyped.boolean);
+		Assert.equals(123.4, result.strictlyTyped.float);
+		Assert.equals("hello", result.strictlyTyped.string);
+		Assert.equals(567, result.strictlyTyped.integer);
+		Assert.notNull(result.strictlyTyped.struct);
+		Assert.equals(4, Reflect.fields(result.strictlyTyped.struct).length);
+		Assert.isTrue(Reflect.hasField(result.strictlyTyped.struct, "float"));
+		Assert.isTrue(Reflect.hasField(result.strictlyTyped.struct, "boolean"));
+		Assert.isTrue(Reflect.hasField(result.strictlyTyped.struct, "string"));
+		Assert.isTrue(Reflect.hasField(result.strictlyTyped.struct, "object"));
+		Assert.equals(123.4, Reflect.field(result.strictlyTyped.struct, "float"));
+		Assert.isTrue(Reflect.field(result.strictlyTyped.struct, "boolean"));
+		Assert.equals("hello", Reflect.field(result.strictlyTyped.struct, "string"));
+		Assert.notNull(Reflect.field(result.strictlyTyped.struct, "object"));
+		Assert.equals(567, Reflect.field(Reflect.field(result.strictlyTyped.struct, "object"), "integer"));
 	}
 
 	public function testArrayChildElement():Void {

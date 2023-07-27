@@ -58,47 +58,47 @@ class MXHXComponentBasicBindingTest extends Test {
 		var result = MXHXComponent.withMarkup('
 			<tests:TestClass1 xmlns:mx="https://ns.mxhx.dev/2024/basic" xmlns:tests="https://ns.mxhx.dev/2024/tests">
 				<mx:Declarations>
-					<tests:TestPropertiesClass id="strict" string="\\{this is not binding}"/>
+					<tests:TestPropertiesClass id="strictlyTyped" string="\\{this is not binding}"/>
 				</mx:Declarations>
 			</tests:TestClass1>
 		');
 		Assert.notNull(result);
-		Assert.equals("{this is not binding}", result.strict.string);
+		Assert.equals("{this is not binding}", result.strictlyTyped.string);
 	}
 
 	public function testMultipleEscapedBindingInsideAttribute():Void {
 		var result = MXHXComponent.withMarkup('
 			<tests:TestClass1 xmlns:mx="https://ns.mxhx.dev/2024/basic" xmlns:tests="https://ns.mxhx.dev/2024/tests">
 				<mx:Declarations>
-					<tests:TestPropertiesClass id="strict" string="\\{this is not binding} \\{nor is this}"/>
+					<tests:TestPropertiesClass id="strictlyTyped" string="\\{this is not binding} \\{nor is this}"/>
 				</mx:Declarations>
 			</tests:TestClass1>
 		');
 		Assert.notNull(result);
-		Assert.equals("{this is not binding} {nor is this}", result.strict.string);
+		Assert.equals("{this is not binding} {nor is this}", result.strictlyTyped.string);
 	}
 
 	public function testMultipleUnclosedConsecutiveEscapedBindingInsideAttribute():Void {
 		var result = MXHXComponent.withMarkup('
 			<tests:TestClass1 xmlns:mx="https://ns.mxhx.dev/2024/basic" xmlns:tests="https://ns.mxhx.dev/2024/tests">
 				<mx:Declarations>
-					<tests:TestPropertiesClass id="strict" string="\\{\\{"/>
+					<tests:TestPropertiesClass id="strictlyTyped" string="\\{\\{"/>
 				</mx:Declarations>
 			</tests:TestClass1>
 		');
 		Assert.notNull(result);
-		Assert.equals("{{", result.strict.string);
+		Assert.equals("{{", result.strictlyTyped.string);
 	}
 
 	public function testUnclosedNonEscapedBindingInsideAttribute():Void {
 		var result = MXHXComponent.withMarkup('
 			<tests:TestClass1 xmlns:mx="https://ns.mxhx.dev/2024/basic" xmlns:tests="https://ns.mxhx.dev/2024/tests">
 				<mx:Declarations>
-					<tests:TestPropertiesClass id="strict" string="{this is not binding"/>
+					<tests:TestPropertiesClass id="strictlyTyped" string="{this is not binding"/>
 				</mx:Declarations>
 			</tests:TestClass1>
 		');
 		Assert.notNull(result);
-		Assert.equals("{this is not binding", result.strict.string);
+		Assert.equals("{this is not binding", result.strictlyTyped.string);
 	}
 }

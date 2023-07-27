@@ -4,7 +4,7 @@ package fixtures;
 class TestPropertiesClass {
 	public function new() {}
 
-	public var any:Any;
+	public var struct:Dynamic;
 	public var boolean:Bool;
 	public var ereg:EReg;
 	public var float:Float;
@@ -12,7 +12,7 @@ class TestPropertiesClass {
 	public var string:String;
 	public var unsignedInteger:UInt;
 	public var enumValue:TestPropertyEnum;
-	public var strict:TestPropertiesClass;
+	public var strictlyTyped:TestPropertiesClass;
 	public var array:Array<String>;
 	public var type:Class<Dynamic>;
 	public var complexEnum:TestComplexEnum;
