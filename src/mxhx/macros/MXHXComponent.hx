@@ -1504,6 +1504,7 @@ class MXHXComponent {
 			if (resolvedTag == null) {
 				var isAnyOrDynamic = switch (parentSymbol) {
 					case AbstractSymbol(a, params): a.pack.length == 0 && (a.name == TYPE_ANY || a.name == TYPE_DYNAMIC);
+					case null: false;
 					default: false;
 				}
 				if (isAnyOrDynamic && tagData.prefix == tagData.parentTag.prefix) {
