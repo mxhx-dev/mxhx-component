@@ -193,7 +193,8 @@ class MXHXComponent {
 		}
 
 		var superClass = localClass.superClass;
-		var resolvedTag = mxhxResolver.resolveTag(mxhxData.rootTag);
+		var rootTag = mxhxData.rootTag;
+		var resolvedTag = mxhxResolver.resolveTag(rootTag);
 		var resolvedType:BaseType = null;
 		if (resolvedTag != null) {
 			switch (resolvedTag) {
@@ -207,7 +208,7 @@ class MXHXComponent {
 			}
 		}
 		if (resolvedType == null) {
-			reportError('Could not resolve super class type for \'${localClass.name}\'', localClass.pos);
+			reportError('Could not resolve super class for \'${localClass.name}\' from tag \'<${rootTag.name}>\'', localClass.pos);
 			return null;
 		}
 		var expectedSuperClass = resolvedType.module;
@@ -397,6 +398,11 @@ class MXHXComponent {
 	}
 
 	private static function handleRootTag(tagData:IMXHXTagData, initFunctionName:String, outerDocumentTypePath:TypePath, buildFields:Array<Field>):MXHXSymbol {
+		var resolvedTag = mxhxResolver.resolveTag(tagData);
+		if (resolvedTag == null) {
+			errorTagUnexpected(tagData);
+			return null;
+		}
 		objectCounter = 0;
 		var prefixMap = tagData.parent.getPrefixMapForTag(tagData);
 		if (tagData.parentTag == null) {
@@ -436,7 +442,7 @@ class MXHXComponent {
 				languageUri = null;
 			}
 		}
-		var resolvedTag = mxhxResolver.resolveTag(tagData);
+
 		var generatedFields:Array<Field> = [];
 		var bodyExprs:Array<Expr> = [];
 		var attributeAndChildNames:Map<String, Bool> = [];
