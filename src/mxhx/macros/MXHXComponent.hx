@@ -449,6 +449,10 @@ class MXHXComponent {
 			}
 		}
 
+		var originalFieldNames:Map<String, Bool> = [];
+		for (field in buildFields) {
+			originalFieldNames.set(field.name, true);
+		}
 		var generatedFields:Array<Field> = [];
 		var bodyExprs:Array<Expr> = [];
 		var attributeAndChildNames:Map<String, Bool> = [];
@@ -527,6 +531,10 @@ class MXHXComponent {
 			]
 		});
 		for (field in generatedFields) {
+			if (originalFieldNames.exists(field.name)) {
+				// no duplicates allowed! use the original
+				continue;
+			}
 			buildFields.push(field);
 		}
 		var id:String = null;

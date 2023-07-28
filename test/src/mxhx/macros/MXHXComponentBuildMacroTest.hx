@@ -4,6 +4,7 @@ import utest.Assert;
 import utest.Test;
 import fixtures.TestBuildMacro;
 import fixtures.TestBuildMacroNested;
+import fixtures.TestBuildMacroFieldOnClass;
 
 class MXHXComponentBuildMacroTest extends Test {
 	public function testBuildMacro():Void {
@@ -15,5 +16,10 @@ class MXHXComponentBuildMacroTest extends Test {
 		var result = new TestBuildMacroNested();
 		Assert.notNull(result.nested);
 		Assert.isOfType(result.nested, TestBuildMacro);
+	}
+
+	public function testBuildMacroFieldOnClass():Void {
+		var result = new TestBuildMacroFieldOnClass();
+		Assert.equals("hello", result.customField);
 	}
 }
