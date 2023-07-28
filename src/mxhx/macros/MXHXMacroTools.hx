@@ -45,6 +45,22 @@ class MXHXMacroTools {
 					typedExprDef = e.expr;
 				case TField(e, FStatic(c, cf)):
 					var classField = cf.get();
+					var classFieldExpr = classField.expr();
+					if (classFieldExpr == null) {
+						// can't find the string value, so generate it from the
+						// name of the field based on standard naming convention
+						var parts = classField.name.split("_");
+						var result = "";
+						for (i in 0...parts.length) {
+							var part = parts[i].toLowerCase();
+							if (i == 0) {
+								result += part;
+							} else {
+								result += part.charAt(0).toUpperCase() + part.substr(1);
+							}
+						}
+						return result;
+					}
 					typedExprDef = classField.expr().expr;
 				default:
 					return null;
