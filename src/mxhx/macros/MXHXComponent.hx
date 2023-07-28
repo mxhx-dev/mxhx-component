@@ -1150,7 +1150,10 @@ class MXHXComponent {
 					var textData:IMXHXTextData = cast child;
 					switch (textData.textType) {
 						case Text:
-							var content = handleTextContentAsText(textData.content, textData);
+							var content = textData.content;
+							if (textContentContainsBinding(content)) {
+								reportError('Binding is not supported here', sourceLocationToContextPosition(textData));
+							}
 							if (pendingText == null) {
 								pendingText = "";
 							}
@@ -1282,7 +1285,7 @@ class MXHXComponent {
 		return expr;
 	}
 
-	private static function handleTextContentAsText(text:String, sourceLocation:IMXHXSourceLocation):String {
+	private static function textContentContainsBinding(text:String):Bool {
 		var startIndex = 0;
 		do {
 			var bindingStartIndex = text.indexOf("{", startIndex);
@@ -1311,12 +1314,11 @@ class MXHXComponent {
 					}
 				}
 				if (bindingEndIndex != -1) {
-					errorBindingNotSupported(sourceLocation);
-					return null;
+					return true;
 				}
 			}
 		} while (true);
-		return text;
+		return false;
 	}
 
 	private static function handleChildUnitsOfDeclarationsTag(tagData:IMXHXTagData, outerDocumentTypePath:TypePath, generatedFields:Array<Field>,
