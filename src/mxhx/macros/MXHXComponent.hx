@@ -1272,7 +1272,8 @@ class MXHXComponent {
 				}
 				if (bindingEndIndex != -1) {
 					if (languageUri == LANGUAGE_URI_BASIC_2024) {
-						errorBindingNotSupported(sourceLocation);
+						errorBindingNotSupported(new CustomMXHXSourceLocation(sourceLocation.start + bindingStartIndex,
+							sourceLocation.start + bindingEndIndex + 1, sourceLocation.source));
 						return null;
 					}
 					if (pendingText.length > 0) {
