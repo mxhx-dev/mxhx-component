@@ -645,7 +645,7 @@ class MXHXComponent {
 						}
 					}
 				}
-				valueExpr = handleTextContentAsExpr(attrData.rawValue, baseType, enumType, attrData.valueStart, attrData);
+				valueExpr = handleTextContentAsExpr(attrData.rawValue, baseType, enumType, attrData.valueStart, getAttributeValueSourceLocation(attrData));
 				var fieldName = f.name;
 				var setExpr = macro $i{targetIdentifier}.$fieldName = ${valueExpr};
 				initExprs.push(setExpr);
@@ -1883,18 +1883,6 @@ class MXHXComponent {
 		return macro $v{value};
 	}
 
-	private static function createValueExprForFieldAttribute(field:ClassField, value:String, attrData:IMXHXTagAttributeData):Expr {
-		if (!field.isPublic) {
-			reportError('Cannot set field \'${field.name}\' because it is not public', sourceLocationToContextPosition(attrData));
-		}
-		switch (field.kind) {
-			case FVar(read, write):
-			default:
-				reportError('Cannot set field \'${field.name}\'', sourceLocationToContextPosition(attrData));
-		}
-		return createValueExprForType(field.type, value, false, attrData);
-	}
-
 	private static function createValueExprForType(type:Type, value:String, fromCdata:Bool, location:IMXHXSourceLocation):Expr {
 		var baseType:BaseType = null;
 		while (baseType == null) {
@@ -2137,6 +2125,10 @@ class MXHXComponent {
 		return Context.makePosition({file: location.source, min: location.start, max: location.end});
 	}
 
+	private static function getAttributeValueSourceLocation(attrData:IMXHXTagAttributeData):IMXHXSourceLocation {
+		return new CustomMXHXSourceLocation(attrData.valueStart, attrData.valueEnd, attrData.source);
+	}
+
 	private static function resolveFilePath(filePath:String):String {
 		if (Path.isAbsolute(filePath)) {
 			return filePath;
@@ -2157,4 +2149,16 @@ class MXHXComponent {
 		return File.getContent(filePath);
 	}
 	#end
+}
+
+private class CustomMXHXSourceLocation implements IMXHXSourceLocation {
+	public var start:Int;
+	public var end:Int;
+	public var source:String;
+
+	public function new(start:Int, end:Int, source:String) {
+		this.start = start;
+		this.end = end;
+		this.source = source;
+	}
 }
