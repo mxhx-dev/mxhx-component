@@ -602,13 +602,38 @@ class MXHXComponent {
 				}
 			case FieldSymbol(f, t):
 				var valueExpr:Expr = null;
-				if (languageUri == LANGUAGE_URI_BASIC_2024) {
-					var attrValue = handleTextContentAsText(attrData.rawValue, attrData);
-					valueExpr = createValueExprForFieldAttribute(f, attrValue, attrData);
-				} else {
-					var baseType = typeToBaseType(f.type);
-					valueExpr = handleTextContentAsExpr(attrData.rawValue, baseType, attrData.valueStart, attrData);
+
+				var baseType:BaseType = null;
+				var enumType:EnumType = null;
+				var abstractType:AbstractType = null;
+				var currentType = f.type;
+				if (currentType != null) {
+					while (true) {
+						switch (currentType) {
+							case TInst(t, params):
+								baseType = t.get();
+								break;
+							case TAbstract(t, params):
+								abstractType = t.get();
+								if (abstractType.name == TYPE_NULL) {
+									abstractType = null;
+									currentType = params[0];
+								} else {
+									baseType = abstractType;
+									break;
+								}
+							case TEnum(t, params):
+								enumType = t.get();
+								baseType = enumType;
+								break;
+							case TLazy(f):
+								currentType = f();
+							default:
+								break;
+						}
+					}
 				}
+				valueExpr = handleTextContentAsExpr(attrData.rawValue, baseType, enumType, attrData.valueStart, attrData);
 				var fieldName = f.name;
 				var setExpr = macro $i{targetIdentifier}.$fieldName = ${valueExpr};
 				initExprs.push(setExpr);
@@ -1106,12 +1131,7 @@ class MXHXComponent {
 		if (child != null && (child is IMXHXTextData) && child.getNextSiblingUnit() == null) {
 			var textData = cast(child, IMXHXTextData);
 			if (textData.textType == Text && isLanguageTypeAssignableFromText(t)) {
-				if (languageUri == LANGUAGE_URI_BASIC_2024) {
-					var value = handleTextContentAsText(textData.content, textData);
-					initExpr = createValueExprForBaseType(t, value, false, textData);
-				} else {
-					initExpr = handleTextContentAsExpr(textData.content, t, 0, textData);
-				}
+				initExpr = handleTextContentAsExpr(textData.content, t, e, 0, textData);
 			}
 		}
 		if (initExpr == null) {
@@ -1186,7 +1206,8 @@ class MXHXComponent {
 		return initExpr;
 	}
 
-	private static function handleTextContentAsExpr(text:String, baseType:BaseType, textStartOffset:Int, sourceLocation:IMXHXSourceLocation):Expr {
+	private static function handleTextContentAsExpr(text:String, baseType:BaseType, enumType:EnumType, textStartOffset:Int,
+			sourceLocation:IMXHXSourceLocation):Expr {
 		var expr:Expr = null;
 		var startIndex = 0;
 		var pendingText:String = "";
@@ -1194,6 +1215,11 @@ class MXHXComponent {
 			var bindingStartIndex = text.indexOf("{", startIndex);
 			if (bindingStartIndex == -1) {
 				if (expr == null && pendingText.length == 0) {
+					if (enumType != null) {
+						if (enumType.names.indexOf(text) != -1) {
+							return macro $i{text};
+						}
+					}
 					return createValueExprForBaseType(baseType, text, false, sourceLocation);
 				}
 				pendingText += text.substring(startIndex);
@@ -1230,6 +1256,10 @@ class MXHXComponent {
 					}
 				}
 				if (bindingEndIndex != -1) {
+					if (languageUri == LANGUAGE_URI_BASIC_2024) {
+						errorBindingNotSupported(sourceLocation);
+						return null;
+					}
 					if (pendingText.length > 0) {
 						if (expr == null) {
 							expr = macro $v{pendingText};
@@ -1281,7 +1311,6 @@ class MXHXComponent {
 					}
 				}
 				if (bindingEndIndex != -1) {
-					var bindingContent = text.substring(bindingStartIndex + 1, bindingEndIndex);
 					errorBindingNotSupported(sourceLocation);
 					return null;
 				}
@@ -1643,10 +1672,39 @@ class MXHXComponent {
 			fieldType = field.type;
 		}
 
-		var baseType = typeToBaseType(fieldType);
-		if (baseType != null) {
-			isArray = baseType.pack.length == 0 && baseType.name == TYPE_ARRAY;
-			isString = baseType.pack.length == 0 && baseType.name == TYPE_STRING;
+		var baseType:BaseType = null;
+		var enumType:EnumType = null;
+		var abstractType:AbstractType = null;
+		var currentType = fieldType;
+		if (currentType != null) {
+			while (true) {
+				switch (currentType) {
+					case TInst(t, params):
+						baseType = t.get();
+						break;
+					case TAbstract(t, params):
+						abstractType = t.get();
+						if (abstractType.name == TYPE_NULL) {
+							abstractType = null;
+							currentType = params[0];
+						} else {
+							baseType = abstractType;
+							break;
+						}
+					case TEnum(t, params):
+						enumType = t.get();
+						baseType = enumType;
+						break;
+					case TLazy(f):
+						currentType = f();
+					default:
+						break;
+				}
+			}
+			if (baseType != null) {
+				isArray = baseType.pack.length == 0 && baseType.name == TYPE_ARRAY;
+				isString = baseType.pack.length == 0 && baseType.name == TYPE_STRING;
+			}
 		}
 
 		var firstChildIsArrayTag = false;
@@ -1657,12 +1715,7 @@ class MXHXComponent {
 			if (current == firstChild && (current is IMXHXTextData) && current.getNextSiblingUnit() == null) {
 				var textData = cast(current, IMXHXTextData);
 				if (textData.textType == Text && isLanguageTypeAssignableFromText(baseType)) {
-					if (languageUri == LANGUAGE_URI_BASIC_2024) {
-						var value = handleTextContentAsText(textData.content, textData);
-						return createValueExprForBaseType(baseType, value, false, textData);
-					} else {
-						return handleTextContentAsExpr(textData.content, baseType, 0, textData);
-					}
+					return handleTextContentAsExpr(textData.content, baseType, enumType, 0, textData);
 				}
 			}
 			if (!isArray && valueExprs.length > 0) {
@@ -2007,32 +2060,6 @@ class MXHXComponent {
 			return null;
 		}
 		return propertyName;
-	}
-
-	private static function typeToBaseType(type:Type):BaseType {
-		if (type == null) {
-			return null;
-		}
-		while (true) {
-			switch (type) {
-				case TInst(t, params):
-					return t.get();
-				case TAbstract(t, params):
-					var abstractType = t.get();
-					if (abstractType.name == TYPE_NULL) {
-						type = params[0];
-					} else {
-						return abstractType;
-					}
-				case TEnum(t, params):
-					return t.get();
-				case TLazy(f):
-					type = f();
-				default:
-					return null;
-			}
-		}
-		return null;
 	}
 
 	private static function errorTagNotSupported(tagData:IMXHXTagData):Void {
