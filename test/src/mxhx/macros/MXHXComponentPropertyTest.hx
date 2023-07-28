@@ -45,7 +45,8 @@ class MXHXComponentPropertyTest extends Test {
 						boolean="true"
 						float="123.4"
 						integer="567"
-						string="hello">
+						string="hello"
+						canBeNull="890.1">
 						<tests:struct>
 							<mx:Struct float="123.4" boolean="true" string="hello">
 								<mx:float>123.4</mx:float>
@@ -68,6 +69,7 @@ class MXHXComponentPropertyTest extends Test {
 		Assert.equals(123.4, result.strictlyTyped.float);
 		Assert.equals("hello", result.strictlyTyped.string);
 		Assert.equals(567, result.strictlyTyped.integer);
+		Assert.equals(890.1, result.strictlyTyped.canBeNull);
 		Assert.notNull(result.strictlyTyped.struct);
 		Assert.equals(4, Reflect.fields(result.strictlyTyped.struct).length);
 		Assert.isTrue(Reflect.hasField(result.strictlyTyped.struct, "float"));
@@ -1031,5 +1033,73 @@ class MXHXComponentPropertyTest extends Test {
 		Assert.equals("two", array[1]);
 		Assert.equals("three", array[2]);
 		Assert.equals("four", result.other);
+	}
+
+	public function testCanBeNullChildElement():Void {
+		var result = MXHXComponent.withMarkup('
+			<tests:TestPropertiesClass
+				xmlns:mx="https://ns.mxhx.dev/2024/basic"
+				xmlns:tests="https://ns.mxhx.dev/2024/tests">
+				<tests:canBeNull>890.1</tests:canBeNull>
+			</tests:TestPropertiesClass>
+		');
+		Assert.notNull(result);
+		Assert.isOfType(result.canBeNull, Float);
+		Assert.equals(890.1, result.canBeNull);
+	}
+
+	public function testCanBeNullChildElementCData():Void {
+		var result = MXHXComponent.withMarkup('
+			<tests:TestPropertiesClass
+				xmlns:mx="https://ns.mxhx.dev/2024/basic"
+				xmlns:tests="https://ns.mxhx.dev/2024/tests">
+				<tests:canBeNull><![CDATA[890.1]]></tests:canBeNull>
+			</tests:TestPropertiesClass>
+		');
+		Assert.notNull(result);
+		Assert.isOfType(result.canBeNull, Float);
+		Assert.equals(890.1, result.canBeNull);
+	}
+
+	public function testCanBeNullChildElementRedundant():Void {
+		var result = MXHXComponent.withMarkup('
+			<tests:TestPropertiesClass
+				xmlns:mx="https://ns.mxhx.dev/2024/basic"
+				xmlns:tests="https://ns.mxhx.dev/2024/tests">
+				<tests:canBeNull><mx:Float>890.1</mx:Float></tests:canBeNull>
+			</tests:TestPropertiesClass>
+		');
+		Assert.notNull(result);
+		Assert.isOfType(result.canBeNull, Float);
+		Assert.equals(890.1, result.canBeNull);
+	}
+
+	public function testCanBeNullChildElementRedundantEmpty():Void {
+		var result = MXHXComponent.withMarkup('
+			<tests:TestPropertiesClass
+				xmlns:mx="https://ns.mxhx.dev/2024/basic"
+				xmlns:tests="https://ns.mxhx.dev/2024/tests">
+				<tests:canBeNull><mx:Float></mx:Float></tests:canBeNull>
+			</tests:TestPropertiesClass>
+		');
+		Assert.notNull(result);
+		Assert.isOfType(result.canBeNull, Float);
+		Assert.isTrue(Math.isNaN(result.canBeNull));
+	}
+
+	public function testCanBeNullChildElementRedundantEmptyExtraWhitespace():Void {
+		var result = MXHXComponent.withMarkup('
+			<tests:TestPropertiesClass
+				xmlns:mx="https://ns.mxhx.dev/2024/basic"
+				xmlns:tests="https://ns.mxhx.dev/2024/tests">
+				<tests:canBeNull>
+					<mx:Float>
+					</mx:Float>
+				</tests:canBeNull>
+			</tests:TestPropertiesClass>
+		');
+		Assert.notNull(result);
+		Assert.isOfType(result.canBeNull, Float);
+		Assert.isTrue(Math.isNaN(result.canBeNull));
 	}
 }

@@ -177,7 +177,8 @@ class MXHXComponentDeclarationsTest extends Test {
 						boolean="true"
 						float="123.4"
 						integer="567"
-						string="hello">
+						string="hello"
+						canBeNull="890.1">
 						<tests:struct>
 							<mx:Struct float="123.4" boolean="true" string="hello">
 								<mx:float>123.4</mx:float>
@@ -201,6 +202,7 @@ class MXHXComponentDeclarationsTest extends Test {
 		Assert.equals("hello", result.strictlyTyped.string);
 		Assert.equals(567, result.strictlyTyped.integer);
 		Assert.notNull(result.strictlyTyped.struct);
+		Assert.equals(890.1, result.strictlyTyped.canBeNull);
 		Assert.equals(4, Reflect.fields(result.strictlyTyped.struct).length);
 		Assert.isTrue(Reflect.hasField(result.strictlyTyped.struct, "float"));
 		Assert.isTrue(Reflect.hasField(result.strictlyTyped.struct, "boolean"));

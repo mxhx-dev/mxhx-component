@@ -16,4 +16,5 @@ class TestPropertiesClass {
 	public var array:Array<String>;
 	public var type:Class<Dynamic>;
 	public var complexEnum:TestComplexEnum;
+	public var canBeNull:Null<Float>;
 }

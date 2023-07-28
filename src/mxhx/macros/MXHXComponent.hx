@@ -77,6 +77,7 @@ class MXHXComponent {
 	private static final KEYWORD_THIS = "this";
 	private static final KEYWORD_NEW = "new";
 	private static final META_DEFAULT_XML_PROPERTY = "defaultXmlProperty";
+	private static final META_ENUM = ":enum";
 	private static final META_MARKUP = ":markup";
 	private static final META_NO_COMPLETION = ":noCompletion";
 	private static final TYPE_ANY = "Any";
@@ -1839,7 +1840,7 @@ class MXHXComponent {
 					if (abstractType.name == TYPE_NULL) {
 						type = params[0];
 					} else {
-						if (abstractType.meta.has(":enum")) {
+						if (abstractType.meta.has(META_ENUM)) {
 							return macro $i{value};
 						} else {
 							baseType = abstractType;
@@ -2017,7 +2018,12 @@ class MXHXComponent {
 				case TInst(t, params):
 					return t.get();
 				case TAbstract(t, params):
-					return t.get();
+					var abstractType = t.get();
+					if (abstractType.name == TYPE_NULL) {
+						type = params[0];
+					} else {
+						return abstractType;
+					}
 				case TEnum(t, params):
 					return t.get();
 				case TLazy(f):
