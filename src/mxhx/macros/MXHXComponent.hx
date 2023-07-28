@@ -215,10 +215,12 @@ class MXHXComponent {
 			reportError('Could not resolve super class for \'${localClass.name}\' from tag \'<${rootTag.name}>\'', localClass.pos);
 			return null;
 		}
-		var expectedSuperClass = resolvedType.module;
-		if (superClass == null || Std.string(superClass.t) != expectedSuperClass) {
-			reportError('Class ${localClass.name} must extend ${expectedSuperClass}', localClass.pos);
-			return null;
+		if (!isObjectTag(rootTag)) {
+			var expectedSuperClass = resolvedType.module;
+			if (superClass == null || Std.string(superClass.t) != expectedSuperClass) {
+				reportError('Class ${localClass.name} must extend ${expectedSuperClass}', localClass.pos);
+				return null;
+			}
 		}
 
 		var buildFields = Context.getBuildFields();
@@ -499,7 +501,9 @@ class MXHXComponent {
 			if (resolvedTag != null) {
 				switch (resolvedTag) {
 					case ClassSymbol(c, params):
-						constructorExprs.unshift(macro super());
+						if (!isObjectTag(tagData)) {
+							constructorExprs.unshift(macro super());
+						};
 					default:
 				}
 			}

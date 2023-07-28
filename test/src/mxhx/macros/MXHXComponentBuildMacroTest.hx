@@ -1,10 +1,11 @@
 package mxhx.macros;
 
+import fixtures.TestBuildMacro;
+import fixtures.TestBuildMacroFieldOnClass;
+import fixtures.TestBuildMacroNested;
+import fixtures.TestBuildMacroObjectBaseClass;
 import utest.Assert;
 import utest.Test;
-import fixtures.TestBuildMacro;
-import fixtures.TestBuildMacroNested;
-import fixtures.TestBuildMacroFieldOnClass;
 
 class MXHXComponentBuildMacroTest extends Test {
 	public function testBuildMacro():Void {
@@ -16,6 +17,11 @@ class MXHXComponentBuildMacroTest extends Test {
 		var result = new TestBuildMacroNested();
 		Assert.notNull(result.nested);
 		Assert.isOfType(result.nested, TestBuildMacro);
+	}
+
+	public function testBuildMacroObjectBaseClass():Void {
+		var result = new TestBuildMacroObjectBaseClass();
+		Assert.pass();
 	}
 
 	public function testBuildMacroFieldOnClass():Void {
