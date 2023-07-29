@@ -936,7 +936,20 @@ class MXHXComponent {
 									case TInst(t, params):
 										var classType = t.get();
 										if (classType.pack.length == 0 && classType.name == TYPE_ARRAY && params.length > 0) {
-											paramType = TypeTools.toComplexType(params[0]);
+											var isTypeParameter = false;
+											switch (params[0]) {
+												case TInst(t, params):
+													var paramClassType = t.get();
+													switch (paramClassType.kind) {
+														case KTypeParameter(constraints):
+															isTypeParameter = true;
+														default:
+													}
+												default:
+											}
+											if (!isTypeParameter) {
+												paramType = TypeTools.toComplexType(params[0]);
+											}
 										}
 									default:
 								}
