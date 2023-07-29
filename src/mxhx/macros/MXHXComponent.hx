@@ -645,6 +645,47 @@ class MXHXComponent {
 						}
 					}
 				}
+				if (abstractType != null) {
+					if (!isLanguageTypeAssignableFromText(abstractType)) {
+						for (from in abstractType.from) {
+							var fromBaseType:BaseType = null;
+							var fromEnumType:EnumType = null;
+							var fromAbstractType:AbstractType = null;
+							var currentFromType = from.t;
+							if (currentFromType != null) {
+								while (true) {
+									switch (currentFromType) {
+										case TInst(t, params):
+											fromBaseType = t.get();
+											break;
+										case TAbstract(t, params):
+											fromAbstractType = t.get();
+											if (fromAbstractType.name == TYPE_NULL) {
+												fromAbstractType = null;
+												currentFromType = params[0];
+											} else {
+												fromBaseType = fromAbstractType;
+												break;
+											}
+										case TEnum(t, params):
+											fromEnumType = t.get();
+											fromBaseType = fromEnumType;
+											break;
+										case TLazy(f):
+											currentFromType = f();
+										default:
+											break;
+									}
+								}
+							}
+							if (isLanguageTypeAssignableFromText(fromBaseType)) {
+								baseType = fromBaseType;
+								abstractType = fromAbstractType;
+								enumType = fromEnumType;
+							}
+						}
+					}
+				}
 				valueExpr = handleTextContentAsExpr(attrData.rawValue, baseType, enumType, attrData.valueStart, getAttributeValueSourceLocation(attrData));
 				var fieldName = f.name;
 				var setExpr = macro $i{targetIdentifier}.$fieldName = ${valueExpr};
