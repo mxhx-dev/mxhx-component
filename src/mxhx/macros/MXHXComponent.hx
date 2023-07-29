@@ -912,7 +912,15 @@ class MXHXComponent {
 			// this shouldn't happen
 			childTypePath = {name: TYPE_DYNAMIC, pack: []};
 		} else {
-			childTypePath = {name: resolvedType.name, pack: resolvedType.pack};
+			var qname = resolvedType.name;
+			if (resolvedType.pack.length > 0) {
+				qname = resolvedType.pack.join(".") + "." + qname;
+			}
+			if (qname != resolvedType.module) {
+				childTypePath = {name: resolvedType.module.split(".").pop(), pack: resolvedType.pack, sub: resolvedType.name};
+			} else {
+				childTypePath = {name: resolvedType.name, pack: resolvedType.pack};
+			}
 			if (isArray) {
 				var paramType:ComplexType = null;
 				if (resolvedTypeParams.length > 0) {
