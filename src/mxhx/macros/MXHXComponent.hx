@@ -719,12 +719,7 @@ class MXHXComponent {
 		var setIDExpr:Expr = null;
 
 		if (id != null) {
-			generatedFields.push({
-				name: id,
-				pos: sourceLocationToContextPosition(idAttr),
-				kind: FVar(TPath(childTypePath)),
-				access: [APublic]
-			});
+			addFieldForID(id, TPath(childTypePath), idAttr, generatedFields);
 			setIDExpr = macro this.$id = $i{localVarName};
 		} else {
 			id = Std.string(objectCounter);
@@ -1014,12 +1009,7 @@ class MXHXComponent {
 		}
 		var setIDExpr:Expr = null;
 		if (id != null) {
-			generatedFields.push({
-				name: id,
-				pos: sourceLocationToContextPosition(idAttr),
-				kind: FVar(TPath(childTypePath)),
-				access: [APublic]
-			});
+			addFieldForID(id, TPath(childTypePath), idAttr, generatedFields);
 			setIDExpr = macro this.$id = $i{localVarName};
 		} else {
 			// field names can't start with a number, so starting a generated
@@ -1100,12 +1090,7 @@ class MXHXComponent {
 			if (t.pack.length == 0 && t.name == TYPE_CLASS) {
 				typePath.params = [TPType(TPath({pack: [], name: TYPE_DYNAMIC}))];
 			}
-			generatedFields.push({
-				name: id,
-				pos: sourceLocationToContextPosition(idAttr),
-				kind: FVar(TPath(typePath)),
-				access: [APublic]
-			});
+			addFieldForID(id, TPath(typePath), idAttr, generatedFields);
 			initExpr = macro this.$id = $initExpr;
 		}
 		return initExpr;
@@ -1287,12 +1272,7 @@ class MXHXComponent {
 			if (t.pack.length == 0 && t.name == TYPE_CLASS) {
 				typePath.params = [TPType(TPath({pack: [], name: TYPE_DYNAMIC}))];
 			}
-			generatedFields.push({
-				name: id,
-				pos: sourceLocationToContextPosition(idAttr),
-				kind: FVar(TPath(typePath)),
-				access: [APublic]
-			});
+			addFieldForID(id, TPath(typePath), idAttr, generatedFields);
 			if (bindingTextData != null && dataBindingCallback != null && textContentContainsBinding(bindingTextData.content)) {
 				initExpr = dataBindingCallback(initExpr, destination, macro null);
 			} else {
@@ -2144,6 +2124,15 @@ class MXHXComponent {
 			return null;
 		}
 		return propertyName;
+	}
+
+	private static function addFieldForID(id:String, type:ComplexType, location:IMXHXSourceLocation, generatedFields:Array<Field>):Void {
+		generatedFields.push({
+			name: id,
+			pos: sourceLocationToContextPosition(location),
+			kind: FVar(type),
+			access: [APublic]
+		});
 	}
 
 	private static function errorTagNotSupported(tagData:IMXHXTagData):Void {
