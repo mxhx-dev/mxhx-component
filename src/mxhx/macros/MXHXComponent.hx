@@ -429,7 +429,8 @@ class MXHXComponent {
 						for (prefix in prefixes) {
 							var attrData = tagData.getAttributeData('xmlns:$prefix');
 							if (attrData != null) {
-								if (!Context.defined("mxhx-disable-experimental-warning")) {
+								if (!Context.defined("mxhx-disable-experimental-warning")
+									&& !Context.defined("mxhx_disable_experimental_warning")) {
 									Context.warning('Namespace \'$uri\' is experimental. Using namespace \'$LANGUAGE_URI_BASIC_2024\' instead is recommended.',
 										sourceLocationToContextPosition(attrData));
 								}
