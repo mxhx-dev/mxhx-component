@@ -171,6 +171,8 @@ class MXHXComponent {
 	private static var mxhxResolver:MXHXMacroResolver;
 	private static var manifests:Map<String, Map<String, String>> = [];
 	private static var dataBindingCallback:(Expr, Expr, Expr) -> Expr;
+	private static var dispatchEventCallback:(Expr, String) -> Expr;
+	private static var addEventListenerCallback:(Expr, String, Expr) -> Expr;
 	#end
 
 	/**
@@ -330,6 +332,14 @@ class MXHXComponent {
 
 	public static function setDataBindingCallback(callback:(Expr, Expr, Expr) -> Expr):Void {
 		dataBindingCallback = callback;
+	}
+
+	public static function setDispatchEventCallback(callback:(Expr, String) -> Expr):Void {
+		dispatchEventCallback = callback;
+	}
+
+	public static function setAddEventListenerCallback(callback:(Expr, String, Expr) -> Expr):Void {
+		addEventListenerCallback = callback;
 	}
 
 	private static function createResolver():Void {
@@ -612,10 +622,14 @@ class MXHXComponent {
 				if (languageUri == LANGUAGE_URI_BASIC_2024) {
 					errorEventsNotSupported(attrData);
 					return;
+				} else if (addEventListenerCallback == null) {
+					errorEventsNotConfigured(attrData);
+					return;
 				} else {
+					var dispatcherExpr = macro $i{targetIdentifier};
 					var eventName = MXHXMacroTools.getEventName(e);
-					var eventExpr = Context.parse(attrData.rawValue, sourceLocationToContextPosition(attrData));
-					var addEventExpr = macro $i{targetIdentifier}.addEventListener($v{eventName}, (event) -> ${eventExpr});
+					var listenerExpr = Context.parse(attrData.rawValue, sourceLocationToContextPosition(attrData));
+					var addEventExpr = addEventListenerCallback(dispatcherExpr, eventName, listenerExpr);
 					initExprs.push(addEventExpr);
 				}
 			case FieldSymbol(f, t):
@@ -2127,11 +2141,39 @@ class MXHXComponent {
 	}
 
 	private static function addFieldForID(id:String, type:ComplexType, location:IMXHXSourceLocation, generatedFields:Array<Field>):Void {
+		var pos = sourceLocationToContextPosition(location);
+		if (dispatchEventCallback == null) {
+			generatedFields.push({
+				name: id,
+				pos: pos,
+				kind: FVar(type),
+				access: [APublic]
+			});
+			return;
+		}
+		var eventName = '${id}Changed';
 		generatedFields.push({
 			name: id,
-			pos: sourceLocationToContextPosition(location),
-			kind: FVar(type),
-			access: [APublic]
+			pos: pos,
+			kind: FProp("default", "set", type),
+			access: [APublic],
+			meta: [{name: ":bindable", params: [macro $v{eventName}], pos: pos}]
+		});
+		var dispatcherExpr = macro this;
+		var dispatchExpr = dispatchEventCallback(dispatcherExpr, eventName);
+		generatedFields.push({
+			name: 'set_${id}',
+			pos: pos,
+			kind: FFun({
+				args: [{name: "value", type: type}],
+				ret: type,
+				expr: macro {
+					this.$id = value;
+					$dispatchExpr;
+					return this.$id;
+				}
+			}),
+			access: [APrivate]
 		});
 	}
 
@@ -2145,6 +2187,10 @@ class MXHXComponent {
 
 	private static function errorEventsNotSupported(sourceLocation:IMXHXSourceLocation):Void {
 		reportError('Events are not supported by the \'${languageUri}\' namespace', sourceLocationToContextPosition(sourceLocation));
+	}
+
+	private static function errorEventsNotConfigured(sourceLocation:IMXHXSourceLocation):Void {
+		reportError('Adding event listeners has not been configured', sourceLocationToContextPosition(sourceLocation));
 	}
 
 	private static function errorBindingNotSupported(sourceLocation:IMXHXSourceLocation):Void {
