@@ -170,6 +170,7 @@ class MXHXComponent {
 	private static var languageUri:String = null;
 	private static var mxhxResolver:MXHXMacroResolver;
 	private static var manifests:Map<String, Map<String, String>> = [];
+	private static var dataBindingCallback:(Expr, Expr, Expr) -> Expr;
 	#end
 
 	/**
@@ -325,6 +326,10 @@ class MXHXComponent {
 			mappings.set(xmlName, qname);
 		}
 		manifests.set(uri, mappings);
+	}
+
+	public static function setDataBindingCallback(callback:(Expr, Expr, Expr) -> Expr):Void {
+		dataBindingCallback = callback;
 	}
 
 	private static function createResolver():Void {
@@ -686,10 +691,16 @@ class MXHXComponent {
 						}
 					}
 				}
-				valueExpr = handleTextContentAsExpr(attrData.rawValue, baseType, enumType, attrData.valueStart, getAttributeValueSourceLocation(attrData));
 				var fieldName = f.name;
-				var setExpr = macro $i{targetIdentifier}.$fieldName = ${valueExpr};
-				initExprs.push(setExpr);
+				var destination = macro $i{targetIdentifier}.$fieldName;
+				valueExpr = handleTextContentAsExpr(attrData.rawValue, baseType, enumType, attrData.valueStart, getAttributeValueSourceLocation(attrData));
+				if (dataBindingCallback != null && textContentContainsBinding(attrData.rawValue)) {
+					var bindingExpr = dataBindingCallback(valueExpr, destination, macro null);
+					initExprs.push(bindingExpr);
+				} else {
+					var setExpr = macro $destination = ${valueExpr};
+					initExprs.push(setExpr);
+				}
 			default:
 				errorAttributeUnexpected(attrData);
 		}
@@ -1202,10 +1213,12 @@ class MXHXComponent {
 	private static function handleInstanceTagAssignableFromText(tagData:IMXHXTagData, t:BaseType, e:EnumType, generatedFields:Array<Field>):Expr {
 		var initExpr:Expr = null;
 		var child = tagData.getFirstChildUnit();
+		var bindingTextData:IMXHXTextData = null;
 		if (child != null && (child is IMXHXTextData) && child.getNextSiblingUnit() == null) {
 			var textData = cast(child, IMXHXTextData);
 			if (textData.textType == Text && isLanguageTypeAssignableFromText(t)) {
-				initExpr = handleTextContentAsExpr(textData.content, t, e, 0, textData);
+				initExpr = handleTextContentAsExpr(textData.content, t, e, null, textData);
+				bindingTextData = textData;
 			}
 		}
 		if (initExpr == null) {
@@ -1268,6 +1281,7 @@ class MXHXComponent {
 		var idAttr = tagData.getAttributeData(PROPERTY_ID);
 		if (idAttr != null) {
 			var id = idAttr.rawValue;
+			var destination = macro this.$id;
 			var typePath:TypePath = {pack: t.pack, name: t.name, params: null};
 			if (t.pack.length == 0 && t.name == TYPE_CLASS) {
 				typePath.params = [TPType(TPath({pack: [], name: TYPE_DYNAMIC}))];
@@ -1278,7 +1292,11 @@ class MXHXComponent {
 				kind: FVar(TPath(typePath)),
 				access: [APublic]
 			});
-			initExpr = macro this.$id = $initExpr;
+			if (bindingTextData != null && dataBindingCallback != null && textContentContainsBinding(bindingTextData.content)) {
+				initExpr = dataBindingCallback(initExpr, destination, macro null);
+			} else {
+				initExpr = macro $destination = $initExpr;
+			}
 		}
 		return initExpr;
 	}
