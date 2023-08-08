@@ -710,7 +710,7 @@ class MXHXComponent {
 				var destination = macro $i{targetIdentifier}.$fieldName;
 				valueExpr = handleTextContentAsExpr(attrData.rawValue, baseType, enumType, attrData.valueStart, getAttributeValueSourceLocation(attrData));
 				if (dataBindingCallback != null && textContentContainsBinding(attrData.rawValue)) {
-					var bindingExpr = dataBindingCallback(valueExpr, destination, macro null);
+					var bindingExpr = dataBindingCallback(valueExpr, destination, macro this);
 					initExprs.push(bindingExpr);
 				} else {
 					var setExpr = macro $destination = ${valueExpr};
@@ -1288,7 +1288,7 @@ class MXHXComponent {
 			}
 			addFieldForID(id, TPath(typePath), idAttr, generatedFields);
 			if (bindingTextData != null && dataBindingCallback != null && textContentContainsBinding(bindingTextData.content)) {
-				initExpr = dataBindingCallback(initExpr, destination, macro null);
+				initExpr = dataBindingCallback(initExpr, destination, macro this);
 			} else {
 				initExpr = macro $destination = $initExpr;
 			}
