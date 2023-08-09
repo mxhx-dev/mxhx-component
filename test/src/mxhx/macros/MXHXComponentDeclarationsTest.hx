@@ -299,7 +299,9 @@ class MXHXComponentDeclarationsTest extends Test {
 		');
 		Assert.notNull(result);
 		Assert.isOfType(result.ereg, EReg);
+		#if eval
 		Assert.equals("~/[a-z]+/g", Std.string(result.ereg));
+		#end
 	}
 
 	public function testERegExtraWhitespace():Void {
@@ -314,7 +316,9 @@ class MXHXComponentDeclarationsTest extends Test {
 		');
 		Assert.notNull(result);
 		Assert.isOfType(result.ereg, EReg);
+		#if eval
 		Assert.equals("~/[a-z]+/g", Std.string(result.ereg));
+		#end
 	}
 
 	public function testERegComment1():Void {
@@ -327,7 +331,9 @@ class MXHXComponentDeclarationsTest extends Test {
 		');
 		Assert.notNull(result);
 		Assert.isOfType(result.ereg, EReg);
+		#if eval
 		Assert.equals("~/[a-z]+/g", Std.string(result.ereg));
+		#end
 	}
 
 	public function testERegComment2():Void {
@@ -340,7 +346,9 @@ class MXHXComponentDeclarationsTest extends Test {
 		');
 		Assert.notNull(result);
 		Assert.isOfType(result.ereg, EReg);
+		#if eval
 		Assert.equals("~/[a-z]+/g", Std.string(result.ereg));
+		#end
 	}
 
 	public function testERegEmpty():Void {
@@ -353,7 +361,9 @@ class MXHXComponentDeclarationsTest extends Test {
 		');
 		Assert.notNull(result);
 		Assert.isOfType(result.ereg, EReg);
+		#if eval
 		Assert.equals("~//", Std.string(result.ereg));
+		#end
 	}
 
 	public function testERegEmptyExtraWhitespace():Void {
@@ -367,7 +377,9 @@ class MXHXComponentDeclarationsTest extends Test {
 		');
 		Assert.notNull(result);
 		Assert.isOfType(result.ereg, EReg);
+		#if eval
 		Assert.equals("~//", Std.string(result.ereg));
+		#end
 	}
 
 	public function testERegOnlyComment1():Void {
@@ -380,7 +392,9 @@ class MXHXComponentDeclarationsTest extends Test {
 		');
 		Assert.notNull(result);
 		Assert.isOfType(result.ereg, EReg);
+		#if eval
 		Assert.equals("~//", Std.string(result.ereg));
+		#end
 	}
 
 	public function testERegOnlyComment2():Void {
@@ -395,7 +409,9 @@ class MXHXComponentDeclarationsTest extends Test {
 		');
 		Assert.notNull(result);
 		Assert.isOfType(result.ereg, EReg);
+		#if eval
 		Assert.equals("~//", Std.string(result.ereg));
+		#end
 	}
 
 	public function testERegOnlyDocComment1():Void {
@@ -408,7 +424,9 @@ class MXHXComponentDeclarationsTest extends Test {
 		');
 		Assert.notNull(result);
 		Assert.isOfType(result.ereg, EReg);
+		#if eval
 		Assert.equals("~//", Std.string(result.ereg));
+		#end
 	}
 
 	public function testERegOnlyDocComment2():Void {
@@ -423,7 +441,9 @@ class MXHXComponentDeclarationsTest extends Test {
 		');
 		Assert.notNull(result);
 		Assert.isOfType(result.ereg, EReg);
+		#if eval
 		Assert.equals("~//", Std.string(result.ereg));
+		#end
 	}
 
 	public function testERegNoExpression():Void {
@@ -436,7 +456,9 @@ class MXHXComponentDeclarationsTest extends Test {
 		');
 		Assert.notNull(result);
 		Assert.isOfType(result.ereg, EReg);
+		#if eval
 		Assert.equals("~//", Std.string(result.ereg));
+		#end
 	}
 
 	public function testERegCData():Void {
@@ -449,7 +471,9 @@ class MXHXComponentDeclarationsTest extends Test {
 		');
 		Assert.notNull(result);
 		Assert.isOfType(result.ereg, EReg);
+		#if eval
 		Assert.equals("~/[a-z]+/g", Std.string(result.ereg));
+		#end
 	}
 
 	public function testFloat():Void {

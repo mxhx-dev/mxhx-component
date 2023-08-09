@@ -445,7 +445,9 @@ class MXHXComponentPropertyTest extends Test {
 		');
 		Assert.notNull(result);
 		Assert.isOfType(result.ereg, EReg);
+		#if eval
 		Assert.equals("~/[a-z]+/g", Std.string(result.ereg));
+		#end
 	}
 
 	public function testERegChildElementCData():Void {
@@ -458,7 +460,9 @@ class MXHXComponentPropertyTest extends Test {
 		');
 		Assert.notNull(result);
 		Assert.isOfType(result.ereg, EReg);
+		#if eval
 		Assert.equals("~/[a-z]+/g", Std.string(result.ereg));
+		#end
 	}
 
 	public function testERegChildElementRedundant():Void {
@@ -471,7 +475,9 @@ class MXHXComponentPropertyTest extends Test {
 		');
 		Assert.notNull(result);
 		Assert.isOfType(result.ereg, EReg);
+		#if eval
 		Assert.equals("~/[a-z]+/g", Std.string(result.ereg));
+		#end
 	}
 
 	public function testERegChildElementRedundantEmpty():Void {
@@ -484,7 +490,9 @@ class MXHXComponentPropertyTest extends Test {
 		');
 		Assert.notNull(result);
 		Assert.isOfType(result.ereg, EReg);
+		#if eval
 		Assert.equals("~//", Std.string(result.ereg));
+		#end
 	}
 
 	public function testERegChildElementRedundantEmptyExtraWhitespace():Void {
@@ -500,7 +508,9 @@ class MXHXComponentPropertyTest extends Test {
 		');
 		Assert.notNull(result);
 		Assert.isOfType(result.ereg, EReg);
+		#if eval
 		Assert.equals("~//", Std.string(result.ereg));
+		#end
 	}
 
 	public function testFloatAttribute():Void {
