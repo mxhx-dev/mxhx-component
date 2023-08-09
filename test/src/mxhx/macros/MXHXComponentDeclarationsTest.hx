@@ -1350,8 +1350,15 @@ class MXHXComponentDeclarationsTest extends Test {
 		');
 		Assert.notNull(result);
 		Assert.isOfType(result.uint, Int);
-		var expected:UInt = Std.int(4000000000);
+		#if eval
+		final expected = Std.int(4000000000);
 		Assert.equals(expected, result.uint);
+		#else
+		// uint comparison doesn't always work on some targets
+		final expected:Float = 4000000000.0;
+		final uintAsFloatValue:Float = result.uint;
+		Assert.equals(expected, uintAsFloatValue);
+		#end
 	}
 
 	public function testUIntExtraWhitespace():Void {
@@ -1366,8 +1373,15 @@ class MXHXComponentDeclarationsTest extends Test {
 		');
 		Assert.notNull(result);
 		Assert.isOfType(result.uint, Int);
-		var expected:UInt = Std.int(4000000000);
+		#if eval
+		final expected = Std.int(4000000000);
 		Assert.equals(expected, result.uint);
+		#else
+		// uint comparison doesn't always work on some targets
+		final expected:Float = 4000000000.0;
+		final uintAsFloatValue:Float = result.uint;
+		Assert.equals(expected, uintAsFloatValue);
+		#end
 	}
 
 	public function testUIntComment1():Void {
@@ -1380,8 +1394,15 @@ class MXHXComponentDeclarationsTest extends Test {
 		');
 		Assert.notNull(result);
 		Assert.isOfType(result.uint, Int);
-		var expected:UInt = Std.int(4000000000);
+		#if eval
+		final expected = Std.int(4000000000);
 		Assert.equals(expected, result.uint);
+		#else
+		// uint comparison doesn't always work on some targets
+		final expected:Float = 4000000000.0;
+		final uintAsFloatValue:Float = result.uint;
+		Assert.equals(expected, uintAsFloatValue);
+		#end
 	}
 
 	public function testUIntComment2():Void {
@@ -1394,8 +1415,15 @@ class MXHXComponentDeclarationsTest extends Test {
 		');
 		Assert.notNull(result);
 		Assert.isOfType(result.uint, Int);
-		var expected:UInt = Std.int(4000000000);
+		#if eval
+		final expected = Std.int(4000000000);
 		Assert.equals(expected, result.uint);
+		#else
+		// uint comparison doesn't always work on some targets
+		final expected:Float = 4000000000.0;
+		final uintAsFloatValue:Float = result.uint;
+		Assert.equals(expected, uintAsFloatValue);
+		#end
 	}
 
 	public function testUIntComment3():Void {
@@ -1408,8 +1436,15 @@ class MXHXComponentDeclarationsTest extends Test {
 		');
 		Assert.notNull(result);
 		Assert.isOfType(result.uint, Int);
-		var expected:UInt = Std.int(4000000000);
+		#if eval
+		final expected = Std.int(4000000000);
 		Assert.equals(expected, result.uint);
+		#else
+		// uint comparison doesn't always work on some targets
+		final expected:Float = 4000000000.0;
+		final uintAsFloatValue:Float = result.uint;
+		Assert.equals(expected, uintAsFloatValue);
+		#end
 	}
 
 	public function testUIntEmpty():Void {
@@ -1477,8 +1512,15 @@ class MXHXComponentDeclarationsTest extends Test {
 		');
 		Assert.notNull(result);
 		Assert.isOfType(result.uint, Int);
-		var expected:UInt = Std.int(4000000000);
+		#if eval
+		final expected = Std.int(4000000000);
 		Assert.equals(expected, result.uint);
+		#else
+		// uint comparison doesn't always work on some targets
+		final expected:Float = 4000000000.0;
+		final uintAsFloatValue:Float = result.uint;
+		Assert.equals(expected, uintAsFloatValue);
+		#end
 	}
 
 	public function testUIntHexUpperCase():Void {
@@ -1491,8 +1533,15 @@ class MXHXComponentDeclarationsTest extends Test {
 		');
 		Assert.notNull(result);
 		Assert.isOfType(result.uint, Int);
-		var expected:UInt = Std.int(4000000000);
+		#if eval
+		final expected = Std.int(4000000000);
 		Assert.equals(expected, result.uint);
+		#else
+		// uint comparison doesn't always work on some targets
+		final expected:Float = 4000000000.0;
+		final uintAsFloatValue:Float = result.uint;
+		Assert.equals(expected, uintAsFloatValue);
+		#end
 	}
 
 	public function testUIntCData():Void {
@@ -1505,8 +1554,15 @@ class MXHXComponentDeclarationsTest extends Test {
 		');
 		Assert.notNull(result);
 		Assert.isOfType(result.uint, Int);
-		var expected:UInt = Std.int(4000000000);
+		#if eval
+		final expected = Std.int(4000000000);
 		Assert.equals(expected, result.uint);
+		#else
+		// uint comparison doesn't always work on some targets
+		final expected:Float = 4000000000.0;
+		final uintAsFloatValue:Float = result.uint;
+		Assert.equals(expected, uintAsFloatValue);
+		#end
 	}
 
 	public function testArray():Void {

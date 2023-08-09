@@ -1965,12 +1965,12 @@ class MXHXComponent {
 		}
 		if (~/^-?[0-9]+?$/.match(value)) {
 			var intValue = Std.parseInt(value);
-			if (intValue == null) {
-				var uintAsFloatValue = Std.parseFloat(value);
-				var uintAsIntValue:UInt = Std.int(uintAsFloatValue);
-				return macro $v{uintAsIntValue};
+			var intAsFloatValue = Std.parseFloat(value);
+			if (intValue != null && intValue == intAsFloatValue) {
+				return macro $v{intValue};
 			}
-			return macro $v{intValue};
+			var uintValue:UInt = Std.int(intAsFloatValue);
+			return macro $v{uintValue};
 		}
 		if (~/^-?[0-9]+(\.[0-9]+)?(e\-?\d+)?$/.match(value)) {
 			var floatValue = Std.parseFloat(value);
@@ -2126,12 +2126,16 @@ class MXHXComponent {
 					return macro $v{value};
 				case TYPE_UINT:
 					value = StringTools.trim(value);
-					if (!StringTools.startsWith(value, "-")) {
+					if (~/^0x[0-9a-fA-F]+$/.match(value)) {
 						var uintValue = Std.parseInt(value);
-						if (uintValue != null) {
+						return macro $v{uintValue};
+					}
+					if (~/^[0-9]+$/.match(value)) {
+						var uintValue = Std.parseInt(value);
+						var uintAsFloatValue = Std.parseFloat(value);
+						if (uintValue != null && uintValue == uintAsFloatValue) {
 							return macro $v{uintValue};
 						}
-						var uintAsFloatValue = Std.parseFloat(value);
 						var uintAsIntValue:UInt = Std.int(uintAsFloatValue);
 						return macro $v{uintAsIntValue};
 					}

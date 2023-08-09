@@ -833,8 +833,15 @@ class MXHXComponentPropertyTest extends Test {
 		');
 		Assert.notNull(result);
 		Assert.isOfType(result.unsignedInteger, Int);
-		var expected:UInt = Std.int(4000000000);
+		#if eval
+		final expected = Std.int(4000000000);
 		Assert.equals(expected, result.unsignedInteger);
+		#else
+		// uint comparison doesn't always work on some targets
+		final expected:Float = 4000000000.0;
+		final uintAsFloatValue:Float = result.unsignedInteger;
+		Assert.equals(expected, uintAsFloatValue);
+		#end
 	}
 
 	public function testUIntChildElement():Void {
@@ -847,8 +854,15 @@ class MXHXComponentPropertyTest extends Test {
 		');
 		Assert.notNull(result);
 		Assert.isOfType(result.unsignedInteger, Int);
-		var expected:UInt = Std.int(4000000000);
+		#if eval
+		final expected = Std.int(4000000000);
 		Assert.equals(expected, result.unsignedInteger);
+		#else
+		// uint comparison doesn't always work on some targets
+		final expected:Float = 4000000000.0;
+		final uintAsFloatValue:Float = result.unsignedInteger;
+		Assert.equals(expected, uintAsFloatValue);
+		#end
 	}
 
 	public function testUIntChildElementCData():Void {
@@ -861,8 +875,15 @@ class MXHXComponentPropertyTest extends Test {
 		');
 		Assert.notNull(result);
 		Assert.isOfType(result.unsignedInteger, Int);
-		var expected:UInt = Std.int(4000000000);
+		#if eval
+		final expected = Std.int(4000000000);
 		Assert.equals(expected, result.unsignedInteger);
+		#else
+		// uint comparison doesn't always work on some targets
+		final expected:Float = 4000000000.0;
+		final uintAsFloatValue:Float = result.unsignedInteger;
+		Assert.equals(expected, uintAsFloatValue);
+		#end
 	}
 
 	public function testUIntChildElementRedundant():Void {
@@ -875,8 +896,15 @@ class MXHXComponentPropertyTest extends Test {
 		');
 		Assert.notNull(result);
 		Assert.isOfType(result.unsignedInteger, Int);
-		var expected:UInt = Std.int(4000000000);
+		#if eval
+		final expected = Std.int(4000000000);
 		Assert.equals(expected, result.unsignedInteger);
+		#else
+		// uint comparison doesn't always work on some targets
+		final expected:Float = 4000000000.0;
+		final uintAsFloatValue:Float = result.unsignedInteger;
+		Assert.equals(expected, uintAsFloatValue);
+		#end
 	}
 
 	public function testUIntChildElementRedundantEmpty():Void {
