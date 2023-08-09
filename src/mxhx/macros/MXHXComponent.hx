@@ -166,7 +166,8 @@ class MXHXComponent {
 		// @:formatter:on
 	];
 	private static var componentCounter = 0;
-	private static var objectCounter = 0;
+	// float can hold larger integers than int
+	private static var objectCounter:Float = 0.0;
 	private static var posInfos:{min:Int, max:Int, file:String};
 	private static var languageUri:String = null;
 	private static var mxhxResolver:MXHXMacroResolver;
@@ -458,7 +459,6 @@ class MXHXComponent {
 			errorTagUnexpected(tagData);
 			return null;
 		}
-		objectCounter = 0;
 		var prefixMap = tagData.parent.getPrefixMapForTag(tagData);
 		if (tagData.parentTag == null) {
 			// inline components inherit the language URI from the outer document
@@ -1060,7 +1060,7 @@ class MXHXComponent {
 		} else {
 			// field names can't start with a number, so starting a generated
 			// id with a number won't conflict with real fields
-			id = Std.string(objectCounter);
+			id = Std.string(Math.fceil(objectCounter));
 			objectCounter++;
 		}
 		if (setIDExpr != null) {
@@ -1085,7 +1085,7 @@ class MXHXComponent {
 				return $i{localVarName};
 			}
 		}
-		var functionName = "createMXHXObject_" + id;
+		var functionName = 'createMXHXObject_${id}';
 		var fieldPos = sourceLocationToContextPosition(idAttr != null ? idAttr : tagData);
 
 		generatedFields.push({
