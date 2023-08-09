@@ -1018,19 +1018,9 @@ class MXHXComponent {
 							if (paramType == null) {
 								// finally, try to infer the correct type from
 								// the items in the array
-								var currentChild = tagData.getFirstChildTag(true);
-								var resolvedChildType:Type = null;
-								while (currentChild != null) {
-									var currentChildType = mxhxResolver.resolveTagAsMacroType(currentChild);
-									resolvedChildType = MXHXMacroTools.getUnifiedType(currentChildType, resolvedChildType);
-									if (resolvedChildType == null) {
-										reportError('Arrays of mixed types are only allowed if the type is forced to Array<Dynamic>',
-											sourceLocationToContextPosition(currentChild));
-									}
-									currentChild = currentChild.getNextSiblingTag(true);
-								}
-								if (resolvedChildType != null) {
-									paramType = TypeTools.toComplexType(resolvedChildType);
+								var inferredType = inferTypeFromChildrenOfTag(tagData);
+								if (inferredType != null) {
+									paramType = TypeTools.toComplexType(inferredType);
 								}
 							}
 						default:
@@ -1055,7 +1045,7 @@ class MXHXComponent {
 		}
 		var setIDExpr:Expr = null;
 		if (id != null) {
-			addFieldForID(id, TPath(childTypePath), idAttr, generatedFields);
+			addFieldForID(id, TPath(returnTypePath), idAttr, generatedFields);
 			setIDExpr = macro this.$id = $i{localVarName};
 		} else {
 			// field names can't start with a number, so starting a generated
@@ -1797,12 +1787,14 @@ class MXHXComponent {
 		var baseType:BaseType = null;
 		var enumType:EnumType = null;
 		var abstractType:AbstractType = null;
+		var resolvedTypeParams:Array<Type> = null;
 		var currentType = fieldType;
 		if (currentType != null) {
 			while (true) {
 				switch (currentType) {
 					case TInst(t, params):
 						baseType = t.get();
+						resolvedTypeParams = params;
 						break;
 					case TAbstract(t, params):
 						abstractType = t.get();
@@ -1811,11 +1803,13 @@ class MXHXComponent {
 							currentType = params[0];
 						} else {
 							baseType = abstractType;
+							resolvedTypeParams = params;
 							break;
 						}
 					case TEnum(t, params):
 						enumType = t.get();
 						baseType = enumType;
+						resolvedTypeParams = params;
 						break;
 					case TLazy(f):
 						currentType = f();
@@ -1876,8 +1870,38 @@ class MXHXComponent {
 			var result:Array<Expr> = [];
 			var localVarName = "array_" + fieldName;
 			if (fieldType != null) {
-				var localVarType = TypeTools.toComplexType(fieldType);
-				result.push(macro var $localVarName:$localVarType = []);
+				var paramType:ComplexType = null;
+				switch (resolvedTypeParams[0]) {
+					case null:
+						// if null, the type was explicit, but could not be resolved
+						reportError('Resolved field \'${fieldName}\' to type \'${baseType.name}\', but type parameter is missing',
+							sourceLocationToContextPosition(tagData));
+					case TInst(t, params):
+						var classType = t.get();
+						var isTypeParameter = false;
+						switch (classType.kind) {
+							case KTypeParameter(constraints):
+								isTypeParameter = true;
+							default:
+						}
+						if (isTypeParameter) {
+							// try to infer the correct type from
+							// the items in the array
+							var inferredType = inferTypeFromChildrenOfTag(tagData);
+							if (inferredType != null) {
+								paramType = TypeTools.toComplexType(inferredType);
+							}
+						} else {
+							paramType = TypeTools.toComplexType(resolvedTypeParams[0]);
+						}
+					default:
+						paramType = TypeTools.toComplexType(resolvedTypeParams[0]);
+				}
+				if (paramType == null) {
+					paramType = TPath({name: TYPE_DYNAMIC, pack: []});
+				}
+
+				result.push(macro var $localVarName:Array<$paramType> = []);
 			} else {
 				result.push(macro var $localVarName:Array<Dynamic> = []);
 			}
@@ -2211,6 +2235,20 @@ class MXHXComponent {
 			}),
 			access: [APrivate]
 		});
+	}
+
+	private static function inferTypeFromChildrenOfTag(tagData:IMXHXTagData):Type {
+		var currentChild = tagData.getFirstChildTag(true);
+		var resolvedChildType:Type = null;
+		while (currentChild != null) {
+			var currentChildType = mxhxResolver.resolveTagAsMacroType(currentChild);
+			resolvedChildType = MXHXMacroTools.getUnifiedType(currentChildType, resolvedChildType);
+			if (resolvedChildType == null) {
+				reportError('Arrays of mixed types are only allowed if the type is forced to Array<Dynamic>', sourceLocationToContextPosition(currentChild));
+			}
+			currentChild = currentChild.getNextSiblingTag(true);
+		}
+		return resolvedChildType;
 	}
 
 	private static function needsOverride(funcName:String, theClass:ClassType):Bool {
