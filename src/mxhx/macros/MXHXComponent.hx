@@ -755,7 +755,7 @@ class MXHXComponent {
 
 	private static function handleXmlTag(tagData:IMXHXTagData, generatedFields:Array<Field>):Expr {
 		var localVarName = "object";
-		var childTypePath:TypePath = {name: TYPE_XML, pack: []};
+		var instanceTypePath:TypePath = {name: TYPE_XML, pack: []};
 
 		var id:String = null;
 		var idAttr = tagData.getAttributeData(PROPERTY_ID);
@@ -765,7 +765,7 @@ class MXHXComponent {
 		var setIDExpr:Expr = null;
 
 		if (id != null) {
-			addFieldForID(id, TPath(childTypePath), idAttr, generatedFields);
+			addFieldForID(id, TPath(instanceTypePath), idAttr, generatedFields);
 			setIDExpr = macro this.$id = $i{localVarName};
 		} else {
 			id = Std.string(objectCounter);
@@ -960,19 +960,19 @@ class MXHXComponent {
 		handleAttributesOfInstanceTag(tagData, resolvedTag, localVarName, setFieldExprs, attributeAndChildNames);
 		handleChildUnitsOfInstanceTag(tagData, resolvedTag, localVarName, outerDocumentTypePath, generatedFields, setFieldExprs, attributeAndChildNames);
 
-		var childTypePath:TypePath = null;
+		var instanceTypePath:TypePath = null;
 		if (resolvedType == null) {
 			// this shouldn't happen
-			childTypePath = {name: TYPE_DYNAMIC, pack: []};
+			instanceTypePath = {name: TYPE_DYNAMIC, pack: []};
 		} else {
 			var qname = resolvedType.name;
 			if (resolvedType.pack.length > 0) {
 				qname = resolvedType.pack.join(".") + "." + qname;
 			}
 			if (qname != resolvedType.module) {
-				childTypePath = {name: resolvedType.module.split(".").pop(), pack: resolvedType.pack, sub: resolvedType.name};
+				instanceTypePath = {name: resolvedType.module.split(".").pop(), pack: resolvedType.pack, sub: resolvedType.name};
 			} else {
-				childTypePath = {name: resolvedType.name, pack: resolvedType.pack};
+				instanceTypePath = {name: resolvedType.name, pack: resolvedType.pack};
 			}
 			if (isArray) {
 				var paramType:ComplexType = null;
@@ -1029,13 +1029,16 @@ class MXHXComponent {
 					if (paramType == null) {
 						paramType = TPath({name: TYPE_DYNAMIC, pack: []});
 					}
-					childTypePath.params = [TPType(paramType)];
+					instanceTypePath.params = [TPType(paramType)];
 				}
 			}
 		}
 
-		var returnTypePath = childTypePath;
-		if (resolvedType != null && !isArray && resolvedType.params.length > 0) {
+		var returnTypePath = instanceTypePath;
+		if (resolvedType != null
+			&& resolvedType.params.length > 0
+			&& (instanceTypePath.params == null || resolvedType.params.length != instanceTypePath.params.length)) {
+			// last resort: set return type and field type to Dynamic
 			returnTypePath = {name: TYPE_DYNAMIC, pack: []};
 		}
 		var id:String = null;
@@ -1070,7 +1073,7 @@ class MXHXComponent {
 			}
 		} else {
 			bodyExpr = macro {
-				var $localVarName = new $childTypePath();
+				var $localVarName = new $instanceTypePath();
 				$b{setFieldExprs};
 				return $i{localVarName};
 			}
