@@ -2196,4 +2196,20 @@ class MXHXComponentDeclarationsTest extends Test {
 				Assert.fail("Wrong enum value: " + result.enumValue);
 		}
 	}
+
+	public function testMultipleDeclarationsTags():Void {
+		var result = MXHXComponent.withMarkup('
+			<tests:TestClass1 xmlns:mx="https://ns.mxhx.dev/2024/basic" xmlns:tests="https://ns.mxhx.dev/2024/tests">
+				<mx:Declarations>
+					<mx:Float id="float">123.4</mx:Float>
+				</mx:Declarations>
+				<mx:Declarations>
+					<mx:String id="string">hello</mx:String>
+				</mx:Declarations>
+			</tests:TestClass1>
+		');
+		Assert.notNull(result);
+		Assert.equals(123.4, result.float);
+		Assert.equals("hello", result.string);
+	}
 }
