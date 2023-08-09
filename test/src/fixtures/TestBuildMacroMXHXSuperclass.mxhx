@@ -1,0 +1,6 @@
+<?xml version="1.0" encoding="utf-8"?>
+<tests:TestBuildMacro xmlns:mx="https://ns.mxhx.dev/2024/basic" xmlns:tests="https://ns.mxhx.dev/2024/tests">
+	<mx:Declarations>
+		<mx:Float id="float2">567.8</mx:Float>
+	</mx:Declarations>
+</tests:TestBuildMacro>

@@ -2,6 +2,7 @@ package mxhx.macros;
 
 import fixtures.TestBuildMacro;
 import fixtures.TestBuildMacroFieldOnClass;
+import fixtures.TestBuildMacroMXHXSuperclass;
 import fixtures.TestBuildMacroNested;
 import fixtures.TestBuildMacroObjectBaseClass;
 import utest.Assert;
@@ -27,5 +28,11 @@ class MXHXComponentBuildMacroTest extends Test {
 	public function testBuildMacroFieldOnClass():Void {
 		var result = new TestBuildMacroFieldOnClass();
 		Assert.equals("hello", result.customField);
+	}
+
+	public function testBuildMacroMXHXSuperclass():Void {
+		var result = new TestBuildMacroMXHXSuperclass();
+		Assert.equals(123.4, result.float);
+		Assert.equals(567.8, result.float2);
 	}
 }

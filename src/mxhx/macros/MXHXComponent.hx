@@ -19,6 +19,7 @@ import haxe.macro.Context;
 import haxe.macro.Expr;
 import haxe.macro.PositionTools;
 import haxe.macro.Type;
+import haxe.macro.Type.ClassType;
 import haxe.macro.TypeTools;
 import mxhx.parser.MXHXParser;
 import sys.FileSystem;
@@ -229,6 +230,23 @@ class MXHXComponent {
 		var buildFields = Context.getBuildFields();
 		var localTypePath = {name: localClass.name, pack: localClass.pack};
 		handleRootTag(mxhxData.rootTag, INIT_FUNCTION_NAME, localTypePath, buildFields);
+		if (localClass.superClass != null) {
+			var superClass = localClass.superClass.t.get();
+			var initFunc = Lambda.find(buildFields, f -> f.name == INIT_FUNCTION_NAME);
+			if (initFunc != null && needsOverride(initFunc.name, superClass)) {
+				initFunc.access.push(AOverride);
+				switch (initFunc.kind) {
+					case FFun(f):
+						var oldExpr = f.expr;
+						f.expr = macro {
+							super.$INIT_FUNCTION_NAME();
+							$oldExpr;
+						}
+					default:
+						reportError('Cannot find method ${INIT_FUNCTION_NAME} on class ${superClass.name}', sourceLocationToContextPosition(rootTag));
+				}
+			}
+		}
 		return buildFields;
 	}
 
@@ -403,6 +421,20 @@ class MXHXComponent {
 		} else {
 			reportError('Tag ${rootTag.name} could not be resolved to a class', sourceLocationToContextPosition(rootTag));
 			typeDef = macro class $componentName {};
+		}
+		var initFunc = Lambda.find(buildFields, f -> f.name == INIT_FUNCTION_NAME);
+		if (initFunc != null && resolvedClass != null && needsOverride(INIT_FUNCTION_NAME, resolvedClass)) {
+			initFunc.access.push(AOverride);
+			switch (initFunc.kind) {
+				case FFun(f):
+					var oldExpr = f.expr;
+					f.expr = macro {
+						super.$INIT_FUNCTION_NAME();
+						$oldExpr;
+					}
+				default:
+					reportError('Cannot find method ${INIT_FUNCTION_NAME} on class ${resolvedClass.name}', sourceLocationToContextPosition(rootTag));
+			}
 		}
 		for (buildField in buildFields) {
 			typeDef.fields.push(buildField);
@@ -2175,6 +2207,22 @@ class MXHXComponent {
 			}),
 			access: [APrivate]
 		});
+	}
+
+	private static function needsOverride(funcName:String, theClass:ClassType):Bool {
+		var currentClass = theClass;
+		while (currentClass != null) {
+			var func = Lambda.find(currentClass.fields.get(), f -> f.name == funcName);
+			if (func != null) {
+				return true;
+			}
+			if (currentClass.superClass == null) {
+				currentClass = null;
+			} else {
+				currentClass = currentClass.superClass.t.get();
+			}
+		}
+		return false;
 	}
 
 	private static function errorTagNotSupported(tagData:IMXHXTagData):Void {

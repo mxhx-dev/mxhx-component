@@ -8,4 +8,5 @@
   <component id="TestDefaultPropertyClass1" class="fixtures.TestDefaultPropertyClass1"/>
   <component id="TestDefaultPropertyClass2" class="fixtures.TestDefaultPropertyClass2"/>
   <component id="TestInlineComponentClass" class="fixtures.TestInlineComponentClass"/>
+  <component id="TestBuildMacro" class="fixtures.TestBuildMacro"/>
 </componentPackage>
