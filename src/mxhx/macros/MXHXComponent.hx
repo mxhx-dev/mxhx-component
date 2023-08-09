@@ -32,11 +32,11 @@ import haxe.io.Path;
 	[MXHX](https://mxhx.dev) markup.
 
 	Pass an inline markup string to `MXHXComponent.withMarkup()` to create a
-	component instance from thee string. The following example creates a
+	component instance from the string. The following example creates a
 	[Feathers UI](https://feathersui.com) component.
 
 	```haxe
-	var instance = XmlComponent.withMarkup(
+	var instance = MXHXComponent.withMarkup(
 		'<f:LayoutGroup
 			xmlns:mx="https://ns.mxhx.dev/2024/basic"
 			xmlns:f="https://ns.feathersui.com/mxhx">
