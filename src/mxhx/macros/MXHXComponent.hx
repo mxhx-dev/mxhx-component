@@ -1936,7 +1936,7 @@ class MXHXComponent {
 	}
 
 	private static function isLanguageTypeAssignableFromText(t:BaseType):Bool {
-		return t != null && t.pack.length == 0 && LANGUAGE_TYPES_ASSIGNABLE_BY_TEXT.contains(t.name);
+		return t != null && t.pack.length == 0 && LANGUAGE_TYPES_ASSIGNABLE_BY_TEXT.indexOf(t.name) != -1;
 	}
 
 	private static function canIgnoreTextData(textData:IMXHXTextData):Bool {
