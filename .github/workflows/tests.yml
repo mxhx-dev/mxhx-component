@@ -14,6 +14,7 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v3
+      - uses: cedx/setup-hashlink@v3
       - uses: krdlab/setup-haxe@v1
         with:
           haxe-version: ${{ matrix.haxe-version }}
@@ -22,11 +23,16 @@ jobs:
           haxelib install utest --quiet
           haxelib git mxhx-parser https://github.com/mxhx-dev/mxhx-parser.git --quiet
           haxelib dev mxhx-component $GITHUB_WORKSPACE
-      - name: Run Basic Interpreter Tests
+      - name: Run Interpreter Tests
         working-directory: test
         run: haxe test.hxml --interp
-      - name: Run Basic Neko Tests
+      - name: Run Neko Tests
         working-directory: test
         run: |
           haxe test.hxml --neko bin/test.n
           neko bin/test.n
+      - name: Run HashLink Tests
+        working-directory: test
+        run: |
+          haxe test.hxml --hl bin/test.hl
+          hl bin/test.hl
