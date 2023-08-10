@@ -85,6 +85,7 @@ class MXHXComponent {
 	private static final TYPE_ARRAY = "Array";
 	private static final TYPE_BOOL = "Bool";
 	private static final TYPE_CLASS = "Class";
+	private static final TYPE_DATE = "Date";
 	private static final TYPE_DYNAMIC = "Dynamic";
 	private static final TYPE_EREG = "EReg";
 	private static final TYPE_FLOAT = "Float";
@@ -113,11 +114,18 @@ class MXHXComponent {
 	private static final TAG_STRUCT = "Struct";
 	private static final TAG_STYLE = "Style";
 	private static final INIT_FUNCTION_NAME = "MXHXComponent_initMXHX";
+	private static final FIELD_FULL_YEAR = "fullYear";
+	private static final FIELD_MONTH = "month";
+	private static final FIELD_DATE = "date";
+	private static final FIELD_HOURS = "hours";
+	private static final FIELD_MINUTES = "minutes";
+	private static final FIELD_SECONDS = "seconds";
 	private static final LANGUAGE_MAPPINGS_2024 = [
 		// @:formatter:off
 		TYPE_ARRAY => TYPE_ARRAY,
 		TYPE_BOOL => TYPE_BOOL,
 		TYPE_CLASS => TYPE_CLASS,
+		TYPE_DATE => TYPE_DATE,
 		TYPE_EREG => TYPE_EREG,
 		TYPE_FLOAT => TYPE_FLOAT,
 		TYPE_INT => TYPE_INT,
@@ -611,8 +619,7 @@ class MXHXComponent {
 			return;
 		}
 		if (attributeAndChildNames.exists(attrData.name)) {
-			reportError('Field \'${attrData.name}\' is already specified for element \'${attrData.parentTag.name}\'',
-				sourceLocationToContextPosition(attrData));
+			errorDuplicateField(attrData.name, attrData.parentTag, attrData);
 			return;
 		}
 		attributeAndChildNames.set(attrData.name, true);
@@ -751,6 +758,166 @@ class MXHXComponent {
 			default:
 				errorAttributeUnexpected(attrData);
 		}
+	}
+
+	private static function handleDateTag(tagData:IMXHXTagData, generatedFields:Array<Field>):Expr {
+		var instanceTypePath:TypePath = {name: TYPE_DATE, pack: []};
+
+		var id:String = null;
+		var idAttr = tagData.getAttributeData(PROPERTY_ID);
+		if (idAttr != null) {
+			id = idAttr.rawValue;
+		}
+		if (id != null) {
+			addFieldForID(id, TPath(instanceTypePath), idAttr, generatedFields);
+		}
+
+		var intType = Context.getType(TYPE_INT);
+		var hasCustom = false;
+		var fullYear:Expr = null;
+		var month:Expr = null;
+		var date:Expr = null;
+		var hours:Expr = null;
+		var minutes:Expr = null;
+		var seconds:Expr = null;
+		for (attrData in tagData.attributeData) {
+			switch (attrData.name) {
+				case FIELD_FULL_YEAR:
+					hasCustom = true;
+					if (fullYear != null) {
+						errorDuplicateField(FIELD_FULL_YEAR, tagData, attrData);
+					}
+					fullYear = createValueExprForType(intType, attrData.rawValue, false, attrData);
+				case FIELD_MONTH:
+					hasCustom = true;
+					if (month != null) {
+						errorDuplicateField(FIELD_MONTH, tagData, attrData);
+					}
+					month = createValueExprForType(intType, attrData.rawValue, false, attrData);
+				case FIELD_DATE:
+					hasCustom = true;
+					if (date != null) {
+						errorDuplicateField(FIELD_DATE, tagData, attrData);
+					}
+					date = createValueExprForType(intType, attrData.rawValue, false, attrData);
+				case FIELD_HOURS:
+					hasCustom = true;
+					if (hours != null) {
+						errorDuplicateField(FIELD_HOURS, tagData, attrData);
+					}
+					hours = createValueExprForType(intType, attrData.rawValue, false, attrData);
+				case FIELD_MINUTES:
+					hasCustom = true;
+					if (minutes != null) {
+						errorDuplicateField(FIELD_MINUTES, tagData, attrData);
+					}
+					minutes = createValueExprForType(intType, attrData.rawValue, false, attrData);
+				case FIELD_SECONDS:
+					hasCustom = true;
+					if (seconds != null) {
+						errorDuplicateField(FIELD_SECONDS, tagData, attrData);
+					}
+					seconds = createValueExprForType(intType, attrData.rawValue, false, attrData);
+			}
+		}
+
+		var current = tagData.getFirstChildUnit();
+		while (current != null) {
+			if ((current is IMXHXTagData)) {
+				var childTag:IMXHXTagData = cast current;
+				if (childTag.uri != tagData.uri) {
+					errorUnexpected(childTag);
+					continue;
+				}
+				switch (childTag.shortName) {
+					case FIELD_FULL_YEAR:
+						hasCustom = true;
+						if (fullYear != null) {
+							errorDuplicateField(FIELD_FULL_YEAR, tagData, childTag);
+						}
+						fullYear = createValueExprForFieldTag(childTag, null, null, intType, null, generatedFields);
+					case FIELD_MONTH:
+						hasCustom = true;
+						if (month != null) {
+							errorDuplicateField(FIELD_MONTH, tagData, childTag);
+						}
+						month = createValueExprForFieldTag(childTag, null, null, intType, null, generatedFields);
+					case FIELD_DATE:
+						hasCustom = true;
+						if (date != null) {
+							errorDuplicateField(FIELD_DATE, tagData, childTag);
+						}
+						date = createValueExprForFieldTag(childTag, null, null, intType, null, generatedFields);
+					case FIELD_HOURS:
+						hasCustom = true;
+						if (hours != null) {
+							errorDuplicateField(FIELD_HOURS, tagData, childTag);
+						}
+						hours = createValueExprForFieldTag(childTag, null, null, intType, null, generatedFields);
+					case FIELD_MINUTES:
+						hasCustom = true;
+						if (minutes != null) {
+							errorDuplicateField(FIELD_MINUTES, tagData, childTag);
+						}
+						minutes = createValueExprForFieldTag(childTag, null, null, intType, null, generatedFields);
+					case FIELD_SECONDS:
+						hasCustom = true;
+						if (seconds != null) {
+							errorDuplicateField(FIELD_SECONDS, tagData, childTag);
+						}
+						seconds = createValueExprForFieldTag(childTag, null, null, intType, null, generatedFields);
+					default:
+						errorUnexpected(childTag);
+				}
+			} else if ((current is IMXHXTextData)) {
+				var textData:IMXHXTextData = cast current;
+				if (!canIgnoreTextData(textData)) {
+					errorTextUnexpected(textData);
+					break;
+				}
+			} else {
+				errorUnexpected(current);
+			}
+			current = current.getNextSiblingUnit();
+		}
+
+		if (!hasCustom) {
+			return macro Date.now();
+		}
+		var createExpr = macro var current = Date.now();
+		var exprs = [createExpr];
+		if (fullYear != null) {
+			exprs.push(macro var fullYear = ${fullYear});
+		} else {
+			exprs.push(macro var fullYear = current.getFullYear());
+		}
+		if (month != null) {
+			exprs.push(macro var month = ${month});
+		} else {
+			exprs.push(macro var month = current.getMonth());
+		}
+		if (date != null) {
+			exprs.push(macro var date = ${date});
+		} else {
+			exprs.push(macro var date = current.getDate());
+		}
+		if (hours != null) {
+			exprs.push(macro var hours = ${hours});
+		} else {
+			exprs.push(macro var hours = current.getHours());
+		}
+		if (minutes != null) {
+			exprs.push(macro var minutes = ${minutes});
+		} else {
+			exprs.push(macro var minutes = current.getMinutes());
+		}
+		if (seconds != null) {
+			exprs.push(macro var seconds = ${seconds});
+		} else {
+			exprs.push(macro var seconds = current.getSeconds());
+		}
+		exprs.push(macro new Date(fullYear, month, date, hours, minutes, seconds));
+		return macro $b{exprs};
 	}
 
 	private static function handleXmlTag(tagData:IMXHXTagData, generatedFields:Array<Field>):Expr {
@@ -1445,7 +1612,9 @@ class MXHXComponent {
 
 	private static function createInitExpr(tagData:IMXHXTagData, t:BaseType, e:EnumType, outerDocumentTypePath:TypePath, generatedFields:Array<Field>):Expr {
 		var initExpr:Expr = null;
-		if (t.pack.length == 0 && t.name == TYPE_XML) {
+		if (t.pack.length == 0 && t.name == TYPE_DATE) {
+			initExpr = handleDateTag(tagData, generatedFields);
+		} else if (t.pack.length == 0 && t.name == TYPE_XML) {
 			initExpr = handleXmlTag(tagData, generatedFields);
 		} else if (e != null) {
 			if (!tagContainsOnlyText(tagData)) {
@@ -1716,8 +1885,7 @@ class MXHXComponent {
 						}
 					case FieldSymbol(f, t):
 						if (attributeAndChildNames.exists(tagData.name)) {
-							reportError('Field \'${tagData.name}\' is already specified for element \'${tagData.parentTag.name}\'',
-								sourceLocationToContextPosition(tagData));
+							errorDuplicateField(tagData.name, tagData.parentTag, tagData);
 							return;
 						}
 						attributeAndChildNames.set(tagData.name, true);
@@ -2302,6 +2470,10 @@ class MXHXComponent {
 
 	private static function errorAttributeUnexpected(attrData:IMXHXTagAttributeData):Void {
 		reportError('Attribute \'${attrData.name}\' is unexpected', sourceLocationToContextPosition(attrData));
+	}
+
+	private static function errorDuplicateField(fieldName:String, tagData:IMXHXTagData, sourceLocation:IMXHXSourceLocation):Void {
+		reportError('Field \'${fieldName}\' is already specified for element \'${tagData.name}\'', sourceLocationToContextPosition(sourceLocation));
 	}
 
 	private static function reportError(message:String, position:Position):Void {

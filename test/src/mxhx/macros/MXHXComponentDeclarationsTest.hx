@@ -2197,6 +2197,211 @@ class MXHXComponentDeclarationsTest extends Test {
 		}
 	}
 
+	public function testDateNoFields():Void {
+		var result = MXHXComponent.withMarkup('
+			<tests:TestClass1 xmlns:mx="https://ns.mxhx.dev/2024/basic" xmlns:tests="https://ns.mxhx.dev/2024/tests">
+				<mx:Declarations>
+					<mx:Date id="date"/>
+				</mx:Declarations>
+			</tests:TestClass1>
+		');
+		var now = Date.now();
+		Assert.notNull(result);
+		Assert.isOfType(result.date, Date);
+		var difference = now.getTime() - result.date.getTime();
+		Assert.isTrue(difference < 1000.0);
+	}
+
+	public function testDateFullYearAttribute():Void {
+		var result = MXHXComponent.withMarkup('
+			<tests:TestClass1 xmlns:mx="https://ns.mxhx.dev/2024/basic" xmlns:tests="https://ns.mxhx.dev/2024/tests">
+				<mx:Declarations>
+					<mx:Date id="date" fullYear="2008"/>
+				</mx:Declarations>
+			</tests:TestClass1>
+		');
+		Assert.notNull(result);
+		Assert.isOfType(result.date, Date);
+		Assert.equals(2008, result.date.getFullYear());
+	}
+
+	public function testDateMonthAttribute():Void {
+		var result = MXHXComponent.withMarkup('
+			<tests:TestClass1 xmlns:mx="https://ns.mxhx.dev/2024/basic" xmlns:tests="https://ns.mxhx.dev/2024/tests">
+				<mx:Declarations>
+					<mx:Date id="date" month="4"/>
+				</mx:Declarations>
+			</tests:TestClass1>
+		');
+		Assert.notNull(result);
+		Assert.isOfType(result.date, Date);
+		Assert.equals(4, result.date.getMonth());
+	}
+
+	public function testDateDateAttribute():Void {
+		var result = MXHXComponent.withMarkup('
+			<tests:TestClass1 xmlns:mx="https://ns.mxhx.dev/2024/basic" xmlns:tests="https://ns.mxhx.dev/2024/tests">
+				<mx:Declarations>
+					<mx:Date id="date" date="25"/>
+				</mx:Declarations>
+			</tests:TestClass1>
+		');
+		Assert.notNull(result);
+		Assert.isOfType(result.date, Date);
+		Assert.equals(25, result.date.getDate());
+	}
+
+	public function testDateHoursAttribute():Void {
+		var result = MXHXComponent.withMarkup('
+			<tests:TestClass1 xmlns:mx="https://ns.mxhx.dev/2024/basic" xmlns:tests="https://ns.mxhx.dev/2024/tests">
+				<mx:Declarations>
+					<mx:Date id="date" hours="3"/>
+				</mx:Declarations>
+			</tests:TestClass1>
+		');
+		Assert.notNull(result);
+		Assert.isOfType(result.date, Date);
+		Assert.equals(3, result.date.getHours());
+	}
+
+	public function testDateMinutesAttribute():Void {
+		var result = MXHXComponent.withMarkup('
+			<tests:TestClass1 xmlns:mx="https://ns.mxhx.dev/2024/basic" xmlns:tests="https://ns.mxhx.dev/2024/tests">
+				<mx:Declarations>
+					<mx:Date id="date" minutes="47"/>
+				</mx:Declarations>
+			</tests:TestClass1>
+		');
+		Assert.notNull(result);
+		Assert.isOfType(result.date, Date);
+		Assert.equals(47, result.date.getMinutes());
+	}
+
+	public function testDateSecondsAttribute():Void {
+		var result = MXHXComponent.withMarkup('
+			<tests:TestClass1 xmlns:mx="https://ns.mxhx.dev/2024/basic" xmlns:tests="https://ns.mxhx.dev/2024/tests">
+				<mx:Declarations>
+					<mx:Date id="date" seconds="51"/>
+				</mx:Declarations>
+			</tests:TestClass1>
+		');
+		Assert.notNull(result);
+		Assert.isOfType(result.date, Date);
+		Assert.equals(51, result.date.getSeconds());
+	}
+
+	public function testDateFullYearChildElement():Void {
+		var result = MXHXComponent.withMarkup('
+			<tests:TestClass1 xmlns:mx="https://ns.mxhx.dev/2024/basic" xmlns:tests="https://ns.mxhx.dev/2024/tests">
+				<mx:Declarations>
+					<mx:Date id="date">
+						<mx:fullYear>2008</mx:fullYear>
+					</mx:Date>
+				</mx:Declarations>
+			</tests:TestClass1>
+		');
+		Assert.notNull(result);
+		Assert.isOfType(result.date, Date);
+		Assert.equals(2008, result.date.getFullYear());
+	}
+
+	public function testDateMonthChildElement():Void {
+		var result = MXHXComponent.withMarkup('
+			<tests:TestClass1 xmlns:mx="https://ns.mxhx.dev/2024/basic" xmlns:tests="https://ns.mxhx.dev/2024/tests">
+				<mx:Declarations>
+					<mx:Date id="date">
+						<mx:month>4</mx:month>
+					</mx:Date>
+				</mx:Declarations>
+			</tests:TestClass1>
+		');
+		Assert.notNull(result);
+		Assert.isOfType(result.date, Date);
+		Assert.equals(4, result.date.getMonth());
+	}
+
+	public function testDateDateChildElement():Void {
+		var result = MXHXComponent.withMarkup('
+			<tests:TestClass1 xmlns:mx="https://ns.mxhx.dev/2024/basic" xmlns:tests="https://ns.mxhx.dev/2024/tests">
+				<mx:Declarations>
+					<mx:Date id="date">
+						<mx:date>25</mx:date>
+					</mx:Date>
+				</mx:Declarations>
+			</tests:TestClass1>
+		');
+		Assert.notNull(result);
+		Assert.isOfType(result.date, Date);
+		Assert.equals(25, result.date.getDate());
+	}
+
+	public function testDateHoursChildElement():Void {
+		var result = MXHXComponent.withMarkup('
+			<tests:TestClass1 xmlns:mx="https://ns.mxhx.dev/2024/basic" xmlns:tests="https://ns.mxhx.dev/2024/tests">
+				<mx:Declarations>
+					<mx:Date id="date">
+						<mx:hours>3</mx:hours>
+					</mx:Date>
+				</mx:Declarations>
+			</tests:TestClass1>
+		');
+		Assert.notNull(result);
+		Assert.isOfType(result.date, Date);
+		Assert.equals(3, result.date.getHours());
+	}
+
+	public function testDateMinutesChildElement():Void {
+		var result = MXHXComponent.withMarkup('
+			<tests:TestClass1 xmlns:mx="https://ns.mxhx.dev/2024/basic" xmlns:tests="https://ns.mxhx.dev/2024/tests">
+				<mx:Declarations>
+					<mx:Date id="date">
+						<mx:minutes>47</mx:minutes>
+					</mx:Date>
+				</mx:Declarations>
+			</tests:TestClass1>
+		');
+		Assert.notNull(result);
+		Assert.isOfType(result.date, Date);
+		Assert.equals(47, result.date.getMinutes());
+	}
+
+	public function testDateSecondsChildElement():Void {
+		var result = MXHXComponent.withMarkup('
+			<tests:TestClass1 xmlns:mx="https://ns.mxhx.dev/2024/basic" xmlns:tests="https://ns.mxhx.dev/2024/tests">
+				<mx:Declarations>
+					<mx:Date id="date">
+						<mx:seconds>51</mx:seconds>
+					</mx:Date>
+				</mx:Declarations>
+			</tests:TestClass1>
+		');
+		Assert.notNull(result);
+		Assert.isOfType(result.date, Date);
+		Assert.equals(51, result.date.getSeconds());
+	}
+
+	public function testDateMixedAttributesAndChildElements():Void {
+		var result = MXHXComponent.withMarkup('
+			<tests:TestClass1 xmlns:mx="https://ns.mxhx.dev/2024/basic" xmlns:tests="https://ns.mxhx.dev/2024/tests">
+				<mx:Declarations>
+					<mx:Date id="date" fullYear="2008" date="25" minutes="47">
+						<mx:month>4</mx:month>
+						<mx:hours>3</mx:hours>
+						<mx:seconds>51</mx:seconds>
+					</mx:Date>
+				</mx:Declarations>
+			</tests:TestClass1>
+		');
+		Assert.notNull(result);
+		Assert.isOfType(result.date, Date);
+		Assert.equals(2008, result.date.getFullYear());
+		Assert.equals(4, result.date.getMonth());
+		Assert.equals(25, result.date.getDate());
+		Assert.equals(3, result.date.getHours());
+		Assert.equals(47, result.date.getMinutes());
+		Assert.equals(51, result.date.getSeconds());
+	}
+
 	public function testMultipleDeclarationsTags():Void {
 		var result = MXHXComponent.withMarkup('
 			<tests:TestClass1 xmlns:mx="https://ns.mxhx.dev/2024/basic" xmlns:tests="https://ns.mxhx.dev/2024/tests">
