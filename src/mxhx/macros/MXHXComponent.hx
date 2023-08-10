@@ -446,7 +446,9 @@ class MXHXComponent {
 			}
 		}
 		for (buildField in buildFields) {
-			typeDef.fields.push(buildField);
+			if (resolvedClass == null || !fieldExists(buildField.name, resolvedClass)) {
+				typeDef.fields.push(buildField);
+			}
 		}
 		var typePos = sourceLocationToContextPosition(rootTag);
 		typeDef.pack = typePath.pack;
@@ -761,17 +763,6 @@ class MXHXComponent {
 	}
 
 	private static function handleDateTag(tagData:IMXHXTagData, generatedFields:Array<Field>):Expr {
-		var instanceTypePath:TypePath = {name: TYPE_DATE, pack: []};
-
-		var id:String = null;
-		var idAttr = tagData.getAttributeData(PROPERTY_ID);
-		if (idAttr != null) {
-			id = idAttr.rawValue;
-		}
-		if (id != null) {
-			addFieldForID(id, TPath(instanceTypePath), idAttr, generatedFields);
-		}
-
 		var intType = Context.getType(TYPE_INT);
 		var hasCustom = false;
 		var fullYear:Expr = null;
@@ -881,64 +872,61 @@ class MXHXComponent {
 			current = current.getNextSiblingUnit();
 		}
 
+		var valueExpr:Expr = null;
 		if (!hasCustom) {
-			return macro Date.now();
-		}
-		var createExpr = macro var current = Date.now();
-		var exprs = [createExpr];
-		if (fullYear != null) {
-			exprs.push(macro var fullYear = ${fullYear});
+			valueExpr = macro Date.now();
 		} else {
-			exprs.push(macro var fullYear = current.getFullYear());
+			var createExpr = macro var current = Date.now();
+			var exprs = [createExpr];
+			if (fullYear != null) {
+				exprs.push(macro var fullYear = ${fullYear});
+			} else {
+				exprs.push(macro var fullYear = current.getFullYear());
+			}
+			if (month != null) {
+				exprs.push(macro var month = ${month});
+			} else {
+				exprs.push(macro var month = current.getMonth());
+			}
+			if (date != null) {
+				exprs.push(macro var date = ${date});
+			} else {
+				exprs.push(macro var date = current.getDate());
+			}
+			if (hours != null) {
+				exprs.push(macro var hours = ${hours});
+			} else {
+				exprs.push(macro var hours = current.getHours());
+			}
+			if (minutes != null) {
+				exprs.push(macro var minutes = ${minutes});
+			} else {
+				exprs.push(macro var minutes = current.getMinutes());
+			}
+			if (seconds != null) {
+				exprs.push(macro var seconds = ${seconds});
+			} else {
+				exprs.push(macro var seconds = current.getSeconds());
+			}
+			exprs.push(macro new Date(fullYear, month, date, hours, minutes, seconds));
+			valueExpr = macro $b{exprs};
 		}
-		if (month != null) {
-			exprs.push(macro var month = ${month});
-		} else {
-			exprs.push(macro var month = current.getMonth());
-		}
-		if (date != null) {
-			exprs.push(macro var date = ${date});
-		} else {
-			exprs.push(macro var date = current.getDate());
-		}
-		if (hours != null) {
-			exprs.push(macro var hours = ${hours});
-		} else {
-			exprs.push(macro var hours = current.getHours());
-		}
-		if (minutes != null) {
-			exprs.push(macro var minutes = ${minutes});
-		} else {
-			exprs.push(macro var minutes = current.getMinutes());
-		}
-		if (seconds != null) {
-			exprs.push(macro var seconds = ${seconds});
-		} else {
-			exprs.push(macro var seconds = current.getSeconds());
-		}
-		exprs.push(macro new Date(fullYear, month, date, hours, minutes, seconds));
-		return macro $b{exprs};
-	}
-
-	private static function handleXmlTag(tagData:IMXHXTagData, generatedFields:Array<Field>):Expr {
-		var localVarName = "object";
-		var instanceTypePath:TypePath = {name: TYPE_XML, pack: []};
 
 		var id:String = null;
 		var idAttr = tagData.getAttributeData(PROPERTY_ID);
 		if (idAttr != null) {
 			id = idAttr.rawValue;
 		}
-		var setIDExpr:Expr = null;
-
 		if (id != null) {
+			var instanceTypePath:TypePath = {name: TYPE_DATE, pack: []};
 			addFieldForID(id, TPath(instanceTypePath), idAttr, generatedFields);
-			setIDExpr = macro this.$id = $i{localVarName};
-		} else {
-			id = Std.string(objectCounter);
-			objectCounter++;
+			return macro this.$id = $valueExpr;
 		}
 
+		return valueExpr;
+	}
+
+	private static function handleXmlTag(tagData:IMXHXTagData, generatedFields:Array<Field>):Expr {
 		var xmlDoc = Xml.createDocument();
 		var current = tagData.getFirstChildUnit();
 		var parentStack:Array<Xml> = [xmlDoc];
@@ -987,7 +975,20 @@ class MXHXComponent {
 		}
 
 		var xmlString = xmlDoc.toString();
-		return macro Xml.parse($v{xmlString});
+		var valueExpr = macro Xml.parse($v{xmlString});
+
+		var id:String = null;
+		var idAttr = tagData.getAttributeData(PROPERTY_ID);
+		if (idAttr != null) {
+			id = idAttr.rawValue;
+		}
+		if (id != null) {
+			var instanceTypePath:TypePath = {name: TYPE_XML, pack: []};
+			addFieldForID(id, TPath(instanceTypePath), idAttr, generatedFields);
+			return macro this.$id = $valueExpr;
+		}
+
+		return valueExpr;
 	}
 
 	private static function handleComponentTag(tagData:IMXHXTagData, assignedToType:Type, outerDocumentTypePath:TypePath, generatedFields:Array<Field>):Expr {
@@ -1634,10 +1635,6 @@ class MXHXComponent {
 			initExpr = handleInstanceTagAssignableFromText(tagData, t, e, generatedFields);
 		} else {
 			initExpr = handleInstanceTag(tagData, null, outerDocumentTypePath, generatedFields);
-		}
-		var id = tagData.getRawAttributeValue(PROPERTY_ID);
-		if (id != null) {
-			initExpr = macro this.$id = $initExpr;
 		}
 		return initExpr;
 	}
@@ -2437,7 +2434,33 @@ class MXHXComponent {
 		while (currentClass != null) {
 			var func = Lambda.find(currentClass.fields.get(), f -> f.name == funcName);
 			if (func != null) {
-				return true;
+				switch (func.kind) {
+					case FMethod(k):
+						return true;
+					default:
+						return false;
+				}
+			}
+			if (currentClass.superClass == null) {
+				currentClass = null;
+			} else {
+				currentClass = currentClass.superClass.t.get();
+			}
+		}
+		return false;
+	}
+
+	private static function fieldExists(fieldName:String, theClass:ClassType):Bool {
+		var currentClass = theClass;
+		while (currentClass != null) {
+			var field = Lambda.find(currentClass.fields.get(), f -> f.name == fieldName);
+			if (field != null) {
+				switch (field.kind) {
+					case FVar(read, write):
+						return true;
+					default:
+						return false;
+				}
 			}
 			if (currentClass.superClass == null) {
 				currentClass = null;

@@ -56,4 +56,29 @@ class MXHXComponentSubclassTest extends Test {
 		// don't have duplicate names. it won't compile if it fails.
 		Assert.pass();
 	}
+
+	public function testSubclassWithSameIDAndCompatibleType():Void {
+		var superClass = MXHXComponent.withMarkup('
+			<mx:Object xmlns:mx="https://ns.mxhx.dev/2024/basic">
+				<mx:Declarations>
+					<mx:String id="string">superclass</mx:String>
+				</mx:Declarations>
+			</mx:Object>
+		', {
+				name: "SuperClass3",
+				pack: ["mxhx", "macros", "tests"]
+			});
+
+		var subClass = MXHXComponent.withMarkup('
+			<SuperClass3 xmlns:mx="https://ns.mxhx.dev/2024/basic"
+				xmlns="mxhx.macros.tests.*">
+				<mx:Declarations>
+					<mx:String id="string">subclass</mx:String>
+				</mx:Declarations>
+			</SuperClass3>
+		');
+
+		Assert.equals("superclass", superClass.string);
+		Assert.equals("subclass", subClass.string);
+	}
 }
