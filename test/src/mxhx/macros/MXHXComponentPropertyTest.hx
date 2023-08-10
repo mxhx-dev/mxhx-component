@@ -1,5 +1,6 @@
 package mxhx.macros;
 
+import Xml.XmlType;
 import fixtures.TestPropertiesClass;
 import fixtures.TestPropertyEnum;
 import fixtures.TestComplexEnum;
@@ -1139,5 +1140,43 @@ class MXHXComponentPropertyTest extends Test {
 		Assert.notNull(result);
 		Assert.isOfType(result.canBeNull, Float);
 		Assert.isTrue(Math.isNaN(result.canBeNull));
+	}
+
+	public function testXmlChildElementEmpty():Void {
+		var result = MXHXComponent.withMarkup('
+			<tests:TestPropertiesClass
+				xmlns:mx="https://ns.mxhx.dev/2024/basic"
+				xmlns:tests="https://ns.mxhx.dev/2024/tests">
+				<tests:xml>
+					<mx:Xml></mx:Xml>
+				</tests:xml>
+			</tests:TestPropertiesClass>
+		');
+		Assert.notNull(result);
+		Assert.isOfType(result.xml, Xml);
+		var xml:Xml = result.xml;
+		Assert.equals(XmlType.Document, xml.nodeType);
+		var firstChild:Xml = xml.firstChild();
+		Assert.notNull(firstChild);
+		Assert.equals(XmlType.PCData, firstChild.nodeType);
+		Assert.equals("", firstChild.nodeValue);
+		Assert.isNull(xml.firstElement());
+	}
+
+	public function testDateChildElementNoFields():Void {
+		var result = MXHXComponent.withMarkup('
+			<tests:TestPropertiesClass
+				xmlns:mx="https://ns.mxhx.dev/2024/basic"
+				xmlns:tests="https://ns.mxhx.dev/2024/tests">
+				<tests:date>
+					<mx:Date/>
+				</tests:date>
+			</tests:TestPropertiesClass>
+		');
+		var now = Date.now();
+		Assert.notNull(result);
+		Assert.isOfType(result.date, Date);
+		var difference = now.getTime() - result.date.getTime();
+		Assert.isTrue(difference < 1000.0);
 	}
 }

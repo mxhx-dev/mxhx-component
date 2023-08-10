@@ -1121,6 +1121,18 @@ class MXHXComponent {
 			}
 		}
 
+		// some tags have special parsing rules, such as when there are
+		// required constructor arguments for core language types
+		if (resolvedType.pack.length == 0) {
+			switch (resolvedType.name) {
+				case TYPE_XML:
+					return handleXmlTag(tagData, generatedFields);
+				case TYPE_DATE:
+					return handleDateTag(tagData, generatedFields);
+				default:
+			}
+		}
+
 		var localVarName = "object";
 		var setFieldExprs:Array<Expr> = [];
 		var attributeAndChildNames:Map<String, Bool> = [];
@@ -1612,11 +1624,7 @@ class MXHXComponent {
 
 	private static function createInitExpr(tagData:IMXHXTagData, t:BaseType, e:EnumType, outerDocumentTypePath:TypePath, generatedFields:Array<Field>):Expr {
 		var initExpr:Expr = null;
-		if (t.pack.length == 0 && t.name == TYPE_DATE) {
-			initExpr = handleDateTag(tagData, generatedFields);
-		} else if (t.pack.length == 0 && t.name == TYPE_XML) {
-			initExpr = handleXmlTag(tagData, generatedFields);
-		} else if (e != null) {
+		if (e != null) {
 			if (!tagContainsOnlyText(tagData)) {
 				initExpr = handleInstanceTagEnumValue(tagData, t, generatedFields);
 			} else {

@@ -18,4 +18,5 @@ class TestPropertiesClass {
 	public var complexEnum:TestComplexEnum;
 	public var canBeNull:Null<Float>;
 	public var date:Date;
+	public var xml:Xml;
 }
