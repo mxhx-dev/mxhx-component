@@ -2046,6 +2046,8 @@ class MXHXComponent {
 					break;
 				case TLazy(f):
 					type = f();
+				case TType(t, params):
+					type = t.get().type;
 				default:
 					reportError('Cannot parse a value of type \'${type.getName()}\' from \'${value}\'', sourceLocationToContextPosition(location));
 			}
