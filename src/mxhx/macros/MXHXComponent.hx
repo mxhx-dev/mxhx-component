@@ -2310,21 +2310,31 @@ class MXHXComponent {
 						return macro $v{intValue};
 					}
 				case TYPE_STRING:
+					var inDeclarations = false;
 					if ((location is IMXHXTagData)) {
-						if (fromCdata) {
-							var parentTag = cast(location, IMXHXTagData).parentTag;
-							if (value.length == 0 && isLanguageTag(TAG_DECLARATIONS, parentTag)) {
-								return macro null;
-							}
-							return macro $v{value};
-						}
-						var trimmed = StringTools.trim(value);
 						var parentTag = cast(location, IMXHXTagData).parentTag;
-						if (trimmed.length == 0 && isLanguageTag(TAG_DECLARATIONS, parentTag)) {
-							return macro null;
-						}
-						return macro $v{trimmed};
+						inDeclarations = isLanguageTag(TAG_DECLARATIONS, parentTag);
 					}
+					// there are a couple of exceptions where the original
+					// value is not used, and an alternate result is returned
+					if (fromCdata && inDeclarations && value.length == 0) {
+						// cdata is only modified when in mx:Declarations
+						// and the length is 0
+						return macro null;
+					} else if (!fromCdata) {
+						var trimmed = StringTools.trim(value);
+						// if non-cdata consists of only whitespace,
+						// return an empty string
+						// unless it's in the mx:Declarations tag, then null
+						if (trimmed.length == 0) {
+							if (inDeclarations) {
+								return macro null;
+							} else {
+								return macro $v{trimmed};
+							}
+						}
+					}
+					// otherwise, don't modify the original value
 					return macro $v{value};
 				case TYPE_UINT:
 					value = StringTools.trim(value);
