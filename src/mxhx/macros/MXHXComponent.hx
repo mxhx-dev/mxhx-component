@@ -104,6 +104,7 @@ class MXHXComponent {
 	private static final TAG_DESIGN_LAYER = "DesignLayer";
 	private static final TAG_DECLARATIONS = "Declarations";
 	private static final TAG_DEFINITION = "Definition";
+	private static final TAG_FUNCTION = "Function";
 	private static final TAG_LIBRARY = "Library";
 	private static final TAG_METADATA = "Metadata";
 	private static final TAG_MODEL = "Model";
@@ -164,6 +165,7 @@ class MXHXComponent {
 		TAG_BINDING,
 		TAG_DEFINITION,
 		TAG_DESIGN_LAYER,
+		TAG_FUNCTION,
 		TAG_LIBRARY,
 		TAG_METADATA,
 		TAG_MODEL,
