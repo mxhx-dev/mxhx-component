@@ -186,6 +186,45 @@ class MXHXComponentPropertyTest extends Test {
 		Assert.isTrue(result.boolean);
 	}
 
+	public function testBoolChildElementComment1():Void {
+		var result = MXHXComponent.withMarkup('
+			<tests:TestPropertiesClass
+				xmlns:mx="https://ns.mxhx.dev/2024/basic"
+				xmlns:tests="https://ns.mxhx.dev/2024/tests">
+				<tests:boolean>true<!-- comment --></tests:boolean>
+			</tests:TestPropertiesClass>
+		');
+		Assert.notNull(result);
+		Assert.isOfType(result.boolean, Bool);
+		Assert.isTrue(result.boolean);
+	}
+
+	public function testBoolChildElementComment2():Void {
+		var result = MXHXComponent.withMarkup('
+			<tests:TestPropertiesClass
+				xmlns:mx="https://ns.mxhx.dev/2024/basic"
+				xmlns:tests="https://ns.mxhx.dev/2024/tests">
+				<tests:boolean><!-- comment -->true</tests:boolean>
+			</tests:TestPropertiesClass>
+		');
+		Assert.notNull(result);
+		Assert.isOfType(result.boolean, Bool);
+		Assert.isTrue(result.boolean);
+	}
+
+	public function testBoolChildElementComment3():Void {
+		var result = MXHXComponent.withMarkup('
+			<tests:TestPropertiesClass
+				xmlns:mx="https://ns.mxhx.dev/2024/basic"
+				xmlns:tests="https://ns.mxhx.dev/2024/tests">
+				<tests:boolean>tr<!-- comment -->ue</tests:boolean>
+			</tests:TestPropertiesClass>
+		');
+		Assert.notNull(result);
+		Assert.isOfType(result.boolean, Bool);
+		Assert.isTrue(result.boolean);
+	}
+
 	public function testBoolChildElementCData():Void {
 		var result = MXHXComponent.withMarkup('
 			<tests:TestPropertiesClass
@@ -266,6 +305,45 @@ class MXHXComponentPropertyTest extends Test {
 		Assert.equals(fixtures.TestClass1, result.type);
 	}
 
+	public function testClassChildElementComment1():Void {
+		var result = MXHXComponent.withMarkup('
+			<tests:TestPropertiesClass
+				xmlns:mx="https://ns.mxhx.dev/2024/basic"
+				xmlns:tests="https://ns.mxhx.dev/2024/tests">
+				<tests:type>fixtures.TestClass1<!-- comment --></tests:type>
+			</tests:TestPropertiesClass>
+		');
+		Assert.notNull(result);
+		Assert.isOfType(result.type, Class);
+		Assert.equals(fixtures.TestClass1, result.type);
+	}
+
+	public function testClassChildElementComment2():Void {
+		var result = MXHXComponent.withMarkup('
+			<tests:TestPropertiesClass
+				xmlns:mx="https://ns.mxhx.dev/2024/basic"
+				xmlns:tests="https://ns.mxhx.dev/2024/tests">
+				<tests:type>fixtures.<!-- comment -->TestClass1</tests:type>
+			</tests:TestPropertiesClass>
+		');
+		Assert.notNull(result);
+		Assert.isOfType(result.type, Class);
+		Assert.equals(fixtures.TestClass1, result.type);
+	}
+
+	public function testClassChildElementComment3():Void {
+		var result = MXHXComponent.withMarkup('
+			<tests:TestPropertiesClass
+				xmlns:mx="https://ns.mxhx.dev/2024/basic"
+				xmlns:tests="https://ns.mxhx.dev/2024/tests">
+				<tests:type>fixtures.<!-- comment -->TestClass1</tests:type>
+			</tests:TestPropertiesClass>
+		');
+		Assert.notNull(result);
+		Assert.isOfType(result.type, Class);
+		Assert.equals(fixtures.TestClass1, result.type);
+	}
+
 	public function testClassChildElementCData():Void {
 		var result = MXHXComponent.withMarkup('
 			<tests:TestPropertiesClass
@@ -336,6 +414,42 @@ class MXHXComponentPropertyTest extends Test {
 				xmlns:mx="https://ns.mxhx.dev/2024/basic"
 				xmlns:tests="https://ns.mxhx.dev/2024/tests">
 				<tests:enumValue>Value2</tests:enumValue>
+			</tests:TestPropertiesClass>
+		');
+		Assert.notNull(result);
+		Assert.equals(TestPropertyEnum.Value2, result.enumValue);
+	}
+
+	public function testEnumValueChildElementComment1():Void {
+		var result = MXHXComponent.withMarkup('
+			<tests:TestPropertiesClass
+				xmlns:mx="https://ns.mxhx.dev/2024/basic"
+				xmlns:tests="https://ns.mxhx.dev/2024/tests">
+				<tests:enumValue>Value2<!-- comment --></tests:enumValue>
+			</tests:TestPropertiesClass>
+		');
+		Assert.notNull(result);
+		Assert.equals(TestPropertyEnum.Value2, result.enumValue);
+	}
+
+	public function testEnumValueChildElementComment2():Void {
+		var result = MXHXComponent.withMarkup('
+			<tests:TestPropertiesClass
+				xmlns:mx="https://ns.mxhx.dev/2024/basic"
+				xmlns:tests="https://ns.mxhx.dev/2024/tests">
+				<tests:enumValue><!-- comment -->Value2</tests:enumValue>
+			</tests:TestPropertiesClass>
+		');
+		Assert.notNull(result);
+		Assert.equals(TestPropertyEnum.Value2, result.enumValue);
+	}
+
+	public function testEnumValueChildElementComment3():Void {
+		var result = MXHXComponent.withMarkup('
+			<tests:TestPropertiesClass
+				xmlns:mx="https://ns.mxhx.dev/2024/basic"
+				xmlns:tests="https://ns.mxhx.dev/2024/tests">
+				<tests:enumValue>Val<!-- comment -->ue2</tests:enumValue>
 			</tests:TestPropertiesClass>
 		');
 		Assert.notNull(result);
@@ -451,6 +565,36 @@ class MXHXComponentPropertyTest extends Test {
 		#end
 	}
 
+	public function testERegChildElementComment1():Void {
+		var result = MXHXComponent.withMarkup('
+			<tests:TestPropertiesClass
+				xmlns:mx="https://ns.mxhx.dev/2024/basic"
+				xmlns:tests="https://ns.mxhx.dev/2024/tests">
+				<tests:ereg>~/[a-z]+/g<!-- comment --></tests:ereg>
+			</tests:TestPropertiesClass>
+		');
+		Assert.notNull(result);
+		Assert.isOfType(result.ereg, EReg);
+		#if eval
+		Assert.equals("~/[a-z]+/g", Std.string(result.ereg));
+		#end
+	}
+
+	public function testERegChildElementComment2():Void {
+		var result = MXHXComponent.withMarkup('
+			<tests:TestPropertiesClass
+				xmlns:mx="https://ns.mxhx.dev/2024/basic"
+				xmlns:tests="https://ns.mxhx.dev/2024/tests">
+				<tests:ereg>~<!-- comment -->/[a-z]+/g</tests:ereg>
+			</tests:TestPropertiesClass>
+		');
+		Assert.notNull(result);
+		Assert.isOfType(result.ereg, EReg);
+		#if eval
+		Assert.equals("~/[a-z]+/g", Std.string(result.ereg));
+		#end
+	}
+
 	public function testERegChildElementCData():Void {
 		var result = MXHXComponent.withMarkup('
 			<tests:TestPropertiesClass
@@ -539,6 +683,45 @@ class MXHXComponentPropertyTest extends Test {
 		Assert.equals(123.4, result.float);
 	}
 
+	public function testFloatChildElementComment1():Void {
+		var result = MXHXComponent.withMarkup('
+			<tests:TestPropertiesClass
+				xmlns:mx="https://ns.mxhx.dev/2024/basic"
+				xmlns:tests="https://ns.mxhx.dev/2024/tests">
+				<tests:float>123.4<!-- comment --></tests:float>
+			</tests:TestPropertiesClass>
+		');
+		Assert.notNull(result);
+		Assert.isOfType(result.float, Float);
+		Assert.equals(123.4, result.float);
+	}
+
+	public function testFloatChildElementComment2():Void {
+		var result = MXHXComponent.withMarkup('
+			<tests:TestPropertiesClass
+				xmlns:mx="https://ns.mxhx.dev/2024/basic"
+				xmlns:tests="https://ns.mxhx.dev/2024/tests">
+				<tests:float><!-- comment -->123.4</tests:float>
+			</tests:TestPropertiesClass>
+		');
+		Assert.notNull(result);
+		Assert.isOfType(result.float, Float);
+		Assert.equals(123.4, result.float);
+	}
+
+	public function testFloatChildElementComment3():Void {
+		var result = MXHXComponent.withMarkup('
+			<tests:TestPropertiesClass
+				xmlns:mx="https://ns.mxhx.dev/2024/basic"
+				xmlns:tests="https://ns.mxhx.dev/2024/tests">
+				<tests:float>12<!-- comment -->3.4</tests:float>
+			</tests:TestPropertiesClass>
+		');
+		Assert.notNull(result);
+		Assert.isOfType(result.float, Float);
+		Assert.equals(123.4, result.float);
+	}
+
 	public function testFloatChildElementCData():Void {
 		var result = MXHXComponent.withMarkup('
 			<tests:TestPropertiesClass
@@ -612,6 +795,45 @@ class MXHXComponentPropertyTest extends Test {
 				xmlns:mx="https://ns.mxhx.dev/2024/basic"
 				xmlns:tests="https://ns.mxhx.dev/2024/tests">
 				<tests:integer>567</tests:integer>
+			</tests:TestPropertiesClass>
+		');
+		Assert.notNull(result);
+		Assert.isOfType(result.integer, Int);
+		Assert.equals(567, result.integer);
+	}
+
+	public function testIntChildElementComment1():Void {
+		var result = MXHXComponent.withMarkup('
+			<tests:TestPropertiesClass
+				xmlns:mx="https://ns.mxhx.dev/2024/basic"
+				xmlns:tests="https://ns.mxhx.dev/2024/tests">
+				<tests:integer>567<!-- comment --></tests:integer>
+			</tests:TestPropertiesClass>
+		');
+		Assert.notNull(result);
+		Assert.isOfType(result.integer, Int);
+		Assert.equals(567, result.integer);
+	}
+
+	public function testIntChildElementComment2():Void {
+		var result = MXHXComponent.withMarkup('
+			<tests:TestPropertiesClass
+				xmlns:mx="https://ns.mxhx.dev/2024/basic"
+				xmlns:tests="https://ns.mxhx.dev/2024/tests">
+				<tests:integer><!-- comment -->567</tests:integer>
+			</tests:TestPropertiesClass>
+		');
+		Assert.notNull(result);
+		Assert.isOfType(result.integer, Int);
+		Assert.equals(567, result.integer);
+	}
+
+	public function testIntChildElementComment3():Void {
+		var result = MXHXComponent.withMarkup('
+			<tests:TestPropertiesClass
+				xmlns:mx="https://ns.mxhx.dev/2024/basic"
+				xmlns:tests="https://ns.mxhx.dev/2024/tests">
+				<tests:integer>56<!-- comment -->7</tests:integer>
 			</tests:TestPropertiesClass>
 		');
 		Assert.notNull(result);
@@ -711,6 +933,45 @@ class MXHXComponentPropertyTest extends Test {
 		Assert.equals("hello", result.string);
 	}
 
+	public function testStringChildElementComment1():Void {
+		var result = MXHXComponent.withMarkup('
+			<tests:TestPropertiesClass
+				xmlns:mx="https://ns.mxhx.dev/2024/basic"
+				xmlns:tests="https://ns.mxhx.dev/2024/tests">
+				<tests:string>hello<!-- comment --></tests:string>
+			</tests:TestPropertiesClass>
+		');
+		Assert.notNull(result);
+		Assert.isOfType(result.string, String);
+		Assert.equals("hello", result.string);
+	}
+
+	public function testStringChildElementComment2():Void {
+		var result = MXHXComponent.withMarkup('
+			<tests:TestPropertiesClass
+				xmlns:mx="https://ns.mxhx.dev/2024/basic"
+				xmlns:tests="https://ns.mxhx.dev/2024/tests">
+				<tests:string><!-- comment -->hello</tests:string>
+			</tests:TestPropertiesClass>
+		');
+		Assert.notNull(result);
+		Assert.isOfType(result.string, String);
+		Assert.equals("hello", result.string);
+	}
+
+	public function testStringChildElementComment3():Void {
+		var result = MXHXComponent.withMarkup('
+			<tests:TestPropertiesClass
+				xmlns:mx="https://ns.mxhx.dev/2024/basic"
+				xmlns:tests="https://ns.mxhx.dev/2024/tests">
+				<tests:string>hello<!-- comment -->world</tests:string>
+			</tests:TestPropertiesClass>
+		');
+		Assert.notNull(result);
+		Assert.isOfType(result.string, String);
+		Assert.equals("helloworld", result.string);
+	}
+
 	public function testStringChildElementEmpty():Void {
 		var result = MXHXComponent.withMarkup('
 			<tests:TestPropertiesClass
@@ -749,6 +1010,63 @@ class MXHXComponentPropertyTest extends Test {
 		Assert.isOfType(result.string, String);
 		Assert.equals("", result.string);
 	}
+
+	public function testStringChildElementCDataWhitespace():Void {
+		var result = MXHXComponent.withMarkup('
+			<tests:TestPropertiesClass
+				xmlns:mx="https://ns.mxhx.dev/2024/basic"
+				xmlns:tests="https://ns.mxhx.dev/2024/tests">
+				<tests:string><![CDATA[ ]]></tests:string>
+			</tests:TestPropertiesClass>
+		');
+		Assert.notNull(result);
+		Assert.isOfType(result.string, String);
+		Assert.equals(" ", result.string);
+	}
+
+	public function testStringChildElementCDataWhitespace2():Void {
+		var result = MXHXComponent.withMarkup('
+			<tests:TestPropertiesClass
+				xmlns:mx="https://ns.mxhx.dev/2024/basic"
+				xmlns:tests="https://ns.mxhx.dev/2024/tests">
+				<tests:string><![CDATA[   ]]></tests:string>
+			</tests:TestPropertiesClass>
+		');
+		Assert.notNull(result);
+		Assert.isOfType(result.string, String);
+		Assert.equals("   ", result.string);
+	}
+
+	public function testStringChildElementCDataWhitespaceSurroundingWhitespace():Void {
+		var result = MXHXComponent.withMarkup('
+			<tests:TestPropertiesClass
+				xmlns:mx="https://ns.mxhx.dev/2024/basic"
+				xmlns:tests="https://ns.mxhx.dev/2024/tests">
+				<tests:string>
+					<![CDATA[   ]]>
+				</tests:string>
+			</tests:TestPropertiesClass>
+		');
+		Assert.notNull(result);
+		Assert.isOfType(result.string, String);
+		Assert.equals("   ", result.string);
+	}
+
+	// public function testStringChildElementCDataWhitespaceSurroundingWhitespace2():Void {
+	// 	var result = MXHXComponent.withMarkup('
+	// 		<tests:TestPropertiesClass
+	// 			xmlns:mx="https://ns.mxhx.dev/2024/basic"
+	// 			xmlns:tests="https://ns.mxhx.dev/2024/tests">
+	// 			<tests:string>
+	// 				<![CDATA[   ]]>
+	// 				<![CDATA[   ]]>
+	// 			</tests:string>
+	// 		</tests:TestPropertiesClass>
+	// 	');
+	// 	Assert.notNull(result);
+	// 	Assert.isOfType(result.string, String);
+	// 	Assert.equals("      ", result.string);
+	// }
 
 	public function testStringChildElementRedundant():Void {
 		var result = MXHXComponent.withMarkup('
@@ -905,6 +1223,69 @@ class MXHXComponentPropertyTest extends Test {
 				xmlns:mx="https://ns.mxhx.dev/2024/basic"
 				xmlns:tests="https://ns.mxhx.dev/2024/tests">
 				<tests:unsignedInteger>4000000000</tests:unsignedInteger>
+			</tests:TestPropertiesClass>
+		');
+		Assert.notNull(result);
+		Assert.isOfType(result.unsignedInteger, Int);
+		#if eval
+		final expected = Std.int(4000000000);
+		Assert.equals(expected, result.unsignedInteger);
+		#else
+		// uint comparison doesn't always work on some targets
+		final expected:Float = 4000000000.0;
+		final uintAsFloatValue:Float = result.unsignedInteger;
+		Assert.equals(expected, uintAsFloatValue);
+		#end
+	}
+
+	public function testUIntChildElementComment1():Void {
+		var result = MXHXComponent.withMarkup('
+			<tests:TestPropertiesClass
+				xmlns:mx="https://ns.mxhx.dev/2024/basic"
+				xmlns:tests="https://ns.mxhx.dev/2024/tests">
+				<tests:unsignedInteger>4000000000<!-- comment --></tests:unsignedInteger>
+			</tests:TestPropertiesClass>
+		');
+		Assert.notNull(result);
+		Assert.isOfType(result.unsignedInteger, Int);
+		#if eval
+		final expected = Std.int(4000000000);
+		Assert.equals(expected, result.unsignedInteger);
+		#else
+		// uint comparison doesn't always work on some targets
+		final expected:Float = 4000000000.0;
+		final uintAsFloatValue:Float = result.unsignedInteger;
+		Assert.equals(expected, uintAsFloatValue);
+		#end
+	}
+
+	public function testUIntChildElementComment2():Void {
+		var result = MXHXComponent.withMarkup('
+			<tests:TestPropertiesClass
+				xmlns:mx="https://ns.mxhx.dev/2024/basic"
+				xmlns:tests="https://ns.mxhx.dev/2024/tests">
+				<tests:unsignedInteger><!-- comment -->4000000000</tests:unsignedInteger>
+			</tests:TestPropertiesClass>
+		');
+		Assert.notNull(result);
+		Assert.isOfType(result.unsignedInteger, Int);
+		#if eval
+		final expected = Std.int(4000000000);
+		Assert.equals(expected, result.unsignedInteger);
+		#else
+		// uint comparison doesn't always work on some targets
+		final expected:Float = 4000000000.0;
+		final uintAsFloatValue:Float = result.unsignedInteger;
+		Assert.equals(expected, uintAsFloatValue);
+		#end
+	}
+
+	public function testUIntChildElementComment3():Void {
+		var result = MXHXComponent.withMarkup('
+			<tests:TestPropertiesClass
+				xmlns:mx="https://ns.mxhx.dev/2024/basic"
+				xmlns:tests="https://ns.mxhx.dev/2024/tests">
+				<tests:unsignedInteger>4000000<!-- comment -->000</tests:unsignedInteger>
 			</tests:TestPropertiesClass>
 		');
 		Assert.notNull(result);
@@ -1124,6 +1505,45 @@ class MXHXComponentPropertyTest extends Test {
 				xmlns:mx="https://ns.mxhx.dev/2024/basic"
 				xmlns:tests="https://ns.mxhx.dev/2024/tests">
 				<tests:canBeNull>890.1</tests:canBeNull>
+			</tests:TestPropertiesClass>
+		');
+		Assert.notNull(result);
+		Assert.isOfType(result.canBeNull, Float);
+		Assert.equals(890.1, result.canBeNull);
+	}
+
+	public function testCanBeNullChildElementComment1():Void {
+		var result = MXHXComponent.withMarkup('
+			<tests:TestPropertiesClass
+				xmlns:mx="https://ns.mxhx.dev/2024/basic"
+				xmlns:tests="https://ns.mxhx.dev/2024/tests">
+				<tests:canBeNull>890.1<!-- comment --></tests:canBeNull>
+			</tests:TestPropertiesClass>
+		');
+		Assert.notNull(result);
+		Assert.isOfType(result.canBeNull, Float);
+		Assert.equals(890.1, result.canBeNull);
+	}
+
+	public function testCanBeNullChildElementComment2():Void {
+		var result = MXHXComponent.withMarkup('
+			<tests:TestPropertiesClass
+				xmlns:mx="https://ns.mxhx.dev/2024/basic"
+				xmlns:tests="https://ns.mxhx.dev/2024/tests">
+				<tests:canBeNull><!-- comment -->890.1</tests:canBeNull>
+			</tests:TestPropertiesClass>
+		');
+		Assert.notNull(result);
+		Assert.isOfType(result.canBeNull, Float);
+		Assert.equals(890.1, result.canBeNull);
+	}
+
+	public function testCanBeNullChildElementComment3():Void {
+		var result = MXHXComponent.withMarkup('
+			<tests:TestPropertiesClass
+				xmlns:mx="https://ns.mxhx.dev/2024/basic"
+				xmlns:tests="https://ns.mxhx.dev/2024/tests">
+				<tests:canBeNull>89<!-- comment -->0.1</tests:canBeNull>
 			</tests:TestPropertiesClass>
 		');
 		Assert.notNull(result);

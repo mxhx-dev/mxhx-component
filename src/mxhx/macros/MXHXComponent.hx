@@ -1967,6 +1967,7 @@ class MXHXComponent {
 		var isArray = false;
 		var isString = false;
 		var fieldName:String = tagData.shortName;
+		// field may be null if it's on a struct
 		if (field != null) {
 			fieldName = field.name;
 			fieldType = field.type;
@@ -2013,22 +2014,48 @@ class MXHXComponent {
 
 		var firstChildIsArrayTag = false;
 		var valueExprs:Array<Expr> = [];
+		var pendingText:String = null;
+		var pendingTextIncludesCData = false;
 		var firstChild = (childUnits != null) ? childUnits.shift() : tagData.getFirstChildUnit();
 		var current = firstChild;
 		while (current != null) {
-			if (current == firstChild && (current is IMXHXTextData) && current.getNextSiblingUnit() == null) {
+			var next = (childUnits != null) ? childUnits.shift() : current.getNextSiblingUnit();
+			if ((current is IMXHXTextData)) {
 				var textData = cast(current, IMXHXTextData);
-				if (textData.textType == Text && isLanguageTypeAssignableFromText(baseType)) {
+				if (textData == firstChild && next == null && textData.textType == Text && isLanguageTypeAssignableFromText(baseType)) {
 					return handleTextContentAsExpr(textData.content, baseType, enumType, 0, textData);
 				}
+				if (!canIgnoreTextData(textData)) {
+					if (valueExprs.length > 0) {
+						// can't combine text and tags (at this time)
+						errorTextUnexpected(textData);
+					} else if (pendingText == null) {
+						var textData = cast(current, IMXHXTextData);
+						pendingText = textData.content;
+						pendingTextIncludesCData = textData.textType == CData;
+					} else {
+						var textData = cast(current, IMXHXTextData);
+						if ((pendingTextIncludesCData && textData.textType != CData)
+							|| (!pendingTextIncludesCData && textData.textType == CData)) {
+							// can't combine normal text and cdata text
+							errorTextUnexpected(textData);
+						} else {
+							pendingText += textData.content;
+						}
+					}
+				}
+				current = next;
+				continue;
+			} else if (pendingText != null) {
+				errorUnexpected(current);
+				current = next;
+				continue;
 			}
 			if (!isArray && valueExprs.length > 0) {
 				// when the type is not array, multiple children are not allowed
-				var isWhitespace = (current is IMXHXTextData) && cast(current, IMXHXTextData).textType == Whitespace;
-				if (!isWhitespace) {
-					errorUnexpected(current);
-					return null;
-				}
+				errorUnexpected(current);
+				current = next;
+				continue;
 			}
 			var valueExpr = createValueExprForUnitData(current, fieldType, outerDocumentTypePath, generatedFields);
 			if (valueExpr != null) {
@@ -2040,7 +2067,19 @@ class MXHXComponent {
 				}
 				valueExprs.push(valueExpr);
 			}
-			current = (childUnits != null) ? childUnits.shift() : current.getNextSiblingUnit();
+			current = next;
+		}
+		if (pendingText != null) {
+			var valueExpr:Expr = null;
+			if (enumType != null) {
+				var value = StringTools.trim(pendingText);
+				valueExpr = macro $i{value};
+			} else if (baseType != null) {
+				valueExpr = createValueExprForBaseType(baseType, pendingText, pendingTextIncludesCData, tagData);
+			} else {
+				valueExpr = createValueExprForDynamic(pendingText);
+			}
+			valueExprs.push(valueExpr);
 		}
 		if (valueExprs.length == 0 && !isArray) {
 			if (isString) {
@@ -2102,6 +2141,10 @@ class MXHXComponent {
 			return macro $b{result};
 		}
 		// not an array
+		if (valueExprs.length > 1) {
+			// this shouldn't happen, but just to be safe
+			reportError('Too many expressions for field \'${fieldName}\'', sourceLocationToContextPosition(tagData));
+		}
 		return valueExprs[0];
 	}
 
