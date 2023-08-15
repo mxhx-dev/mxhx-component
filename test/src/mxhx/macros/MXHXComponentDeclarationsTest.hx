@@ -1348,6 +1348,8 @@ class MXHXComponentDeclarationsTest extends Test {
 		');
 		Assert.notNull(result);
 		// child of field element: empty string, child of declarations: null
+		// normally cdata is unmodified, but the one exception is child of
+		// declarations and empty
 		Assert.isNull(result.string);
 	}
 
@@ -1362,6 +1364,50 @@ class MXHXComponentDeclarationsTest extends Test {
 		Assert.notNull(result);
 		Assert.isOfType(result.string, String);
 		Assert.equals(" ", result.string);
+	}
+
+	public function testStringCDataEmptyExtraWhitespace2():Void {
+		var result = MXHXComponent.withMarkup('
+			<tests:TestClass1 xmlns:mx="https://ns.mxhx.dev/2024/basic" xmlns:tests="https://ns.mxhx.dev/2024/tests">
+				<mx:Declarations>
+					<mx:String id="string"><![CDATA[   ]]></mx:String>
+				</mx:Declarations>
+			</tests:TestClass1>
+		');
+		Assert.notNull(result);
+		Assert.isOfType(result.string, String);
+		Assert.equals("   ", result.string);
+	}
+
+	public function testStringCDataEmptyExtraWhitespace3():Void {
+		var result = MXHXComponent.withMarkup('
+			<tests:TestClass1 xmlns:mx="https://ns.mxhx.dev/2024/basic" xmlns:tests="https://ns.mxhx.dev/2024/tests">
+				<mx:Declarations>
+					<mx:String id="string">
+						<![CDATA[   ]]>
+					</mx:String>
+				</mx:Declarations>
+			</tests:TestClass1>
+		');
+		Assert.notNull(result);
+		Assert.isOfType(result.string, String);
+		Assert.equals("   ", result.string);
+	}
+
+	public function testStringCDataEmptyExtraWhitespace4():Void {
+		var result = MXHXComponent.withMarkup('
+			<tests:TestClass1 xmlns:mx="https://ns.mxhx.dev/2024/basic" xmlns:tests="https://ns.mxhx.dev/2024/tests">
+				<mx:Declarations>
+					<mx:String id="string">
+						<![CDATA[   ]]>
+						<![CDATA[   ]]>
+					</mx:String>
+				</mx:Declarations>
+			</tests:TestClass1>
+		');
+		Assert.notNull(result);
+		Assert.isOfType(result.string, String);
+		Assert.equals("      ", result.string);
 	}
 
 	public function testUInt():Void {
@@ -1784,6 +1830,14 @@ class MXHXComponentDeclarationsTest extends Test {
 						</mx:String>
 						<mx:String><![CDATA[]]></mx:String>
 						<mx:String><![CDATA[ ]]></mx:String>
+						<mx:String><![CDATA[   ]]></mx:String>
+						<mx:String>
+							<![CDATA[   ]]>
+						</mx:String>
+						<mx:String>
+							<![CDATA[   ]]>
+							<![CDATA[   ]]>
+						</mx:String>
 					</mx:Array>
 				</mx:Declarations>
 			</tests:TestClass1>
@@ -1791,13 +1845,16 @@ class MXHXComponentDeclarationsTest extends Test {
 		Assert.notNull(result);
 		Assert.notNull(result.array);
 		Assert.isOfType(result.array, Array);
-		Assert.equals(5, result.array.length);
+		Assert.equals(8, result.array.length);
 		// child of most elements: empty string, child of declarations: null
 		Assert.equals("", result.array[0]);
 		Assert.equals("", result.array[1]);
 		Assert.equals("", result.array[2]);
 		Assert.equals("", result.array[3]);
 		Assert.equals(" ", result.array[4]);
+		Assert.equals("   ", result.array[5]);
+		Assert.equals("   ", result.array[6]);
+		Assert.equals("      ", result.array[7]);
 	}
 
 	public function testXmlEmpty():Void {

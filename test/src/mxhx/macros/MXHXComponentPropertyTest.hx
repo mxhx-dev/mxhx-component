@@ -835,6 +835,50 @@ class MXHXComponentPropertyTest extends Test {
 		Assert.equals(" ", result.string);
 	}
 
+	public function testStringChildElementRedundantCDataWhitespace2():Void {
+		var result = MXHXComponent.withMarkup('
+			<tests:TestPropertiesClass
+				xmlns:mx="https://ns.mxhx.dev/2024/basic"
+				xmlns:tests="https://ns.mxhx.dev/2024/tests">
+				<tests:string><mx:String><![CDATA[   ]]></mx:String></tests:string>
+			</tests:TestPropertiesClass>
+		');
+		Assert.notNull(result);
+		Assert.isOfType(result.string, String);
+		Assert.equals("   ", result.string);
+	}
+
+	public function testStringChildElementRedundantCDataWhitespace3():Void {
+		var result = MXHXComponent.withMarkup('
+			<tests:TestPropertiesClass
+				xmlns:mx="https://ns.mxhx.dev/2024/basic"
+				xmlns:tests="https://ns.mxhx.dev/2024/tests">
+				<tests:string><mx:String>
+					<![CDATA[   ]]>
+				</mx:String></tests:string>
+			</tests:TestPropertiesClass>
+		');
+		Assert.notNull(result);
+		Assert.isOfType(result.string, String);
+		Assert.equals("   ", result.string);
+	}
+
+	public function testStringChildElementRedundantCDataWhitespace4():Void {
+		var result = MXHXComponent.withMarkup('
+			<tests:TestPropertiesClass
+				xmlns:mx="https://ns.mxhx.dev/2024/basic"
+				xmlns:tests="https://ns.mxhx.dev/2024/tests">
+				<tests:string><mx:String>
+					<![CDATA[   ]]>
+					<![CDATA[   ]]>
+				</mx:String></tests:string>
+			</tests:TestPropertiesClass>
+		');
+		Assert.notNull(result);
+		Assert.isOfType(result.string, String);
+		Assert.equals("      ", result.string);
+	}
+
 	public function testUIntAttribute():Void {
 		var result = MXHXComponent.withMarkup('
 			<tests:TestPropertiesClass

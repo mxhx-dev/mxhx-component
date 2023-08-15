@@ -1432,8 +1432,10 @@ class MXHXComponent {
 			do {
 				if (child == null) {
 					if (initExpr != null) {
+						// this shouldn't happen, but just to be safe
 						errorTagUnexpected(tagData);
 					} else {
+						// no text found, so use default value instead
 						initExpr = createDefaultValueExprForBaseType(t, tagData);
 					}
 					// no more children
@@ -1442,34 +1444,44 @@ class MXHXComponent {
 					var textData:IMXHXTextData = cast child;
 					switch (textData.textType) {
 						case Text:
+							if (pendingText != null && pendingTextIncludesCData) {
+								// can't combine normal text and cdata text
+								errorUnexpected(child);
+								break;
+							}
 							var content = textData.content;
 							if (textContentContainsBinding(content)) {
 								reportError('Binding is not supported here', sourceLocationToContextPosition(textData));
 							}
 							if (pendingText == null) {
-								pendingText = "";
+								pendingText = content;
+							} else {
+								// append to existing normal text content
+								pendingText += content;
 							}
-							pendingText += content;
 						case CData:
-							if (pendingText == null) {
-								pendingText = "";
+							if (pendingText != null && !pendingTextIncludesCData) {
+								// can't combine normal text and cdata text
+								errorUnexpected(child);
+								break;
 							}
-							pendingText += textData.content;
-							pendingTextIncludesCData = true;
-						case Whitespace:
-							if (t.name == TYPE_STRING && t.pack.length == 0) {
-								if (pendingText == null) {
-									pendingText = "";
-								}
+							if (pendingText == null) {
+								pendingText = textData.content;
+							} else {
+								// append to existing cdata content
 								pendingText += textData.content;
 							}
+							pendingTextIncludesCData = true;
 						default:
+							// whitespace textType is never appended to the
+							// pending text. it is ignored, like comments.
 							if (!canIgnoreTextData(textData)) {
 								errorTextUnexpected(textData);
 								break;
 							}
 					}
 				} else {
+					// anything that isn't text is unexpected
 					errorUnexpected(child);
 				}
 				child = child.getNextSiblingUnit();
