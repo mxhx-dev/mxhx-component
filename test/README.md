@@ -27,3 +27,12 @@ To run tests with HashLink, run the following command:
 haxe test.hxml --hl bin/test.hl
 hl bin/test.hl
 ```
+
+## Run Node.js tests
+
+To run tests with Node.js, run the following command:
+
+```sh
+haxe test.hxml --js bin/test.js
+node bin/test.js
+```

@@ -36,3 +36,8 @@ jobs:
         run: |
           haxe test.hxml --hl bin/test.hl
           hl bin/test.hl
+      - name: Run Node Tests
+        working-directory: test
+        run: |
+          haxe test.hxml --js bin/test.js
+          node bin/test.js
