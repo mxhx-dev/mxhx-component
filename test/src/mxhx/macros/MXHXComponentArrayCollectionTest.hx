@@ -30,7 +30,7 @@ class MXHXComponentArrayCollectionTest extends Test {
 		Assert.equals(3, result.collection.array.length);
 	}
 
-	public function testSetArrayPropertyArrayWrappeInferredType():Void {
+	public function testSetArrayPropertyArrayWrapperInferredType():Void {
 		var result = MXHXComponent.withMarkup('
 			<mx:Object
 				xmlns:mx="https://ns.mxhx.dev/2024/basic"

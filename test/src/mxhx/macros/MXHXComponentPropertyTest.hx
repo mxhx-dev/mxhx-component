@@ -1,9 +1,12 @@
 package mxhx.macros;
 
 import Xml.XmlType;
-import fixtures.TestPropertiesClass;
-import fixtures.TestPropertyEnum;
+import fixtures.ModuleWithClassThatHasDifferentName.ThisClassHasADifferentNameThanItsModule;
+import fixtures.TestAbstractFromModuleType.ModuleType;
 import fixtures.TestComplexEnum;
+import fixtures.TestPropertiesClass;
+import fixtures.TestPropertyAbstractEnum;
+import fixtures.TestPropertyEnum;
 import utest.Assert;
 import utest.Test;
 
@@ -395,6 +398,89 @@ class MXHXComponentPropertyTest extends Test {
 		');
 		Assert.notNull(result);
 		Assert.isNull(result.type);
+	}
+
+	public function testAbstractEnumValueAttribute():Void {
+		var result = MXHXComponent.withMarkup('
+			<tests:TestPropertiesClass
+				xmlns:mx="https://ns.mxhx.dev/2024/basic"
+				xmlns:tests="https://ns.mxhx.dev/2024/tests"
+				abstractEnumValue="Value2"/>
+		');
+		Assert.notNull(result);
+		Assert.equals(TestPropertyAbstractEnum.Value2, result.abstractEnumValue);
+	}
+
+	public function testAbstractEnumValueChildElement():Void {
+		var result = MXHXComponent.withMarkup('
+			<tests:TestPropertiesClass
+				xmlns:mx="https://ns.mxhx.dev/2024/basic"
+				xmlns:tests="https://ns.mxhx.dev/2024/tests">
+				<tests:abstractEnumValue>Value2</tests:abstractEnumValue>
+			</tests:TestPropertiesClass>
+		');
+		Assert.notNull(result);
+		Assert.equals(TestPropertyAbstractEnum.Value2, result.abstractEnumValue);
+	}
+
+	public function testAbstractEnumValueChildElementComment1():Void {
+		var result = MXHXComponent.withMarkup('
+			<tests:TestPropertiesClass
+				xmlns:mx="https://ns.mxhx.dev/2024/basic"
+				xmlns:tests="https://ns.mxhx.dev/2024/tests">
+				<tests:abstractEnumValue>Value2<!-- comment --></tests:abstractEnumValue>
+			</tests:TestPropertiesClass>
+		');
+		Assert.notNull(result);
+		Assert.equals(TestPropertyAbstractEnum.Value2, result.abstractEnumValue);
+	}
+
+	public function testAbstractEnumValueChildElementComment2():Void {
+		var result = MXHXComponent.withMarkup('
+			<tests:TestPropertiesClass
+				xmlns:mx="https://ns.mxhx.dev/2024/basic"
+				xmlns:tests="https://ns.mxhx.dev/2024/tests">
+				<tests:abstractEnumValue><!-- comment -->Value2</tests:abstractEnumValue>
+			</tests:TestPropertiesClass>
+		');
+		Assert.notNull(result);
+		Assert.equals(TestPropertyAbstractEnum.Value2, result.abstractEnumValue);
+	}
+
+	public function testAbstractEnumValueChildElementComment3():Void {
+		var result = MXHXComponent.withMarkup('
+			<tests:TestPropertiesClass
+				xmlns:mx="https://ns.mxhx.dev/2024/basic"
+				xmlns:tests="https://ns.mxhx.dev/2024/tests">
+				<tests:abstractEnumValue>Val<!-- comment -->ue2</tests:abstractEnumValue>
+			</tests:TestPropertiesClass>
+		');
+		Assert.notNull(result);
+		Assert.equals(TestPropertyAbstractEnum.Value2, result.abstractEnumValue);
+	}
+
+	public function testAbstractEnumValueChildElementCData():Void {
+		var result = MXHXComponent.withMarkup('
+			<tests:TestPropertiesClass
+				xmlns:mx="https://ns.mxhx.dev/2024/basic"
+				xmlns:tests="https://ns.mxhx.dev/2024/tests">
+				<tests:abstractEnumValue><![CDATA[Value2]]></tests:abstractEnumValue>
+			</tests:TestPropertiesClass>
+		');
+		Assert.notNull(result);
+		Assert.equals(TestPropertyAbstractEnum.Value2, result.abstractEnumValue);
+	}
+
+	public function testAbstractEnumValueChildElementRedundant():Void {
+		var result = MXHXComponent.withMarkup('
+			<tests:TestPropertiesClass
+				xmlns:mx="https://ns.mxhx.dev/2024/basic"
+				xmlns:tests="https://ns.mxhx.dev/2024/tests">
+				<tests:abstractEnumValue><tests:TestPropertyAbstractEnum>Value2</tests:TestPropertyAbstractEnum></tests:abstractEnumValue>
+			</tests:TestPropertiesClass>
+		');
+		Assert.notNull(result);
+		Assert.equals(TestPropertyAbstractEnum.Value2, result.abstractEnumValue);
 	}
 
 	public function testEnumValueAttribute():Void {
@@ -1052,21 +1138,21 @@ class MXHXComponentPropertyTest extends Test {
 		Assert.equals("   ", result.string);
 	}
 
-	// public function testStringChildElementCDataWhitespaceSurroundingWhitespace2():Void {
-	// 	var result = MXHXComponent.withMarkup('
-	// 		<tests:TestPropertiesClass
-	// 			xmlns:mx="https://ns.mxhx.dev/2024/basic"
-	// 			xmlns:tests="https://ns.mxhx.dev/2024/tests">
-	// 			<tests:string>
-	// 				<![CDATA[   ]]>
-	// 				<![CDATA[   ]]>
-	// 			</tests:string>
-	// 		</tests:TestPropertiesClass>
-	// 	');
-	// 	Assert.notNull(result);
-	// 	Assert.isOfType(result.string, String);
-	// 	Assert.equals("      ", result.string);
-	// }
+	public function testStringChildElementCDataWhitespaceSurroundingWhitespace2():Void {
+		var result = MXHXComponent.withMarkup('
+			<tests:TestPropertiesClass
+				xmlns:mx="https://ns.mxhx.dev/2024/basic"
+				xmlns:tests="https://ns.mxhx.dev/2024/tests">
+				<tests:string>
+					<![CDATA[   ]]>
+					<![CDATA[   ]]>
+				</tests:string>
+			</tests:TestPropertiesClass>
+		');
+		Assert.notNull(result);
+		Assert.isOfType(result.string, String);
+		Assert.equals("      ", result.string);
+	}
 
 	public function testStringChildElementRedundant():Void {
 		var result = MXHXComponent.withMarkup('
@@ -1642,5 +1728,45 @@ class MXHXComponentPropertyTest extends Test {
 		Assert.isOfType(result.date, Date);
 		var difference = now.getTime() - result.date.getTime();
 		Assert.isTrue(difference < 1000.0);
+	}
+
+	public function testAbstractFrom():Void {
+		var result = MXHXComponent.withMarkup('
+			<tests:TestPropertiesClass
+				xmlns:mx="https://ns.mxhx.dev/2024/basic"
+				xmlns:tests="https://ns.mxhx.dev/2024/tests">
+				<tests:abstractFrom>123.4</tests:abstractFrom>
+			</tests:TestPropertiesClass>
+		');
+		Assert.notNull(result);
+		Assert.equals(123.4, result.abstractFrom);
+	}
+
+	public function testAbstractFromModuleType():Void {
+		var result = MXHXComponent.withMarkup('
+			<tests:TestPropertiesClass
+				xmlns:mx="https://ns.mxhx.dev/2024/basic"
+				xmlns:tests="https://ns.mxhx.dev/2024/tests">
+				<tests:abstractFromModuleType>123.4</tests:abstractFromModuleType>
+			</tests:TestPropertiesClass>
+		');
+		Assert.notNull(result);
+		var moduleType:ModuleType = result.abstractFromModuleType;
+		Assert.equals(123.4, moduleType.value);
+	}
+
+	public function testClassFromModuleWithDifferentName():Void {
+		var result = MXHXComponent.withMarkup('
+			<tests:TestPropertiesClass
+				xmlns:mx="https://ns.mxhx.dev/2024/basic"
+				xmlns:tests="https://ns.mxhx.dev/2024/tests">
+				<tests:classFromModuleWithDifferentName>
+					<tests:ThisClassHasADifferentNameThanItsModule prop="hello"/>
+				</tests:classFromModuleWithDifferentName>
+			</tests:TestPropertiesClass>
+		');
+		Assert.notNull(result);
+		Assert.notNull(result.classFromModuleWithDifferentName);
+		Assert.equals("hello", result.classFromModuleWithDifferentName.prop);
 	}
 }

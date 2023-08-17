@@ -1,5 +1,7 @@
 package fixtures;
 
+import fixtures.ModuleWithClassThatHasDifferentName.ThisClassHasADifferentNameThanItsModule;
+
 @:event("change")
 class TestPropertiesClass {
 	public function new() {}
@@ -11,6 +13,7 @@ class TestPropertiesClass {
 	public var integer:Int;
 	public var string:String;
 	public var unsignedInteger:UInt;
+	public var abstractEnumValue:TestPropertyAbstractEnum;
 	public var enumValue:TestPropertyEnum;
 	public var strictlyTyped:TestPropertiesClass;
 	public var array:Array<String>;
@@ -19,4 +22,11 @@ class TestPropertiesClass {
 	public var canBeNull:Null<Float>;
 	public var date:Date;
 	public var xml:Xml;
+	public var abstractFrom:TestAbstractFrom;
+	public var abstractFromModuleType:TestAbstractFromModuleType;
+	public var classFromModuleWithDifferentName:ThisClassHasADifferentNameThanItsModule;
+
+	// compilation will fail if Context.getType() is used with this one
+	// needs a typedef for a class with @:generic, and not the class alone
+	public var genericMeta:TestTypedefWithGenericMeta<String>;
 }

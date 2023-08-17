@@ -2,6 +2,7 @@ package mxhx.macros;
 
 import Xml.XmlType;
 import fixtures.TestComplexEnum;
+import fixtures.TestPropertyAbstractEnum;
 import fixtures.TestPropertyEnum;
 import utest.Assert;
 import utest.Test;
@@ -213,6 +214,80 @@ class MXHXComponentDeclarationsTest extends Test {
 		Assert.equals("hello", Reflect.field(result.strictlyTyped.struct, "string"));
 		Assert.notNull(Reflect.field(result.strictlyTyped.struct, "object"));
 		Assert.equals(567, Reflect.field(Reflect.field(result.strictlyTyped.struct, "object"), "integer"));
+	}
+
+	public function testAbstractEnumValue():Void {
+		var result = MXHXComponent.withMarkup('
+			<tests:TestClass1 xmlns:mx="https://ns.mxhx.dev/2024/basic" xmlns:tests="https://ns.mxhx.dev/2024/tests">
+				<mx:Declarations>
+					<tests:TestPropertyAbstractEnum id="enumValue">Value2</tests:TestPropertyAbstractEnum>
+				</mx:Declarations>
+			</tests:TestClass1>
+		');
+		Assert.notNull(result);
+		Assert.equals(TestPropertyAbstractEnum.Value2, result.enumValue);
+	}
+
+	public function testAbstractEnumValueExtraWhitespace():Void {
+		var result = MXHXComponent.withMarkup('
+			<tests:TestClass1 xmlns:mx="https://ns.mxhx.dev/2024/basic" xmlns:tests="https://ns.mxhx.dev/2024/tests">
+				<mx:Declarations>
+					<tests:TestPropertyAbstractEnum id="enumValue">
+						Value2
+					</tests:TestPropertyAbstractEnum>
+				</mx:Declarations>
+			</tests:TestClass1>
+		');
+		Assert.notNull(result);
+		Assert.equals(TestPropertyAbstractEnum.Value2, result.enumValue);
+	}
+
+	public function testAbstractEnumValueComment1():Void {
+		var result = MXHXComponent.withMarkup('
+			<tests:TestClass1 xmlns:mx="https://ns.mxhx.dev/2024/basic" xmlns:tests="https://ns.mxhx.dev/2024/tests">
+				<mx:Declarations>
+					<tests:TestPropertyAbstractEnum id="enumValue">Value2<!-- comment --></tests:TestPropertyAbstractEnum>
+				</mx:Declarations>
+			</tests:TestClass1>
+		');
+		Assert.notNull(result);
+		Assert.equals(TestPropertyAbstractEnum.Value2, result.enumValue);
+	}
+
+	public function testAbstractEnumValueComment2():Void {
+		var result = MXHXComponent.withMarkup('
+			<tests:TestClass1 xmlns:mx="https://ns.mxhx.dev/2024/basic" xmlns:tests="https://ns.mxhx.dev/2024/tests">
+				<mx:Declarations>
+					<tests:TestPropertyAbstractEnum id="enumValue"><!-- comment -->Value2</tests:TestPropertyAbstractEnum>
+				</mx:Declarations>
+			</tests:TestClass1>
+		');
+		Assert.notNull(result);
+		Assert.equals(TestPropertyAbstractEnum.Value2, result.enumValue);
+	}
+
+	public function testAbstractEnumValueComment3():Void {
+		var result = MXHXComponent.withMarkup('
+			<tests:TestClass1 xmlns:mx="https://ns.mxhx.dev/2024/basic" xmlns:tests="https://ns.mxhx.dev/2024/tests">
+				<mx:Declarations>
+					<tests:TestPropertyAbstractEnum id="enumValue">Val<!-- comment -->ue2</tests:TestPropertyAbstractEnum>
+				</mx:Declarations>
+			</tests:TestClass1>
+		');
+		Assert.notNull(result);
+		Assert.equals(TestPropertyAbstractEnum.Value2, result.enumValue);
+	}
+
+	public function testAbstractEnumValueCData():Void {
+		var result = MXHXComponent.withMarkup('
+			<tests:TestClass1 xmlns:mx="https://ns.mxhx.dev/2024/basic" xmlns:tests="https://ns.mxhx.dev/2024/tests">
+				<mx:Declarations>
+					<tests:TestPropertyAbstractEnum id="enumValue"><![CDATA[Value2]]></tests:TestPropertyAbstractEnum>
+				</mx:Declarations>
+			</tests:TestClass1>
+		');
+		Assert.notNull(result);
+		Assert.equals(TestPropertyAbstractEnum.Value2, result.enumValue);
 	}
 
 	public function testEnumValue():Void {
@@ -1817,6 +1892,8 @@ class MXHXComponentDeclarationsTest extends Test {
 		Assert.notNull(result.array);
 		Assert.isOfType(result.array, Array);
 		Assert.equals(2, result.array.length);
+		Assert.isOfType(result.array[0], fixtures.TestPropertiesSubclass1);
+		Assert.isOfType(result.array[1], fixtures.TestPropertiesSubclass2);
 	}
 
 	public function testArrayEmptyStrings():Void {

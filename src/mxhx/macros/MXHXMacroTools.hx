@@ -16,115 +16,34 @@ package mxhx.macros;
 
 #if macro
 import haxe.macro.Context;
-import haxe.macro.Expr.Error;
-import haxe.macro.Expr.MetadataEntry;
 import haxe.macro.Type;
-import haxe.macro.Type.BaseType;
+import mxhx.resolver.IMXHXTypeSymbol;
 
 /**
 	Utility functions for MXHX macros.
 **/
 class MXHXMacroTools {
-	/**
-		Gets the name of an event from an `:event` metadata entry.
-	**/
-	public static function getEventName(eventMeta:MetadataEntry):String {
-		if (eventMeta.name != ":event") {
-			throw new Error("getEventNames() requires :event meta", Context.currentPos());
-		}
-		var typedExprDef = Context.typeExpr(eventMeta.params[0]).expr;
-		if (typedExprDef == null) {
+	public static function resolveTypeFromSymbol(typeSymbol:IMXHXTypeSymbol):Type {
+		if (typeSymbol == null) {
 			return null;
 		}
-		var result:String = null;
-		while (true) {
-			switch (typedExprDef) {
-				case TConst(TString(s)):
-					return s;
-				case TCast(e, _):
-					typedExprDef = e.expr;
-				case TField(e, FStatic(c, cf)):
-					var classField = cf.get();
-					var classFieldExpr = classField.expr();
-					if (classFieldExpr == null) {
-						// can't find the string value, so generate it from the
-						// name of the field based on standard naming convention
-						var parts = classField.name.split("_");
-						var result = "";
-						for (i in 0...parts.length) {
-							var part = parts[i].toLowerCase();
-							if (i == 0) {
-								result += part;
-							} else {
-								result += part.charAt(0).toUpperCase() + part.substr(1);
-							}
-						}
-						return result;
-					}
-					typedExprDef = classField.expr().expr;
-				default:
-					return null;
-			}
+		var type:Type = null;
+		try {
+			type = Context.getType(typeSymbol.qname);
+		} catch (e:Dynamic) {
+			return null;
 		}
-		return null;
-	}
-
-	/**
-		Gets the type of an event from an `:event` metadata entry.
-	**/
-	public static function getEventType(eventMeta:MetadataEntry):String {
-		if (eventMeta.name != ":event") {
-			throw new Error("getEventType() requires :event meta", Context.currentPos());
-		}
-		var typedExprType = Context.typeExpr(eventMeta.params[0]).t;
-		return switch (typedExprType) {
+		switch (type) {
+			case TInst(t, params):
+				var resolvedParams = typeSymbol.params.map(paramTypeSymbol -> resolveTypeFromSymbol(paramTypeSymbol));
+				return TInst(t, resolvedParams);
+			case TEnum(t, params):
+				var resolvedParams = typeSymbol.params.map(paramTypeSymbol -> resolveTypeFromSymbol(paramTypeSymbol));
+				return TEnum(t, resolvedParams);
 			case TAbstract(t, params):
-				var qname = getQName(t.get());
-				if ("openfl.events.EventType" != qname) {
-					return "openfl.events.Event";
-				}
-				switch (params[0]) {
-					case TInst(t, params): t.toString();
-					default: null;
-				}
-			default: "openfl.events.Event";
-		};
-	}
-
-	/**
-		Gets the fully qualified name of a type.
-	**/
-	public static function getQName(t:BaseType):String {
-		var qname = t.name;
-		if (t.pack.length > 0) {
-			qname = t.pack.join(".") + "." + qname;
-		}
-		return qname;
-	}
-
-	public static function getUnifiedType(t1:Type, t2:Type):Type {
-		if (t1 == null) {
-			return t2;
-		} else if (t2 == null) {
-			return t1;
-		}
-		var current = t2;
-		while (current != null) {
-			if (Context.unify(t1, current)) {
-				return current;
-			}
-			current = switch (current) {
-				case TInst(t, params):
-					var classType = t.get();
-					var superClass = classType.superClass;
-					if (superClass != null) {
-						TInst(superClass.t, superClass.params);
-					} else {
-						null;
-					}
-				default:
-					null;
-			}
+				var resolvedParams = typeSymbol.params.map(paramTypeSymbol -> resolveTypeFromSymbol(paramTypeSymbol));
+				return TAbstract(t, resolvedParams);
+			default:
 		}
 		return null;
 	}

@@ -1,7 +1,7 @@
 package mxhx.macros;
 
-import fixtures.TestInlineComponentClass.Underlying;
 import fixtures.TestClass1;
+import fixtures.TestInlineComponentClassAbstractFromClass.Underlying;
 import utest.Assert;
 import utest.Test;
 
@@ -25,13 +25,13 @@ class MXHXComponentInlineComponentTest extends Test {
 
 	public function testInlineComponentForPropertyOfTypeAbstractFromClass():Void {
 		var result = MXHXComponent.withMarkup('
-			<tests:TestInlineComponentClass xmlns:mx="https://ns.mxhx.dev/2024/basic" xmlns:tests="https://ns.mxhx.dev/2024/tests">
+			<tests:TestInlineComponentClassAbstractFromClass xmlns:mx="https://ns.mxhx.dev/2024/basic" xmlns:tests="https://ns.mxhx.dev/2024/tests">
 				<tests:classAbstractProperty>
 					<mx:Component>
 						<tests:TestClass1/>
 					</mx:Component>
 				</tests:classAbstractProperty>
-			</tests:TestInlineComponentClass>
+			</tests:TestInlineComponentClassAbstractFromClass>
 		');
 		Assert.notNull(result);
 		Assert.isOfType(result.classAbstractProperty, Underlying);
