@@ -46,4 +46,4 @@ jobs:
         working-directory: test
         run: |
           haxe test.hxml --cpp bin/test
-          node bin/test/Main
+          bin/test/Main
