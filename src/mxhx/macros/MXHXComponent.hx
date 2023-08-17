@@ -920,11 +920,7 @@ class MXHXComponent {
 			return macro null;
 		}
 
-		var returnType:ComplexType = null;
-		var resolvedMacroType = MXHXMacroTools.resolveTypeFromSymbol(assignedToType);
-		if (resolvedMacroType != null) {
-			returnType = TypeTools.toComplexType(resolvedMacroType);
-		}
+		var returnType:ComplexType = TPath(typeSymbolToTypePath(assignedToType));
 
 		var typePos = sourceLocationToContextPosition(tagData);
 		typeDef.fields.push({
@@ -973,7 +969,8 @@ class MXHXComponent {
 		assignmentParts.push(staticOuterDocumentFieldName);
 		var bodyExpr = macro {
 			$p{assignmentParts} = this;
-			return $p{typeParts};
+			var result:$returnType = $p{typeParts};
+			return result;
 		};
 
 		generatedFields.push({
@@ -981,7 +978,7 @@ class MXHXComponent {
 			pos: typePos,
 			kind: FFun({
 				args: [],
-				ret: returnType,
+				ret: TPath({name: TYPE_DYNAMIC, pack: []}),
 				expr: bodyExpr
 			}),
 			access: [APrivate],
@@ -1107,13 +1104,6 @@ class MXHXComponent {
 			}
 		}
 
-		var returnTypePath = instanceTypePath;
-		if (resolvedType != null
-			&& resolvedType.params.length > 0
-			&& (instanceTypePath.params == null || resolvedType.params.length != instanceTypePath.params.length)) {
-			// last resort: set return type and field type to Dynamic
-			returnTypePath = {name: TYPE_DYNAMIC, pack: []};
-		}
 		var id:String = null;
 		var idAttr = tagData.getAttributeData(ATTRIBUTE_ID);
 		if (idAttr != null) {
@@ -1121,7 +1111,7 @@ class MXHXComponent {
 		}
 		var setIDExpr:Expr = null;
 		if (id != null) {
-			addFieldForID(id, TPath(returnTypePath), idAttr, generatedFields);
+			addFieldForID(id, TPath(instanceTypePath), idAttr, generatedFields);
 			setIDExpr = macro this.$id = $i{localVarName};
 		} else {
 			// field names can't start with a number, so starting a generated
@@ -1159,7 +1149,7 @@ class MXHXComponent {
 			pos: fieldPos,
 			kind: FFun({
 				args: [],
-				ret: TPath(returnTypePath),
+				ret: TPath(instanceTypePath),
 				expr: bodyExpr
 			}),
 			access: [APrivate],
@@ -1174,11 +1164,20 @@ class MXHXComponent {
 	}
 
 	private static function typeSymbolToTypePath(typeSymbol:IMXHXTypeSymbol):TypePath {
+		var params:Array<TypeParam> = null;
+		if (typeSymbol.params.length > 0) {
+			params = typeSymbol.params.map(paramType -> TPType(TPath({pack: [], name: TYPE_DYNAMIC})));
+		}
 		if (typeSymbol.qname != typeSymbol.module) {
 			var moduleParts = typeSymbol.module.split(".");
-			return {name: moduleParts.pop(), pack: moduleParts, sub: typeSymbol.name};
+			return {
+				name: moduleParts.pop(),
+				pack: moduleParts,
+				sub: typeSymbol.name,
+				params: params
+			};
 		}
-		return {name: typeSymbol.name, pack: typeSymbol.pack};
+		return {name: typeSymbol.name, pack: typeSymbol.pack, params: params};
 	}
 
 	private static function tagContainsOnlyText(tagData:IMXHXTagData):Bool {
