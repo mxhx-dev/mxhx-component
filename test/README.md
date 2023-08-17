@@ -36,3 +36,12 @@ To run tests with Node.js, run the following command:
 haxe test.hxml --js bin/test.js
 node bin/test.js
 ```
+
+## Run C++ tests
+
+To run tests with a native C++ executable, run the following command:
+
+```sh
+haxe test.hxml --cpp bin/test
+bin/test/Main
+```

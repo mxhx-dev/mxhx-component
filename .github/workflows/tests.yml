@@ -41,3 +41,8 @@ jobs:
         run: |
           haxe test.hxml --js bin/test.js
           node bin/test.js
+      - name: Run C++ Tests
+        working-directory: test
+        run: |
+          haxe test.hxml --cpp bin/test
+          node bin/test/Main
