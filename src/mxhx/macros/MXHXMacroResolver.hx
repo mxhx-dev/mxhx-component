@@ -25,6 +25,7 @@ import mxhx.resolver.IMXHXTypeSymbol;
 import mxhx.resolver.MXHXSymbolTools;
 
 class MXHXMacroResolver implements IMXHXResolver {
+	private static final MODULE_STD_TYPES = "StdTypes";
 	private static final TYPE_ARRAY = "Array";
 	private static final ATTRIBUTE_TYPE = "type";
 	private static final META_DEFAULT_XML_PROPERTY = "defaultXmlProperty";
@@ -126,6 +127,7 @@ class MXHXMacroResolver implements IMXHXResolver {
 					case TInst(t, params):
 						discoveredParams = params;
 					case TAbstract(t, params):
+						var abstractType = t.get();
 						discoveredParams = params;
 					case TEnum(t, params):
 						discoveredParams = params;
@@ -329,6 +331,7 @@ class MXHXMacroResolver implements IMXHXResolver {
 	private function createMXHXClassSymbolForClassType(classType:ClassType, params:Array<IMXHXTypeSymbol>):IMXHXClassSymbol {
 		var qname = macroBaseTypeAndTypeSymbolParamsToQname(classType, params);
 		var result = new MXHXClassSymbol(classType.name, classType.pack.copy());
+		result.qname = qname;
 		result.module = classType.module;
 		// fields may reference this type, so make sure that it's available
 		// before parsing anything else
@@ -364,6 +367,7 @@ class MXHXMacroResolver implements IMXHXResolver {
 		var qname = macroBaseTypeAndTypeSymbolParamsToQname(abstractType, params);
 
 		var result = new MXHXAbstractSymbol(abstractType.name, abstractType.pack.copy());
+		result.qname = qname;
 		result.module = abstractType.module;
 		// fields may reference this type, so make sure that it's available
 		// before parsing anything else
@@ -380,6 +384,7 @@ class MXHXMacroResolver implements IMXHXResolver {
 	private function createMXHXEnumSymbolForAbstractEnumType(abstractType:AbstractType, params:Array<IMXHXTypeSymbol>):IMXHXEnumSymbol {
 		var qname = macroBaseTypeAndTypeSymbolParamsToQname(abstractType, params);
 		var result = new MXHXEnumSymbol(abstractType.name, abstractType.pack.copy());
+		result.qname = qname;
 		result.module = abstractType.module;
 		// fields may reference this type, so make sure that it's available
 		// before parsing anything else
@@ -393,6 +398,7 @@ class MXHXMacroResolver implements IMXHXResolver {
 	private function createMXHXEnumSymbolForEnumType(enumType:EnumType, params:Array<IMXHXTypeSymbol>):IMXHXEnumSymbol {
 		var qname = macroBaseTypeAndTypeSymbolParamsToQname(enumType, params);
 		var result = new MXHXEnumSymbol(enumType.name, enumType.pack.copy());
+		result.qname = qname;
 		result.module = enumType.module;
 		// fields may reference this type, so make sure that it's available
 		// before parsing anything else
@@ -527,7 +533,7 @@ class MXHXMacroResolver implements IMXHXResolver {
 					var abstractType = t.get();
 					return macroBaseTypeToQname(abstractType, params);
 				case TDynamic(t):
-					return "Dynamic";
+					return "Dynamic<%>";
 				case TFun(args, ret):
 					return "haxe.Constraints.Function";
 				case TMono(t):
@@ -551,7 +557,7 @@ class MXHXMacroResolver implements IMXHXResolver {
 		if (baseType.pack.length > 0) {
 			qname = baseType.pack.join(".") + "." + qname;
 		}
-		if (qname != baseType.module) {
+		if (qname != baseType.module && baseType.module != MODULE_STD_TYPES) {
 			qname = baseType.module + "." + baseType.name;
 		}
 		if (params != null && params.length > 0) {
@@ -577,7 +583,7 @@ class MXHXMacroResolver implements IMXHXResolver {
 		if (baseType.pack.length > 0) {
 			qname = baseType.pack.join(".") + "." + qname;
 		}
-		if (qname != baseType.module) {
+		if (qname != baseType.module && baseType.module != MODULE_STD_TYPES) {
 			qname = baseType.module + "." + baseType.name;
 		}
 		if (params != null && params.length > 0) {

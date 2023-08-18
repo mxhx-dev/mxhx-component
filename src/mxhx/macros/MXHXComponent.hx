@@ -2035,7 +2035,7 @@ class MXHXComponent {
 		if (t.pack.length == 1 && t.pack[0] == "haxe" && t.name == TYPE_FUNCTION) {
 			return true;
 		}
-		return t.pack.length == 0 && LANGUAGE_TYPES_ASSIGNABLE_BY_TEXT.indexOf(t.qname) != -1;
+		return t.pack.length == 0 && LANGUAGE_TYPES_ASSIGNABLE_BY_TEXT.indexOf(t.name) != -1;
 	}
 
 	private static function canIgnoreTextData(textData:IMXHXTextData):Bool {

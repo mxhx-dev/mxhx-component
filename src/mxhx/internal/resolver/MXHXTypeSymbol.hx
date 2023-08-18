@@ -12,11 +12,6 @@ class MXHXTypeSymbol implements IMXHXTypeSymbol {
 	public function new(name:String, ?pack:Array<String>, ?params:Array<IMXHXTypeSymbol>) {
 		this.name = name;
 		this.pack = pack != null ? pack : [];
-		if (this.pack.length > 0) {
-			qname = this.pack.join(".") + "." + name;
-		} else {
-			this.qname = name;
-		}
 		this.params = params != null ? params : [];
 	}
 }
