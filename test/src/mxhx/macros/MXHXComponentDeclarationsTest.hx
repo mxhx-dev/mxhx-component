@@ -2551,4 +2551,135 @@ class MXHXComponentDeclarationsTest extends Test {
 		Assert.equals(123.4, result.float);
 		Assert.equals("hello", result.string);
 	}
+
+	public function testFunction():Void {
+		var result = MXHXComponent.withMarkup('
+			<tests:TestClass1 xmlns:mx="https://ns.mxhx.dev/2024/basic" xmlns:tests="https://ns.mxhx.dev/2024/tests">
+				<mx:Declarations>
+					<mx:Function id="func">testMethod</mx:Function>
+				</mx:Declarations>
+			</tests:TestClass1>
+		');
+		Assert.notNull(result);
+		Assert.isTrue(Reflect.isFunction(result.func));
+		Assert.isTrue(Reflect.compareMethods(result.testMethod, result.func));
+	}
+
+	public function testFunctionExtraWhitespace():Void {
+		var result = MXHXComponent.withMarkup('
+			<tests:TestClass1 xmlns:mx="https://ns.mxhx.dev/2024/basic" xmlns:tests="https://ns.mxhx.dev/2024/tests">
+				<mx:Declarations>
+					<mx:Function id="func">
+						testMethod
+					</mx:Function>
+				</mx:Declarations>
+			</tests:TestClass1>
+		');
+		Assert.notNull(result);
+		Assert.isTrue(Reflect.isFunction(result.func));
+		Assert.isTrue(Reflect.compareMethods(result.testMethod, result.func));
+	}
+
+	public function testFunctionComment1():Void {
+		var result = MXHXComponent.withMarkup('
+			<tests:TestClass1 xmlns:mx="https://ns.mxhx.dev/2024/basic" xmlns:tests="https://ns.mxhx.dev/2024/tests">
+				<mx:Declarations>
+					<mx:Function id="func">testMethod<!-- comment --></mx:Function>
+				</mx:Declarations>
+			</tests:TestClass1>
+		');
+		Assert.notNull(result);
+		Assert.isTrue(Reflect.isFunction(result.func));
+		Assert.isTrue(Reflect.compareMethods(result.testMethod, result.func));
+	}
+
+	public function testFunctionComment2():Void {
+		var result = MXHXComponent.withMarkup('
+			<tests:TestClass1 xmlns:mx="https://ns.mxhx.dev/2024/basic" xmlns:tests="https://ns.mxhx.dev/2024/tests">
+				<mx:Declarations>
+					<mx:Function id="func"><!-- comment -->testMethod</mx:Function>
+				</mx:Declarations>
+			</tests:TestClass1>
+		');
+		Assert.notNull(result);
+		Assert.isTrue(Reflect.isFunction(result.func));
+		Assert.isTrue(Reflect.compareMethods(result.testMethod, result.func));
+	}
+
+	public function testFunctionComment3():Void {
+		var result = MXHXComponent.withMarkup('
+			<tests:TestClass1 xmlns:mx="https://ns.mxhx.dev/2024/basic" xmlns:tests="https://ns.mxhx.dev/2024/tests">
+				<mx:Declarations>
+					<mx:Function id="func">test<!-- comment -->Method</mx:Function>
+				</mx:Declarations>
+			</tests:TestClass1>
+		');
+		Assert.notNull(result);
+		Assert.isTrue(Reflect.isFunction(result.func));
+		Assert.isTrue(Reflect.compareMethods(result.testMethod, result.func));
+	}
+
+	public function testFunctionEmpty():Void {
+		var result = MXHXComponent.withMarkup('
+			<tests:TestClass1 xmlns:mx="https://ns.mxhx.dev/2024/basic" xmlns:tests="https://ns.mxhx.dev/2024/tests">
+				<mx:Declarations>
+					<mx:Function id="func"></mx:Function>
+				</mx:Declarations>
+			</tests:TestClass1>
+		');
+		Assert.notNull(result);
+		Assert.isNull(result.func);
+	}
+
+	public function testFunctionEmptyExtraWhitespace():Void {
+		var result = MXHXComponent.withMarkup('
+			<tests:TestClass1 xmlns:mx="https://ns.mxhx.dev/2024/basic" xmlns:tests="https://ns.mxhx.dev/2024/tests">
+				<mx:Declarations>
+					<mx:Function id="func">
+					</mx:Function>
+				</mx:Declarations>
+			</tests:TestClass1>
+		');
+		Assert.notNull(result);
+		Assert.isNull(result.func);
+	}
+
+	public function testFunctionOnlyComment1():Void {
+		var result = MXHXComponent.withMarkup('
+			<tests:TestClass1 xmlns:mx="https://ns.mxhx.dev/2024/basic" xmlns:tests="https://ns.mxhx.dev/2024/tests">
+				<mx:Declarations>
+					<mx:Function id="func"><!-- comment --></mx:Function>
+				</mx:Declarations>
+			</tests:TestClass1>
+		');
+		Assert.notNull(result);
+		Assert.isNull(result.func);
+	}
+
+	public function testFunctionOnlyComment2():Void {
+		var result = MXHXComponent.withMarkup('
+			<tests:TestClass1 xmlns:mx="https://ns.mxhx.dev/2024/basic" xmlns:tests="https://ns.mxhx.dev/2024/tests">
+				<mx:Declarations>
+					<mx:Function id="func">
+						<!-- comment -->
+					</mx:Function>
+				</mx:Declarations>
+			</tests:TestClass1>
+		');
+		Assert.notNull(result);
+		Assert.isNull(result.func);
+	}
+
+	public function testFunctionCData():Void {
+		var result = MXHXComponent.withMarkup('
+			<tests:TestClass1 xmlns:mx="https://ns.mxhx.dev/2024/basic" xmlns:tests="https://ns.mxhx.dev/2024/tests">
+				<mx:Declarations>
+					<mx:Function id="func"><![CDATA[testMethod]]></mx:Function>
+				</mx:Declarations>
+			</tests:TestClass1>
+		');
+		Assert.notNull(result);
+		Assert.isTrue(Reflect.isFunction(result.func));
+		Assert.isTrue(Reflect.compareMethods(result.testMethod, result.func));
+	}
 }

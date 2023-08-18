@@ -326,7 +326,7 @@ class MXHXComponentPropertyTest extends Test {
 			<tests:TestPropertiesClass
 				xmlns:mx="https://ns.mxhx.dev/2024/basic"
 				xmlns:tests="https://ns.mxhx.dev/2024/tests">
-				<tests:type>fixtures.<!-- comment -->TestClass1</tests:type>
+				<tests:type><!-- comment -->fixtures.TestClass1</tests:type>
 			</tests:TestPropertiesClass>
 		');
 		Assert.notNull(result);
@@ -1768,5 +1768,122 @@ class MXHXComponentPropertyTest extends Test {
 		Assert.notNull(result);
 		Assert.notNull(result.classFromModuleWithDifferentName);
 		Assert.equals("hello", result.classFromModuleWithDifferentName.prop);
+	}
+
+	public function testFunctionAttribute():Void {
+		var result = MXHXComponent.withMarkup('
+			<tests:TestPropertiesClass
+				xmlns:mx="https://ns.mxhx.dev/2024/basic"
+				xmlns:tests="https://ns.mxhx.dev/2024/tests"
+				func="testMethod"/>
+		');
+		Assert.notNull(result);
+		Assert.isTrue(Reflect.isFunction(result.func));
+		Assert.isTrue(Reflect.compareMethods(result.testMethod, result.func));
+	}
+
+	public function testFunctionChildElement():Void {
+		var result = MXHXComponent.withMarkup('
+			<tests:TestPropertiesClass
+				xmlns:mx="https://ns.mxhx.dev/2024/basic"
+				xmlns:tests="https://ns.mxhx.dev/2024/tests">
+				<tests:func>testMethod</tests:func>
+			</tests:TestPropertiesClass>
+		');
+		Assert.notNull(result);
+		Assert.isTrue(Reflect.isFunction(result.func));
+		Assert.isTrue(Reflect.compareMethods(result.testMethod, result.func));
+	}
+
+	public function testFunctionChildElementComment1():Void {
+		var result = MXHXComponent.withMarkup('
+			<tests:TestPropertiesClass
+				xmlns:mx="https://ns.mxhx.dev/2024/basic"
+				xmlns:tests="https://ns.mxhx.dev/2024/tests">
+				<tests:func>testMethod<!-- comment --></tests:func>
+			</tests:TestPropertiesClass>
+		');
+		Assert.notNull(result);
+		Assert.isTrue(Reflect.isFunction(result.func));
+		Assert.isTrue(Reflect.compareMethods(result.testMethod, result.func));
+	}
+
+	public function testFunctionChildElementComment2():Void {
+		var result = MXHXComponent.withMarkup('
+			<tests:TestPropertiesClass
+				xmlns:mx="https://ns.mxhx.dev/2024/basic"
+				xmlns:tests="https://ns.mxhx.dev/2024/tests">
+				<tests:func><!-- comment -->testMethod</tests:func>
+			</tests:TestPropertiesClass>
+		');
+		Assert.notNull(result);
+		Assert.isTrue(Reflect.isFunction(result.func));
+		Assert.isTrue(Reflect.compareMethods(result.testMethod, result.func));
+	}
+
+	public function testFunctionChildElementComment3():Void {
+		var result = MXHXComponent.withMarkup('
+			<tests:TestPropertiesClass
+				xmlns:mx="https://ns.mxhx.dev/2024/basic"
+				xmlns:tests="https://ns.mxhx.dev/2024/tests">
+				<tests:func>test<!-- comment -->Method</tests:func>
+			</tests:TestPropertiesClass>
+		');
+		Assert.notNull(result);
+		Assert.isTrue(Reflect.isFunction(result.func));
+		Assert.isTrue(Reflect.compareMethods(result.testMethod, result.func));
+	}
+
+	public function testFunctionChildElementCData():Void {
+		var result = MXHXComponent.withMarkup('
+			<tests:TestPropertiesClass
+				xmlns:mx="https://ns.mxhx.dev/2024/basic"
+				xmlns:tests="https://ns.mxhx.dev/2024/tests">
+				<tests:func><![CDATA[testMethod]]></tests:func>
+			</tests:TestPropertiesClass>
+		');
+		Assert.notNull(result);
+		Assert.isTrue(Reflect.isFunction(result.func));
+		Assert.isTrue(Reflect.compareMethods(result.testMethod, result.func));
+	}
+
+	public function testFunctionChildElementRedundant():Void {
+		var result = MXHXComponent.withMarkup('
+			<tests:TestPropertiesClass
+				xmlns:mx="https://ns.mxhx.dev/2024/basic"
+				xmlns:tests="https://ns.mxhx.dev/2024/tests">
+				<tests:func><mx:Function>testMethod</mx:Function></tests:func>
+			</tests:TestPropertiesClass>
+		');
+		Assert.notNull(result);
+		Assert.isTrue(Reflect.isFunction(result.func));
+		Assert.isTrue(Reflect.compareMethods(result.testMethod, result.func));
+	}
+
+	public function testFunctionChildElementRedundantEmpty():Void {
+		var result = MXHXComponent.withMarkup('
+			<tests:TestPropertiesClass
+				xmlns:mx="https://ns.mxhx.dev/2024/basic"
+				xmlns:tests="https://ns.mxhx.dev/2024/tests">
+				<tests:func><mx:Function></mx:Function></tests:func>
+			</tests:TestPropertiesClass>
+		');
+		Assert.notNull(result);
+		Assert.isNull(result.func);
+	}
+
+	public function testFunctionChildElementRedundantEmptyExtraWhitespace():Void {
+		var result = MXHXComponent.withMarkup('
+			<tests:TestPropertiesClass
+				xmlns:mx="https://ns.mxhx.dev/2024/basic"
+				xmlns:tests="https://ns.mxhx.dev/2024/tests">
+				<tests:func>
+					<mx:Function>
+					</mx:Function>
+				</tests:func>
+			</tests:TestPropertiesClass>
+		');
+		Assert.notNull(result);
+		Assert.isNull(result.func);
 	}
 }

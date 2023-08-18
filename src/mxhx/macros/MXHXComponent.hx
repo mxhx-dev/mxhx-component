@@ -98,11 +98,14 @@ class MXHXComponent {
 	private static final TYPE_DYNAMIC = "Dynamic";
 	private static final TYPE_EREG = "EReg";
 	private static final TYPE_FLOAT = "Float";
+	private static final TYPE_FUNCTION = "Function";
 	private static final TYPE_INT = "Int";
 	private static final TYPE_NULL = "Null";
 	private static final TYPE_STRING = "String";
 	private static final TYPE_UINT = "UInt";
 	private static final TYPE_XML = "Xml";
+	private static final TYPE_HAXE_FUNCTION = "haxe.Function";
+	private static final TYPE_HAXE_CONSTRAINTS_FUNCTION = "haxe.Constraints.Function";
 	private static final VALUE_TRUE = "true";
 	private static final VALUE_FALSE = "false";
 	private static final VALUE_NAN = "NaN";
@@ -113,7 +116,6 @@ class MXHXComponent {
 	private static final TAG_DESIGN_LAYER = "DesignLayer";
 	private static final TAG_DECLARATIONS = "Declarations";
 	private static final TAG_DEFINITION = "Definition";
-	private static final TAG_FUNCTION = "Function";
 	private static final TAG_LIBRARY = "Library";
 	private static final TAG_METADATA = "Metadata";
 	private static final TAG_MODEL = "Model";
@@ -138,6 +140,7 @@ class MXHXComponent {
 		TYPE_DATE => TYPE_DATE,
 		TYPE_EREG => TYPE_EREG,
 		TYPE_FLOAT => TYPE_FLOAT,
+		TYPE_FUNCTION => TYPE_HAXE_CONSTRAINTS_FUNCTION,
 		TYPE_INT => TYPE_INT,
 		TAG_OBJECT => TYPE_ANY,
 		TYPE_STRING => TYPE_STRING,
@@ -152,6 +155,7 @@ class MXHXComponent {
 		TYPE_CLASS,
 		TYPE_EREG,
 		TYPE_FLOAT,
+		TYPE_HAXE_FUNCTION,
 		TYPE_INT,
 		TYPE_STRING,
 		TYPE_UINT,
@@ -174,7 +178,6 @@ class MXHXComponent {
 		TAG_BINDING,
 		TAG_DEFINITION,
 		TAG_DESIGN_LAYER,
-		TAG_FUNCTION,
 		TAG_LIBRARY,
 		TAG_METADATA,
 		TAG_MODEL,
@@ -2144,7 +2147,15 @@ class MXHXComponent {
 		if (typeSymbol.qname != TYPE_STRING && value.length == 0) {
 			reportError('Value of type \'${typeSymbol.qname}\' cannot be empty', location);
 		}
-		if (typeSymbol.pack.length == 0) {
+		if (typeSymbol.pack.length == 1 && typeSymbol.pack[0] == "haxe") {
+			switch (typeSymbol.name) {
+				case TYPE_FUNCTION:
+					value = StringTools.trim(value);
+					var typeParts = value.split(".");
+					return macro $p{typeParts};
+				default:
+			}
+		} else if (typeSymbol.pack.length == 0) {
 			switch (typeSymbol.name) {
 				case TYPE_BOOL:
 					value = StringTools.trim(value);

@@ -1,5 +1,6 @@
 package fixtures;
 
+import haxe.Constraints.Function;
 import fixtures.ModuleWithClassThatHasDifferentName.ThisClassHasADifferentNameThanItsModule;
 
 @:event("change")
@@ -18,6 +19,7 @@ class TestPropertiesClass {
 	public var strictlyTyped:TestPropertiesClass;
 	public var array:Array<String>;
 	public var type:Class<Dynamic>;
+	public var func:Function;
 	public var complexEnum:TestComplexEnum;
 	public var canBeNull:Null<Float>;
 	public var date:Date;
@@ -29,4 +31,7 @@ class TestPropertiesClass {
 	// compilation will fail if Context.getType() is used with this one
 	// needs a typedef for a class with @:generic, and not the class alone
 	public var genericMeta:TestTypedefWithGenericMeta<String>;
+
+	// for testing properties typed as functions
+	public function testMethod():Void {}
 }
