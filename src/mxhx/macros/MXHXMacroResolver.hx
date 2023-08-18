@@ -191,14 +191,16 @@ class MXHXMacroResolver implements IMXHXResolver {
 				var qname = mappings.get(localName);
 				var qnameMacroType = resolveMacroTypeForQname(qname);
 				var discoveredParams:Array<Type> = null;
-				switch (qnameMacroType) {
-					case TInst(t, params):
-						discoveredParams = params;
-					case TAbstract(t, params):
-						discoveredParams = params;
-					case TEnum(t, params):
-						discoveredParams = params;
-					default:
+				if (qnameMacroType != null) {
+					switch (qnameMacroType) {
+						case TInst(t, params):
+							discoveredParams = params;
+						case TAbstract(t, params):
+							discoveredParams = params;
+						case TEnum(t, params):
+							discoveredParams = params;
+						default:
+					}
 				}
 				if (discoveredParams != null && discoveredParams.length > 0) {
 					qname += "<";
