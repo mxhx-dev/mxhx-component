@@ -488,6 +488,8 @@ class MXHXMacroResolver implements IMXHXResolver {
 					return macroBaseTypeToQname(t.get(), params);
 				case TDynamic(t):
 					return "Dynamic";
+				case TFun(args, ret):
+					return "haxe.Constraints.Function";
 				case TMono(t):
 					current = t.get();
 				case TType(t, params):

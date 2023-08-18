@@ -20,6 +20,7 @@ class TestPropertiesClass {
 	public var array:Array<String>;
 	public var type:Class<Dynamic>;
 	public var func:Function;
+	public var funcTyped:() -> Void;
 	public var complexEnum:TestComplexEnum;
 	public var canBeNull:Null<Float>;
 	public var date:Date;

@@ -1886,4 +1886,29 @@ class MXHXComponentPropertyTest extends Test {
 		Assert.notNull(result);
 		Assert.isNull(result.func);
 	}
+
+	public function testFunctionTypedAttribute():Void {
+		var result = MXHXComponent.withMarkup('
+			<tests:TestPropertiesClass
+				xmlns:mx="https://ns.mxhx.dev/2024/basic"
+				xmlns:tests="https://ns.mxhx.dev/2024/tests"
+				funcTyped="testMethod"/>
+		');
+		Assert.notNull(result);
+		Assert.isTrue(Reflect.isFunction(result.funcTyped));
+		Assert.isTrue(Reflect.compareMethods(result.testMethod, result.funcTyped));
+	}
+
+	public function testFunctionTypedChildElement():Void {
+		var result = MXHXComponent.withMarkup('
+			<tests:TestPropertiesClass
+				xmlns:mx="https://ns.mxhx.dev/2024/basic"
+				xmlns:tests="https://ns.mxhx.dev/2024/tests">
+				<tests:funcTyped>testMethod</tests:funcTyped>
+			</tests:TestPropertiesClass>
+		');
+		Assert.notNull(result);
+		Assert.isTrue(Reflect.isFunction(result.funcTyped));
+		Assert.isTrue(Reflect.compareMethods(result.testMethod, result.funcTyped));
+	}
 }
