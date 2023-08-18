@@ -155,7 +155,7 @@ class MXHXComponent {
 		TYPE_CLASS,
 		TYPE_EREG,
 		TYPE_FLOAT,
-		TYPE_HAXE_FUNCTION,
+		TYPE_FUNCTION,
 		TYPE_INT,
 		TYPE_STRING,
 		TYPE_UINT,
@@ -2029,7 +2029,13 @@ class MXHXComponent {
 	}
 
 	private static function isLanguageTypeAssignableFromText(t:IMXHXTypeSymbol):Bool {
-		return t != null && LANGUAGE_TYPES_ASSIGNABLE_BY_TEXT.indexOf(t.qname) != -1;
+		if (t == null) {
+			return false;
+		}
+		if (t.pack.length == 1 && t.pack[0] == "haxe" && t.name == TYPE_FUNCTION) {
+			return true;
+		}
+		return t.pack.length == 0 && LANGUAGE_TYPES_ASSIGNABLE_BY_TEXT.indexOf(t.qname) != -1;
 	}
 
 	private static function canIgnoreTextData(textData:IMXHXTextData):Bool {
@@ -2085,27 +2091,29 @@ class MXHXComponent {
 	}
 
 	private static function createDefaultValueExprForTypeSymbol(typeSymbol:IMXHXTypeSymbol, location:IMXHXSourceLocation):Expr {
-		switch (typeSymbol.qname) {
-			case TYPE_BOOL:
-				return macro false;
-			case TYPE_EREG:
-				return macro ~//;
-			case TYPE_FLOAT:
-				return macro Math.NaN;
-			case TYPE_INT:
-				return macro 0;
-			case TYPE_STRING:
-				if ((location is IMXHXTagData)) {
-					var parentTag = cast(location, IMXHXTagData).parentTag;
-					if (isLanguageTag(TAG_DECLARATIONS, parentTag)) {
-						return macro null;
+		if (typeSymbol.pack.length == 0) {
+			switch (typeSymbol.name) {
+				case TYPE_BOOL:
+					return macro false;
+				case TYPE_EREG:
+					return macro ~//;
+				case TYPE_FLOAT:
+					return macro Math.NaN;
+				case TYPE_INT:
+					return macro 0;
+				case TYPE_STRING:
+					if ((location is IMXHXTagData)) {
+						var parentTag = cast(location, IMXHXTagData).parentTag;
+						if (isLanguageTag(TAG_DECLARATIONS, parentTag)) {
+							return macro null;
+						}
 					}
-				}
-				return macro "";
-			case TYPE_UINT:
-				return macro 0;
-			default:
-				return macro null;
+					return macro "";
+				case TYPE_UINT:
+					return macro 0;
+				default:
+					return macro null;
+			}
 		}
 		return macro null;
 	}

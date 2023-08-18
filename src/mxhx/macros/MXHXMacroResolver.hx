@@ -108,10 +108,6 @@ class MXHXMacroResolver implements IMXHXResolver {
 		if (qname == null) {
 			return null;
 		}
-		var resolved = qnameLookup.get(qname);
-		if (resolved != null) {
-			return resolved;
-		}
 		var qnameMacroType = resolveMacroTypeForQname(qname);
 		if (qnameMacroType == null) {
 			return null;
@@ -123,6 +119,38 @@ class MXHXMacroResolver implements IMXHXResolver {
 			if (paramsString.length > 0) {
 				qnameParams = paramsString.split(",").map(paramTypeName -> resolveQname(paramTypeName));
 			}
+		} else {
+			var discoveredParams:Array<Type> = null;
+			if (qnameMacroType != null) {
+				switch (qnameMacroType) {
+					case TInst(t, params):
+						discoveredParams = params;
+					case TAbstract(t, params):
+						discoveredParams = params;
+					case TEnum(t, params):
+						discoveredParams = params;
+					default:
+				}
+			}
+			if (discoveredParams != null && discoveredParams.length > 0) {
+				qname += "<";
+				for (i in 0...discoveredParams.length) {
+					var param = discoveredParams[0];
+					if (i > 0) {
+						qname += ",";
+					}
+					var paramQname = macroTypeToQname(param);
+					if (paramQname == null) {
+						paramQname = "%";
+					}
+					qname += paramQname;
+				}
+				qname += ">";
+			}
+		}
+		var resolved = qnameLookup.get(qname);
+		if (resolved != null) {
+			return resolved;
 		}
 		switch (qnameMacroType) {
 			case TInst(t, params):
@@ -209,7 +237,11 @@ class MXHXMacroResolver implements IMXHXResolver {
 						if (i > 0) {
 							qname += ",";
 						}
-						qname += macroTypeToQname(param);
+						var paramQname = macroTypeToQname(param);
+						if (paramQname == null) {
+							paramQname = "%";
+						}
+						qname += paramQname;
 					}
 					qname += ">";
 				}
@@ -481,11 +513,19 @@ class MXHXMacroResolver implements IMXHXResolver {
 		while (current != null) {
 			switch (current) {
 				case TInst(t, params):
-					return macroBaseTypeToQname(t.get(), params);
+					var classType = t.get();
+					switch (classType.kind) {
+						case KTypeParameter(constraints):
+							return null;
+						default:
+					}
+					return macroBaseTypeToQname(classType, params);
 				case TEnum(t, params):
-					return macroBaseTypeToQname(t.get(), params);
+					var enumType = t.get();
+					return macroBaseTypeToQname(enumType, params);
 				case TAbstract(t, params):
-					return macroBaseTypeToQname(t.get(), params);
+					var abstractType = t.get();
+					return macroBaseTypeToQname(abstractType, params);
 				case TDynamic(t):
 					return "Dynamic";
 				case TFun(args, ret):
@@ -521,7 +561,11 @@ class MXHXMacroResolver implements IMXHXResolver {
 				if (i > 0) {
 					qname += ",";
 				}
-				qname += macroTypeToQname(param);
+				var paramQname = macroTypeToQname(param);
+				if (paramQname == null) {
+					paramQname = "%";
+				}
+				qname += paramQname;
 			}
 			qname += ">";
 		}
