@@ -1662,7 +1662,7 @@ class MXHXComponent {
 		}
 		var resolvedField = mxhxResolver.resolveTagField(tagData, defaultProperty);
 		if (resolvedField == null) {
-			Context.fatalError('Default property \'${defaultProperty}\' not found for tag \'<${tagData.name}>\'', sourceLocationToContextPosition(tagData));
+			reportError('Default property \'${defaultProperty}\' not found for tag \'<${tagData.name}>\'', tagData);
 			return;
 		}
 
