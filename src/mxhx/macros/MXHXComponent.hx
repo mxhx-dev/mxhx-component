@@ -213,7 +213,9 @@ class MXHXComponent {
 		}
 		var mxhxText = loadMXHXFile(filePath);
 		posInfos = {file: filePath, min: 0, max: mxhxText.length};
-		createResolver();
+		if (mxhxResolver == null) {
+			createResolver();
+		}
 		var mxhxParser = new MXHXParser(mxhxText, posInfos.file);
 		var mxhxData = mxhxParser.parse();
 		if (mxhxData.problems.length > 0) {
@@ -285,9 +287,10 @@ class MXHXComponent {
 				componentCounter++;
 				typePath = {name: name, pack: PACKAGE_RESERVED};
 			}
-			createResolver();
+			if (mxhxResolver == null) {
+				createResolver();
+			}
 			typeDef = createTypeDefinitionFromString(mxhxText, typePath);
-			mxhxResolver = null;
 			FILE_PATH_TO_TYPE_DEFINITION.set(filePath, typeDef);
 		}
 		if (typeDef == null) {
@@ -319,9 +322,10 @@ class MXHXComponent {
 			componentCounter++;
 			typePath = {name: name, pack: PACKAGE_RESERVED};
 		}
-		createResolver();
+		if (mxhxResolver == null) {
+			createResolver();
+		}
 		var typeDef = createTypeDefinitionFromString(mxhxText, typePath);
-		mxhxResolver = null;
 		if (typeDef == null) {
 			return macro null;
 		}
