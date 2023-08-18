@@ -2143,6 +2143,9 @@ class MXHXComponent {
 				}
 			}
 		}
+		if (typeSymbol == null) {
+			Context.fatalError('Fatal: Type symbol for value \'${value}\' not found', sourceLocationToContextPosition(location));
+		}
 		// when parsing text, string may be empty, but not other types
 		if (typeSymbol.qname != TYPE_STRING && value.length == 0) {
 			reportError('Value of type \'${typeSymbol.qname}\' cannot be empty', location);
