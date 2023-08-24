@@ -929,6 +929,10 @@ class MXHXComponent {
 			if ((current is IMXHXTagData)) {
 				var tagData:IMXHXTagData = cast current;
 				if (tagData.isOpenTag()) {
+					if (parentStack.length == 1 && xmlDoc.elements().hasNext()) {
+						reportError("Only one root tag is allowed", tagData);
+						break;
+					}
 					var elementChild = Xml.createElement(tagData.name);
 					for (attrData in tagData.attributeData) {
 						elementChild.set(attrData.name, attrData.rawValue);
