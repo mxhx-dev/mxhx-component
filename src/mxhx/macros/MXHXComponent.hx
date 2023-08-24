@@ -680,7 +680,7 @@ class MXHXComponent {
 			return;
 		}
 		if (attributeAndChildNames.exists(attrData.name)) {
-			errorDuplicateField(attrData.name, attrData.parentTag, attrData);
+			errorDuplicateField(attrData.name, attrData.parentTag, getAttributeNameSourceLocation(attrData));
 			return;
 		}
 		attributeAndChildNames.set(attrData.name, true);
@@ -768,37 +768,37 @@ class MXHXComponent {
 				case FIELD_FULL_YEAR:
 					hasCustom = true;
 					if (fullYear != null) {
-						errorDuplicateField(FIELD_FULL_YEAR, tagData, attrData);
+						errorDuplicateField(FIELD_FULL_YEAR, tagData, getAttributeNameSourceLocation(attrData));
 					}
 					fullYear = createValueExprForTypeSymbol(intType, attrData.rawValue, false, attrData);
 				case FIELD_MONTH:
 					hasCustom = true;
 					if (month != null) {
-						errorDuplicateField(FIELD_MONTH, tagData, attrData);
+						errorDuplicateField(FIELD_MONTH, tagData, getAttributeNameSourceLocation(attrData));
 					}
 					month = createValueExprForTypeSymbol(intType, attrData.rawValue, false, attrData);
 				case FIELD_DATE:
 					hasCustom = true;
 					if (date != null) {
-						errorDuplicateField(FIELD_DATE, tagData, attrData);
+						errorDuplicateField(FIELD_DATE, tagData, getAttributeNameSourceLocation(attrData));
 					}
 					date = createValueExprForTypeSymbol(intType, attrData.rawValue, false, attrData);
 				case FIELD_HOURS:
 					hasCustom = true;
 					if (hours != null) {
-						errorDuplicateField(FIELD_HOURS, tagData, attrData);
+						errorDuplicateField(FIELD_HOURS, tagData, getAttributeNameSourceLocation(attrData));
 					}
 					hours = createValueExprForTypeSymbol(intType, attrData.rawValue, false, attrData);
 				case FIELD_MINUTES:
 					hasCustom = true;
 					if (minutes != null) {
-						errorDuplicateField(FIELD_MINUTES, tagData, attrData);
+						errorDuplicateField(FIELD_MINUTES, tagData, getAttributeNameSourceLocation(attrData));
 					}
 					minutes = createValueExprForTypeSymbol(intType, attrData.rawValue, false, attrData);
 				case FIELD_SECONDS:
 					hasCustom = true;
 					if (seconds != null) {
-						errorDuplicateField(FIELD_SECONDS, tagData, attrData);
+						errorDuplicateField(FIELD_SECONDS, tagData, getAttributeNameSourceLocation(attrData));
 					}
 					seconds = createValueExprForTypeSymbol(intType, attrData.rawValue, false, attrData);
 			}
@@ -1134,7 +1134,8 @@ class MXHXComponent {
 
 				var attrData = tagData.getAttributeData(ATTRIBUTE_TYPE);
 				if (paramType == null && attrData != null) {
-					reportError('The type parameter \'${attrData.rawValue}\' for tag \'<${tagData.name}>\' cannot be resolved', attrData);
+					reportError('The type parameter \'${attrData.rawValue}\' for tag \'<${tagData.name}>\' cannot be resolved',
+						getAttributeValueSourceLocation(attrData));
 				}
 
 				if (paramType == null && assignedToType != null) {
@@ -2016,7 +2017,8 @@ class MXHXComponent {
 
 				var attrData = tagData.getAttributeData(ATTRIBUTE_TYPE);
 				if (paramType == null && attrData != null) {
-					reportError('The type parameter \'${attrData.rawValue}\' for tag \'<${tagData.name}>\' cannot be resolved', attrData);
+					reportError('The type parameter \'${attrData.rawValue}\' for tag \'<${tagData.name}>\' cannot be resolved',
+						getAttributeValueSourceLocation(attrData));
 				}
 
 				if (paramType == null) {
@@ -2118,7 +2120,7 @@ class MXHXComponent {
 			if (allowId && attrData.name == ATTRIBUTE_ID) {
 				continue;
 			}
-			reportError('Unknown field \'${attrData.name}\'', attrData);
+			reportError('Unknown field \'${attrData.name}\'', getAttributeNameSourceLocation(attrData));
 		}
 	}
 
@@ -2514,7 +2516,7 @@ class MXHXComponent {
 	}
 
 	private static function errorAttributeUnexpected(attrData:IMXHXTagAttributeData):Void {
-		reportError('Attribute \'${attrData.name}\' is unexpected', attrData);
+		reportError('Attribute \'${attrData.name}\' is unexpected', getAttributeNameSourceLocation(attrData));
 	}
 
 	private static function errorDuplicateField(fieldName:String, tagData:IMXHXTagData, sourceLocation:IMXHXSourceLocation):Void {
@@ -2558,7 +2560,22 @@ class MXHXComponent {
 		return Context.makePosition({file: location.source, min: location.start, max: location.end});
 	}
 
+	private static function getAttributeNameSourceLocation(attrData:IMXHXTagAttributeData):IMXHXSourceLocation {
+		if (attrData.valueStart == -1) {
+			return attrData;
+		}
+		var attrNameStart = attrData.start;
+		var attrNameEnd = attrData.valueStart - 2;
+		if (attrNameEnd < attrNameStart) {
+			attrNameEnd = attrNameStart;
+		}
+		return new CustomMXHXSourceLocation(attrNameStart, attrNameEnd, attrData.source);
+	}
+
 	private static function getAttributeValueSourceLocation(attrData:IMXHXTagAttributeData):IMXHXSourceLocation {
+		if (attrData.valueStart == -1 || attrData.valueEnd == -1) {
+			return attrData;
+		}
 		return new CustomMXHXSourceLocation(attrData.valueStart, attrData.valueEnd, attrData.source);
 	}
 
