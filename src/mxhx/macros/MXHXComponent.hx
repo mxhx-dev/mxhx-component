@@ -1427,6 +1427,11 @@ class MXHXComponent {
 				initExpr = macro $destination = $initExpr;
 			}
 		}
+		for (attribute in tagData.attributeData) {
+			if (attribute.name != ATTRIBUTE_ID) {
+				errorAttributeUnexpected(attribute);
+			}
+		}
 		return initExpr;
 	}
 
