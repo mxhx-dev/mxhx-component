@@ -541,7 +541,12 @@ class MXHXMacroResolver implements IMXHXResolver {
 				case TType(t, params):
 					current = t.get().type;
 				case TLazy(f):
-					current = f();
+					try {
+						current = f();
+					} catch (e:Dynamic) {
+						// avoid Accessing a type while it's being typed exception
+						return null;
+					}
 				default:
 					return null;
 			}
