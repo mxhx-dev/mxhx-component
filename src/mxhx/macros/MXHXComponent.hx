@@ -998,7 +998,12 @@ class MXHXComponent {
 			return macro null;
 		}
 
-		var returnType:ComplexType = TPath(typeSymbolToTypePath(assignedToType));
+		var returnType:ComplexType = null;
+		if (assignedToType != null) {
+			returnType = TPath(typeSymbolToTypePath(assignedToType));
+		} else {
+			returnType = TPath({name: TYPE_CLASS, pack: [], params: [TPType(TPath(typePath))]});
+		}
 
 		Context.defineType(typeDef);
 
@@ -1616,6 +1621,11 @@ class MXHXComponent {
 			return;
 		}
 		if (!checkRootLanguageTag(tagData)) {
+			return;
+		}
+		if (isComponentTag(tagData)) {
+			var initExpr = handleComponentTag(tagData, null, outerDocumentTypePath, generatedFields);
+			initExprs.push(initExpr);
 			return;
 		}
 		var resolvedTag = mxhxResolver.resolveTag(tagData);

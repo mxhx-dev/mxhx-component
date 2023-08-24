@@ -57,4 +57,22 @@ class MXHXComponentInlineComponentTest extends Test {
 		Assert.isOfType(result.customID, Class);
 		Assert.equals(result.classProperty, result.customID);
 	}
+
+	public function testInlineComponentInDeclarationsWithID():Void {
+		var result = MXHXComponent.withMarkup('
+			<tests:TestInlineComponentClass xmlns:mx="https://ns.mxhx.dev/2024/basic" xmlns:tests="https://ns.mxhx.dev/2024/tests">
+				<mx:Declarations>
+					<mx:Component id="customID">
+						<tests:TestClass1/>
+					</mx:Component>
+				</mx:Declarations>
+			</tests:TestInlineComponentClass>
+		');
+		Assert.notNull(result);
+		Assert.notNull(result.customID);
+		Assert.isOfType(result.customID, Class);
+		Assert.equals(TestClass1, Type.getSuperClass(result.customID));
+		var instance:Dynamic = Type.createInstance(result.customID, []);
+		Assert.equals(result, instance.outerDocument);
+	}
 }
