@@ -80,6 +80,7 @@ class MXHXComponent {
 		// @:formatter:on
 	];
 	private static final PACKAGE_RESERVED = ["mxhx", "_reserved"];
+	private static final ATTRIBUTE_CLASS_NAME = "className";
 	private static final ATTRIBUTE_INCLUDE_IN = "includeIn";
 	private static final ATTRIBUTE_ID = "id";
 	private static final ATTRIBUTE_EXCLUDE_FROM = "excludeFrom";
@@ -984,6 +985,10 @@ class MXHXComponent {
 
 	private static function handleComponentTag(tagData:IMXHXTagData, assignedToType:IMXHXTypeSymbol, outerDocumentTypePath:TypePath,
 			generatedFields:Array<Field>):Expr {
+		var classNameAttr = tagData.getAttributeData(ATTRIBUTE_CLASS_NAME);
+		if (classNameAttr != null) {
+			reportError('The ${ATTRIBUTE_CLASS_NAME} attributes is not supported', classNameAttr);
+		}
 		var componentName = 'MXHXComponent_${componentCounter}';
 		var functionName = 'createMXHXInlineComponent_${componentCounter}';
 		componentCounter++;
@@ -1027,6 +1032,11 @@ class MXHXComponent {
 				}
 			]
 		});
+		for (attribute in tagData.attributeData) {
+			if (attribute.name != ATTRIBUTE_ID && attribute.name != ATTRIBUTE_CLASS_NAME) {
+				errorAttributeUnexpected(attribute);
+			}
+		}
 		var id:String = null;
 		var idAttr = tagData.getAttributeData(ATTRIBUTE_ID);
 		if (idAttr != null) {
