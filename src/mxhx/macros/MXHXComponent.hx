@@ -20,7 +20,6 @@ import haxe.macro.Context;
 import haxe.macro.Expr;
 import haxe.macro.PositionTools;
 import haxe.macro.Type.ClassType;
-import haxe.macro.TypeTools;
 import mxhx.parser.MXHXParser;
 import mxhx.resolver.IMXHXAbstractSymbol;
 import mxhx.resolver.IMXHXClassSymbol;
@@ -81,9 +80,18 @@ class MXHXComponent {
 		// @:formatter:on
 	];
 	private static final PACKAGE_RESERVED = ["mxhx", "_reserved"];
+	private static final ATTRIBUTE_INCLUDE_IN = "includeIn";
 	private static final ATTRIBUTE_ID = "id";
+	private static final ATTRIBUTE_EXCLUDE_FROM = "excludeFrom";
 	private static final ATTRIBUTE_TYPE = "type";
 	private static final ATTRIBUTE_XMLNS = "xmlns";
+	private static final ATTRIBUTES_THAT_CAN_BE_UNRESOLVED = [
+		// @:formatter:off
+		ATTRIBUTE_ID,
+		ATTRIBUTE_EXCLUDE_FROM,
+		ATTRIBUTE_INCLUDE_IN,
+		// @:formatter:on
+	];
 	private static final KEYWORD_THIS = "this";
 	private static final KEYWORD_NEW = "new";
 	private static final META_DEFAULT_XML_PROPERTY = "defaultXmlProperty";
@@ -684,14 +692,18 @@ class MXHXComponent {
 			var isAnyOrDynamic = parentSymbol != null
 				&& parentSymbol.pack.length == 0
 				&& (parentSymbol.name == TYPE_ANY || parentSymbol.name == TYPE_DYNAMIC);
-			if (isAnyOrDynamic && attrData.name != ATTRIBUTE_ID) {
+			var isLanguageAttribute = ATTRIBUTES_THAT_CAN_BE_UNRESOLVED.indexOf(attrData.name) != -1;
+			if (isAnyOrDynamic && !isLanguageAttribute) {
 				var valueExpr = createValueExprForDynamic(attrData.rawValue);
 				var setExpr = macro Reflect.setField($i{targetIdentifier}, $v{attrData.shortName}, ${valueExpr});
 				initExprs.push(setExpr);
 				return;
 			}
-			if (attrData.name == ATTRIBUTE_ID) {
-				// id is a special attribute that doesn't need to resolve
+			if (isLanguageAttribute) {
+				// certain special attributes don't need to resolve
+				if (attrData.name == ATTRIBUTE_INCLUDE_IN || attrData.name == ATTRIBUTE_EXCLUDE_FROM) {
+					errorStatesNotSupported(attrData);
+				}
 				return;
 			}
 			if (attrData.name == ATTRIBUTE_TYPE) {
