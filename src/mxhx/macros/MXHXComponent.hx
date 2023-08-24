@@ -81,9 +81,12 @@ class MXHXComponent {
 	];
 	private static final PACKAGE_RESERVED = ["mxhx", "_reserved"];
 	private static final ATTRIBUTE_CLASS_NAME = "className";
+	private static final ATTRIBUTE_DESTINATION = "destination";
 	private static final ATTRIBUTE_INCLUDE_IN = "includeIn";
 	private static final ATTRIBUTE_ID = "id";
 	private static final ATTRIBUTE_EXCLUDE_FROM = "excludeFrom";
+	private static final ATTRIBUTE_SOURCE = "source";
+	private static final ATTRIBUTE_TWO_WAY = "twoWay";
 	private static final ATTRIBUTE_TYPE = "type";
 	private static final ATTRIBUTE_XMLNS = "xmlns";
 	private static final ATTRIBUTES_THAT_CAN_BE_UNRESOLVED = [
@@ -186,7 +189,6 @@ class MXHXComponent {
 	];
 	private static final UNSUPPORTED_LANGUAGE_TAGS:Array<String> = [
 		// @:formatter:off
-		TAG_BINDING,
 		TAG_DEFINITION,
 		TAG_DESIGN_LAYER,
 		TAG_LIBRARY,
@@ -987,7 +989,7 @@ class MXHXComponent {
 			generatedFields:Array<Field>):Expr {
 		var classNameAttr = tagData.getAttributeData(ATTRIBUTE_CLASS_NAME);
 		if (classNameAttr != null) {
-			reportError('The ${ATTRIBUTE_CLASS_NAME} attributes is not supported', classNameAttr);
+			errorAttributeNotSupported(classNameAttr);
 		}
 		var componentName = 'MXHXComponent_${componentCounter}';
 		var functionName = 'createMXHXInlineComponent_${componentCounter}';
@@ -1336,7 +1338,7 @@ class MXHXComponent {
 					} else if (arg.optional) {
 						initArgs.push(macro null);
 					} else {
-						reportError('Value \'${arg.name}\' is required by tag \'<${childTag.name}>\'', childTag);
+						errorAttributeRequired(arg.name, childTag);
 					}
 				}
 				for (tagName => grandChildTag in tagLookup) {
@@ -1783,6 +1785,10 @@ class MXHXComponent {
 					handleChildUnitsOfDeclarationsTag(tagData, outerDocumentTypePath, generatedFields, initExprs);
 					return;
 				}
+				if (isLanguageTag(TAG_BINDING, tagData)) {
+					handleBindingTag(tagData, initExprs);
+					return;
+				}
 			}
 			var resolvedTag = mxhxResolver.resolveTag(tagData);
 			if (resolvedTag == null) {
@@ -1903,6 +1909,51 @@ class MXHXComponent {
 		} else {
 			errorUnexpected(unitData);
 			return;
+		}
+	}
+
+	private static function handleBindingTag(tagData:IMXHXTagData, initExprs:Array<Expr>):Void {
+		if (languageUri == LANGUAGE_URI_BASIC_2024) {
+			errorBindingNotSupported(tagData);
+			return;
+		}
+		var destAttrData = tagData.getAttributeData(ATTRIBUTE_DESTINATION);
+		if (destAttrData == null) {
+			errorAttributeRequired(ATTRIBUTE_DESTINATION, tagData);
+		}
+		var sourceAttrData = tagData.getAttributeData(ATTRIBUTE_SOURCE);
+		if (sourceAttrData == null) {
+			errorAttributeRequired(ATTRIBUTE_SOURCE, tagData);
+		}
+		var twoWayAttrData = tagData.getAttributeData(ATTRIBUTE_TWO_WAY);
+		if (twoWayAttrData != null) {
+			errorAttributeNotSupported(twoWayAttrData);
+		}
+		for (attribute in tagData.attributeData) {
+			if (attribute.name != ATTRIBUTE_DESTINATION && attribute.name != ATTRIBUTE_SOURCE && attribute.name != ATTRIBUTE_TWO_WAY) {
+				errorAttributeUnexpected(attribute);
+			}
+		}
+		var childUnit = tagData.getFirstChildUnit();
+		while (childUnit != null) {
+			if ((childUnit is IMXHXTextData)) {
+				var textData:IMXHXTextData = cast childUnit;
+				if (canIgnoreTextData(textData)) {
+					childUnit = childUnit.getNextSiblingUnit();
+					continue;
+				}
+			}
+			errorUnexpected(childUnit);
+			break;
+		}
+		var sourceExpr = Context.parse(sourceAttrData.rawValue, sourceLocationToContextPosition(sourceAttrData));
+		var destExpr = Context.parse(destAttrData.rawValue, sourceLocationToContextPosition(destAttrData));
+		if (dataBindingCallback != null) {
+			var bindingExpr = dataBindingCallback(sourceExpr, destExpr, macro this);
+			initExprs.push(bindingExpr);
+		} else {
+			var setExpr = macro $destExpr = $sourceExpr;
+			initExprs.push(setExpr);
 		}
 	}
 
@@ -2489,6 +2540,14 @@ class MXHXComponent {
 
 	private static function errorTagNotSupported(tagData:IMXHXTagData):Void {
 		reportError('Tag \'<${tagData.name}>\' is not supported by the \'${languageUri}\' namespace', tagData);
+	}
+
+	private static function errorAttributeNotSupported(attrData:IMXHXTagAttributeData):Void {
+		reportError('Attribute \'${attrData.name}\' is not supported by the \'${languageUri}\' namespace', getAttributeNameSourceLocation(attrData));
+	}
+
+	private static function errorAttributeRequired(attrName:String, tagData:IMXHXTagData):Void {
+		reportError('The <${tagData.name}> tag requires a \'${ATTRIBUTE_DESTINATION}\' attribute', tagData);
 	}
 
 	private static function errorStatesNotSupported(sourceLocation:IMXHXSourceLocation):Void {
