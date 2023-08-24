@@ -132,6 +132,8 @@ class MXHXComponent {
 	private static final FIELD_HOURS = "hours";
 	private static final FIELD_MINUTES = "minutes";
 	private static final FIELD_SECONDS = "seconds";
+	private static final FIELD_OUTER_DOCUMENT = "outerDocument";
+	private static final FIELD_DEFAULT_OUTER_DOCUMENT = "defaultOuterDocument";
 	private static final LANGUAGE_MAPPINGS_2024 = [
 		// @:formatter:off
 		TYPE_ARRAY => TYPE_ARRAY,
@@ -291,7 +293,7 @@ class MXHXComponent {
 			if (mxhxResolver == null) {
 				createResolver();
 			}
-			typeDef = createTypeDefinitionFromString(mxhxText, typePath);
+			typeDef = createTypeDefinitionFromString(mxhxText, typePath, null);
 			if (typeDef == null) {
 				return macro null;
 			}
@@ -326,7 +328,7 @@ class MXHXComponent {
 		if (mxhxResolver == null) {
 			createResolver();
 		}
-		var typeDef = createTypeDefinitionFromString(mxhxText, typePath);
+		var typeDef = createTypeDefinitionFromString(mxhxText, typePath, null);
 		if (typeDef == null) {
 			return macro null;
 		}
@@ -389,7 +391,7 @@ class MXHXComponent {
 		}
 	}
 
-	private static function createTypeDefinitionFromString(mxhxText:String, typePath:TypePath):TypeDefinition {
+	private static function createTypeDefinitionFromString(mxhxText:String, typePath:TypePath, outerDocumentTypePath:TypePath):TypeDefinition {
 		var mxhxParser = new MXHXParser(mxhxText, posInfos.file);
 		var mxhxData = mxhxParser.parse();
 		if (mxhxData.problems.length > 0) {
@@ -398,14 +400,14 @@ class MXHXComponent {
 			}
 			return null;
 		}
-		var typeDef:TypeDefinition = createTypeDefinitionFromTagData(mxhxData.rootTag, typePath);
+		var typeDef:TypeDefinition = createTypeDefinitionFromTagData(mxhxData.rootTag, typePath, outerDocumentTypePath);
 		if (typeDef == null) {
 			return null;
 		}
 		return typeDef;
 	}
 
-	private static function createTypeDefinitionFromTagData(rootTag:IMXHXTagData, typePath:TypePath):TypeDefinition {
+	private static function createTypeDefinitionFromTagData(rootTag:IMXHXTagData, typePath:TypePath, outerDocumentTypePath:TypePath):TypeDefinition {
 		var buildFields:Array<Field> = [];
 		var resolvedTag = handleRootTag(rootTag, INIT_FUNCTION_NAME, typePath, buildFields);
 
@@ -452,6 +454,9 @@ class MXHXComponent {
 			if (resolvedClass == null || !fieldExists(buildField.name, resolvedClass)) {
 				typeDef.fields.push(buildField);
 			}
+		}
+		if (outerDocumentTypePath != null && !fieldExists(FIELD_OUTER_DOCUMENT, resolvedClass)) {
+			addOuterDocumentField(typeDef, outerDocumentTypePath);
 		}
 		var typePos = sourceLocationToContextPosition(rootTag);
 		typeDef.pack = typePath.pack;
@@ -923,49 +928,13 @@ class MXHXComponent {
 		var functionName = 'createMXHXInlineComponent_${componentCounter}';
 		componentCounter++;
 		var typePath = {name: componentName, pack: PACKAGE_RESERVED};
-		var typeDef = createTypeDefinitionFromTagData(tagData.getFirstChildTag(true), typePath);
+		var typeDef = createTypeDefinitionFromTagData(tagData.getFirstChildTag(true), typePath, outerDocumentTypePath);
 		if (typeDef == null) {
 			return macro null;
 		}
 
 		var returnType:ComplexType = TPath(typeSymbolToTypePath(assignedToType));
 
-		var typePos = sourceLocationToContextPosition(tagData);
-		typeDef.fields.push({
-			name: "outerDocument",
-			pos: typePos,
-			kind: FVar(TPath(outerDocumentTypePath)),
-			access: [APublic],
-			meta: [
-				{
-					name: META_NO_COMPLETION,
-					pos: typePos
-				}
-			]
-		});
-		var staticOuterDocumentFieldName = '${componentName}_defaultOuterDocument';
-		typeDef.fields.push({
-			name: staticOuterDocumentFieldName,
-			pos: typePos,
-			kind: FVar(TPath(outerDocumentTypePath)),
-			access: [APublic, AStatic],
-			meta: [
-				{
-					name: META_NO_COMPLETION,
-					pos: typePos
-				}
-			]
-		});
-		var existingInitFunction = Lambda.find(typeDef.fields, f -> f.name == INIT_FUNCTION_NAME);
-		if (existingInitFunction != null) {
-			switch (existingInitFunction.kind) {
-				case FFun(f):
-					var initExprs:Array<Expr> = [macro outerDocument = $i{staticOuterDocumentFieldName}, f.expr];
-					f.expr = macro $b{initExprs};
-					existingInitFunction.kind = FFun(f);
-				default:
-			}
-		}
 		Context.defineType(typeDef);
 
 		// TODO: allow customization of returned expression based on the type
@@ -974,13 +943,14 @@ class MXHXComponent {
 		var typeParts = typeDef.pack.copy();
 		typeParts.push(typeDef.name);
 		var assignmentParts = typeParts.copy();
-		assignmentParts.push(staticOuterDocumentFieldName);
+		assignmentParts.push('${typeDef.name}_${FIELD_DEFAULT_OUTER_DOCUMENT}');
 		var bodyExpr = macro {
 			$p{assignmentParts} = this;
 			var result:$returnType = $p{typeParts};
 			return result;
 		};
 
+		var typePos = sourceLocationToContextPosition(tagData);
 		generatedFields.push({
 			name: functionName,
 			pos: typePos,
@@ -2322,6 +2292,50 @@ class MXHXComponent {
 			currentChild = currentChild.getNextSiblingTag(true);
 		}
 		return resolvedChildType;
+	}
+
+	private static function addOuterDocumentField(typeDef:TypeDefinition, outerDocumentTypePath:TypePath):Void {
+		typeDef.fields.push({
+			name: FIELD_OUTER_DOCUMENT,
+			pos: typeDef.pos,
+			kind: FVar(TPath(outerDocumentTypePath)),
+			access: [APublic],
+			meta: [
+				{
+					name: META_NO_COMPLETION,
+					pos: typeDef.pos
+				}
+			]
+		});
+		var staticOuterDocumentFieldName = '${typeDef.name}_${FIELD_DEFAULT_OUTER_DOCUMENT}';
+		typeDef.fields.push({
+			name: staticOuterDocumentFieldName,
+			pos: typeDef.pos,
+			kind: FVar(TPath(outerDocumentTypePath)),
+			access: [APublic, AStatic],
+			meta: [
+				{
+					name: META_NO_COMPLETION,
+					pos: typeDef.pos
+				}
+			]
+		});
+		var existingInitFunction = Lambda.find(typeDef.fields, f -> f.name == INIT_FUNCTION_NAME);
+		if (existingInitFunction != null) {
+			switch (existingInitFunction.kind) {
+				case FFun(f):
+					var initExprs:Array<Expr> = [macro outerDocument = $i{staticOuterDocumentFieldName}, f.expr];
+					f.expr = macro $b{initExprs};
+					existingInitFunction.kind = FFun(f);
+				default:
+			}
+		} else {
+			#if (haxe_ver >= 4.3)
+			Context.reportError('Cannot find method ${INIT_FUNCTION_NAME} on class ${typeDef.name}', typeDef.pos);
+			#else
+			Context.error('Cannot find method ${INIT_FUNCTION_NAME} on class ${typeDef.name}', typeDef.pos);
+			#end
+		}
 	}
 
 	private static function needsOverride(funcName:String, theClass:IMXHXClassSymbol):Bool {
