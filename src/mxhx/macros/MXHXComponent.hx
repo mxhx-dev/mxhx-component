@@ -282,6 +282,7 @@ class MXHXComponent {
 		}
 		if (typeDef == null) {
 			var mxhxText = loadMXHXFile(filePath);
+			posInfos = {file: filePath, min: 0, max: mxhxText.length};
 			if (typePath == null) {
 				var name = 'MXHXComponent_${componentCounter}';
 				componentCounter++;
