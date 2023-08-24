@@ -702,6 +702,11 @@ class MXHXComponent {
 			if (isLanguageAttribute) {
 				// certain special attributes don't need to resolve
 				if (attrData.name == ATTRIBUTE_INCLUDE_IN || attrData.name == ATTRIBUTE_EXCLUDE_FROM) {
+					var parentOfInstanceTag = attrData.parentTag.parentTag;
+					if (parentOfInstanceTag != null && isLanguageTag(TAG_DECLARATIONS, parentOfInstanceTag)) {
+						reportError('The includeIn and excludeFrom attributes are not allowed on immediate children of the <${parentOfInstanceTag.name}> tag',
+							attrData);
+					}
 					errorStatesNotSupported(attrData);
 				}
 				return;
