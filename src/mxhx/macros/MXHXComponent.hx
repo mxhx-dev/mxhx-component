@@ -292,11 +292,11 @@ class MXHXComponent {
 				createResolver();
 			}
 			typeDef = createTypeDefinitionFromString(mxhxText, typePath);
+			if (typeDef == null) {
+				return macro null;
+			}
 			FILE_PATH_TO_TYPE_DEFINITION.set(filePath, typeDef);
 			Context.defineType(typeDef);
-		}
-		if (typeDef == null) {
-			return macro null;
 		}
 		return macro new $typePath();
 	}
