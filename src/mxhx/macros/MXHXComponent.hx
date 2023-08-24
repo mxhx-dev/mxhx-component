@@ -1027,6 +1027,15 @@ class MXHXComponent {
 				}
 			]
 		});
+		var id:String = null;
+		var idAttr = tagData.getAttributeData(ATTRIBUTE_ID);
+		if (idAttr != null) {
+			id = idAttr.rawValue;
+		}
+		if (id != null) {
+			addFieldForID(id, returnType, idAttr, generatedFields);
+			return macro this.$id = $i{functionName}();
+		}
 		return macro $i{functionName}();
 	}
 
