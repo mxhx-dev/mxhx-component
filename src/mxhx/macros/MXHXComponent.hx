@@ -193,7 +193,6 @@ class MXHXComponent {
 		TAG_DESIGN_LAYER,
 		TAG_LIBRARY,
 		TAG_METADATA,
-		TAG_MODEL,
 		TAG_PRIVATE,
 		TAG_REPARENT,
 		TAG_SCRIPT,
@@ -989,6 +988,139 @@ class MXHXComponent {
 		return valueExpr;
 	}
 
+	private static function handleModelTag(tagData:IMXHXTagData, generatedFields:Array<Field>):Expr {
+		var current = tagData.getFirstChildUnit();
+		var model:ModelObject;
+		var rootTag:IMXHXTagData = null;
+		var parentStack:Array<ModelObject> = [new ModelObject()];
+		var tagDataStack:Array<IMXHXTagData> = [];
+		while (current != null) {
+			if ((current is IMXHXTagData)) {
+				var tagData:IMXHXTagData = cast current;
+				if (tagData.isOpenTag()) {
+					if (rootTag == null) {
+						rootTag = tagData;
+					} else if (parentStack.length == 1) {
+						reportError("Only one root tag is allowed", tagData);
+						break;
+					}
+					var elementChild = new ModelObject();
+					// attributes are ignored on root tag, for some reason
+					if (tagData != rootTag) {
+						for (attrData in tagData.attributeData) {
+							var objectsForField = elementChild.fields.get(attrData.shortName);
+							if (objectsForField == null) {
+								objectsForField = [];
+								elementChild.fields.set(attrData.shortName, objectsForField);
+							}
+							objectsForField.push(new ModelObject(attrData.rawValue));
+						}
+					} else {
+						model = elementChild;
+					}
+					var currentParent = parentStack[parentStack.length - 1];
+					var parentObjectsForField = currentParent.fields.get(tagData.name);
+					if (parentObjectsForField == null) {
+						parentObjectsForField = [];
+						currentParent.fields.set(tagData.name, parentObjectsForField);
+					}
+					parentObjectsForField.push(elementChild);
+					currentParent.strongFields = true;
+
+					if (!tagData.isEmptyTag()) {
+						parentStack.push(elementChild);
+						tagDataStack.push(tagData);
+					}
+				}
+			} else if ((current is IMXHXTextData)) {
+				var textData:IMXHXTextData = cast current;
+				if (!canIgnoreTextData(textData)) {
+					var currentParent = parentStack[parentStack.length - 1];
+					currentParent.text.push(textData);
+				}
+			}
+			if (tagDataStack.length > 0 && tagDataStack[tagDataStack.length - 1] == current) {
+				// just added a tag to the stack, so read its children
+				var tagData:IMXHXTagData = cast current;
+				current = tagData.getFirstChildUnit();
+			} else {
+				current = current.getNextSiblingUnit();
+			}
+			// if the top-most tag on the stack has no more child units,
+			// return to its parent tag
+			while (current == null && tagDataStack.length > 0) {
+				var parentTag = tagDataStack.pop();
+				var popped = parentStack.pop();
+				current = parentTag.getNextSiblingUnit();
+			}
+		}
+
+		// var xmlString = xmlDoc.toString();
+		// var valueExpr = macro Xml.parse($v{xmlString});
+		var valueExpr = createModelObjectExpr(model, tagData);
+
+		var id:String = null;
+		var idAttr = tagData.getAttributeData(ATTRIBUTE_ID);
+		if (idAttr != null) {
+			id = idAttr.rawValue;
+		}
+		if (id != null) {
+			var instanceTypePath:TypePath = {name: TYPE_DYNAMIC, pack: []};
+			addFieldForID(id, TPath(instanceTypePath), idAttr, generatedFields);
+			return macro this.$id = $valueExpr;
+		}
+
+		return valueExpr;
+	}
+
+	private static function createModelObjectExpr(model:ModelObject, sourceLocation:IMXHXSourceLocation):Expr {
+		if (model.value != null) {
+			return macro $v{model.value};
+		}
+		var textType:MXHXTextType = null;
+		if (model.text.length > 0) {
+			var hasFields = model.fields.iterator().hasNext() && model.strongFields;
+			var hasMultipleTextTypes = model.text.length > 1;
+			for (textData in model.text) {
+				if (hasFields || hasMultipleTextTypes) {
+					Context.warning('Ignoring text \'${textData.content}\' because other XML content exists', sourceLocationToContextPosition(textData));
+					continue;
+				}
+				return macro $v{textData.content};
+			}
+		}
+		var subModelExprs:Array<Expr> = [];
+		for (fieldName => subModels in model.fields) {
+			if (subModels.length == 1) {
+				var subModelSrcExpr = createModelObjectExpr(subModels[0], sourceLocation);
+				var subModelExpr = macro Reflect.setField(model, $v{fieldName}, $subModelSrcExpr);
+				subModelExprs.push(subModelExpr);
+			} else {
+				var arrayExprs:Array<Expr> = [];
+				for (i in 0...subModels.length) {
+					var subModel = subModels[i];
+					var subModelSrcExpr = createModelObjectExpr(subModel, sourceLocation);
+					var arrayExpr = macro array[$v{i}] = $subModelSrcExpr;
+					arrayExprs.push(arrayExpr);
+				}
+				var subModelExpr = macro {
+					var array:Array<Any> = [];
+					$b{arrayExprs};
+					Reflect.setField(model, $v{fieldName}, array);
+				}
+				subModelExprs.push(subModelExpr);
+			}
+		}
+		if (subModelExprs.length == 0) {
+			return {expr: EObjectDecl([]), pos: sourceLocationToContextPosition(sourceLocation)};
+		}
+		return macro {
+			var model = {};
+			$b{subModelExprs};
+			model;
+		}
+	}
+
 	private static function handleComponentTag(tagData:IMXHXTagData, assignedToType:IMXHXTypeSymbol, outerDocumentTypePath:TypePath,
 			generatedFields:Array<Field>):Expr {
 		var classNameAttr = tagData.getAttributeData(ATTRIBUTE_CLASS_NAME);
@@ -1635,6 +1767,11 @@ class MXHXComponent {
 			initExprs.push(initExpr);
 			return;
 		}
+		if (isLanguageTag(TAG_MODEL, tagData)) {
+			var initExpr = handleModelTag(tagData, generatedFields);
+			initExprs.push(initExpr);
+			return;
+		}
 		var resolvedTag = mxhxResolver.resolveTag(tagData);
 		if (resolvedTag == null) {
 			errorTagUnexpected(tagData);
@@ -2114,6 +2251,9 @@ class MXHXComponent {
 			var tagData:IMXHXTagData = cast unitData;
 			if (isComponentTag(tagData)) {
 				return handleComponentTag(tagData, assignedToType, outerDocumentTypePath, generatedFields);
+			}
+			if (isLanguageTag(TAG_MODEL, tagData)) {
+				return handleModelTag(tagData, generatedFields);
 			}
 			return handleInstanceTag(tagData, assignedToType, outerDocumentTypePath, generatedFields);
 		} else if ((unitData is IMXHXTextData)) {
@@ -2673,5 +2813,16 @@ private class CustomMXHXSourceLocation implements IMXHXSourceLocation {
 		this.start = start;
 		this.end = end;
 		this.source = source;
+	}
+}
+
+private class ModelObject {
+	public var fields:Map<String, Array<ModelObject>> = [];
+	public var strongFields:Bool = false;
+	public var text:Array<IMXHXTextData> = [];
+	public var value:String;
+
+	public function new(?value:String) {
+		this.value = value;
 	}
 }
