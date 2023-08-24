@@ -281,24 +281,47 @@ class MXHXComponent {
 		if (FILE_PATH_TO_TYPE_DEFINITION.exists(filePath)) {
 			// for duplicate files, re-use the existing type definition
 			typeDef = FILE_PATH_TO_TYPE_DEFINITION.get(filePath);
+			if (typePath == null) {
+				typePath = {name: typeDef.name, pack: typeDef.pack};
+			}
 		}
+		if (typePath == null) {
+			var name = 'MXHXComponent_${componentCounter}';
+			componentCounter++;
+			typePath = {name: name, pack: PACKAGE_RESERVED};
+		}
+		var outerDocumentTypePath:TypePath = null;
 		if (typeDef == null) {
 			var mxhxText = loadMXHXFile(filePath);
 			posInfos = {file: filePath, min: 0, max: mxhxText.length};
-			if (typePath == null) {
-				var name = 'MXHXComponent_${componentCounter}';
-				componentCounter++;
-				typePath = {name: name, pack: PACKAGE_RESERVED};
-			}
 			if (mxhxResolver == null) {
 				createResolver();
 			}
-			typeDef = createTypeDefinitionFromString(mxhxText, typePath, null);
+			var localClass = Context.getLocalClass().get();
+			var localMethodName = Context.getLocalMethod();
+			var localMethod = Lambda.find(localClass.statics.get(), field -> field.name == localMethodName);
+			if (localMethod == null) {
+				outerDocumentTypePath = {name: localClass.name, pack: localClass.pack};
+			}
+			typeDef = createTypeDefinitionFromString(mxhxText, typePath, outerDocumentTypePath);
 			if (typeDef == null) {
 				return macro null;
 			}
 			FILE_PATH_TO_TYPE_DEFINITION.set(filePath, typeDef);
 			Context.defineType(typeDef);
+		}
+		if (outerDocumentTypePath != null) {
+			var staticOuterDocumentFieldName = '${typeDef.name}_${FIELD_DEFAULT_OUTER_DOCUMENT}';
+			var staticOuterDocumentField = Lambda.find(typeDef.fields, field -> field.name == staticOuterDocumentFieldName);
+			if (staticOuterDocumentField != null) {
+				var assignmentParts = typeDef.pack.copy();
+				assignmentParts.push(typeDef.name);
+				assignmentParts.push(staticOuterDocumentFieldName);
+				return macro {
+					$p{assignmentParts} = this;
+					new $typePath();
+				}
+			}
 		}
 		return macro new $typePath();
 	}
@@ -328,11 +351,31 @@ class MXHXComponent {
 		if (mxhxResolver == null) {
 			createResolver();
 		}
-		var typeDef = createTypeDefinitionFromString(mxhxText, typePath, null);
+		var outerDocumentTypePath:TypePath = null;
+		var localClass = Context.getLocalClass().get();
+		var localMethodName = Context.getLocalMethod();
+		var localMethod = Lambda.find(localClass.statics.get(), field -> field.name == localMethodName);
+		if (localMethod == null) {
+			outerDocumentTypePath = {name: localClass.name, pack: localClass.pack};
+		}
+		var typeDef = createTypeDefinitionFromString(mxhxText, typePath, outerDocumentTypePath);
 		if (typeDef == null) {
 			return macro null;
 		}
 		Context.defineType(typeDef);
+		if (outerDocumentTypePath != null) {
+			var staticOuterDocumentFieldName = '${typeDef.name}_${FIELD_DEFAULT_OUTER_DOCUMENT}';
+			var staticOuterDocumentField = Lambda.find(typeDef.fields, field -> field.name == staticOuterDocumentFieldName);
+			if (staticOuterDocumentField != null) {
+				var assignmentParts = typeDef.pack.copy();
+				assignmentParts.push(typeDef.name);
+				assignmentParts.push(staticOuterDocumentFieldName);
+				return macro {
+					$p{assignmentParts} = this;
+					new $typePath();
+				}
+			}
+		}
 		return macro new $typePath();
 	}
 
