@@ -1081,7 +1081,7 @@ class MXHXComponent {
 
 	private static function createModelObjectExpr(model:ModelObject, sourceLocation:IMXHXSourceLocation):Expr {
 		if (model.value != null) {
-			return macro $v{model.value};
+			return createValueExprForDynamic(model.value);
 		}
 		var textType:MXHXTextType = null;
 		if (model.text.length > 0) {
@@ -1098,7 +1098,7 @@ class MXHXComponent {
 							sourceLocationToContextPosition(current.location));
 					}
 				}
-				return macro $v{textData.content};
+				return createValueExprForDynamic(textData.content);
 			}
 		}
 		var subModelExprs:Array<Expr> = [];
