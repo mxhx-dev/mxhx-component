@@ -1061,9 +1061,12 @@ class MXHXComponent {
 			}
 		}
 
-		// var xmlString = xmlDoc.toString();
-		// var valueExpr = macro Xml.parse($v{xmlString});
-		var valueExpr = createModelObjectExpr(model, tagData);
+		var valueExpr:Expr = null;
+		if (model != null) {
+			valueExpr = createModelObjectExpr(model, tagData);
+		} else {
+			valueExpr = {expr: EObjectDecl([]), pos: sourceLocationToContextPosition(tagData)};
+		}
 
 		var id:String = null;
 		var idAttr = tagData.getAttributeData(ATTRIBUTE_ID);
