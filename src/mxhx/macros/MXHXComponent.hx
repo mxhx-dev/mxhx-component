@@ -1005,6 +1005,7 @@ class MXHXComponent {
 						break;
 					}
 					var elementChild = new ModelObject();
+					elementChild.location = tagData;
 					// attributes are ignored on root tag, for some reason
 					if (tagData != rootTag) {
 						for (attrData in tagData.attributeData) {
@@ -1013,9 +1014,14 @@ class MXHXComponent {
 								objectsForField = [];
 								elementChild.fields.set(attrData.shortName, objectsForField);
 							}
-							objectsForField.push(new ModelObject(attrData.rawValue));
+							var attrObject = new ModelObject(attrData.rawValue);
+							attrObject.location = attrData;
+							objectsForField.push(attrObject);
 						}
 					} else {
+						for (attrData in tagData.attributeData) {
+							Context.warning('Ignoring attribute \'${attrData.name}\' on root tag', sourceLocationToContextPosition(attrData));
+						}
 						model = elementChild;
 					}
 					var currentParent = parentStack[parentStack.length - 1];
@@ -1085,6 +1091,12 @@ class MXHXComponent {
 				if (hasFields || hasMultipleTextTypes) {
 					Context.warning('Ignoring text \'${textData.content}\' because other XML content exists', sourceLocationToContextPosition(textData));
 					continue;
+				}
+				for (fieldName => models in model.fields) {
+					for (current in models) {
+						Context.warning('Ignoring attribute \'${fieldName}\' because other XML content exists',
+							sourceLocationToContextPosition(current.location));
+					}
 				}
 				return macro $v{textData.content};
 			}
@@ -2821,6 +2833,7 @@ private class ModelObject {
 	public var strongFields:Bool = false;
 	public var text:Array<IMXHXTextData> = [];
 	public var value:String;
+	public var location:IMXHXSourceLocation;
 
 	public function new(?value:String) {
 		this.value = value;
