@@ -940,6 +940,19 @@ class MXHXComponent {
 				reportError('Failed to load file with path: ' + sourceFilePath, getAttributeValueSourceLocation(sourceAttr));
 				return macro null;
 			}
+			var child = tagData.getFirstChildUnit();
+			while (child != null) {
+				if ((child is IMXHXTextData)) {
+					var textData:IMXHXTextData = cast child;
+					if (!canIgnoreTextData(textData)) {
+						errorTagWithSourceMustBeEmpty(tagData);
+						break;
+					}
+				} else {
+					errorTagWithSourceMustBeEmpty(tagData);
+				}
+				child = child.getNextSiblingUnit();
+			}
 		}
 		if (xmlString == null) {
 			var xmlDoc = Xml.createDocument();
@@ -1037,6 +1050,20 @@ class MXHXComponent {
 				return macro null;
 			}
 			current = mxhxData.rootTag;
+
+			var child = tagData.getFirstChildUnit();
+			while (child != null) {
+				if ((child is IMXHXTextData)) {
+					var textData:IMXHXTextData = cast child;
+					if (!canIgnoreTextData(textData)) {
+						errorTagWithSourceMustBeEmpty(tagData);
+						break;
+					}
+				} else {
+					errorTagWithSourceMustBeEmpty(tagData);
+				}
+				child = child.getNextSiblingUnit();
+			}
 		}
 		if (current == null) {
 			current = tagData.getFirstChildUnit();
@@ -1589,6 +1616,19 @@ class MXHXComponent {
 					initExpr = macro null;
 					reportError('Failed to load file with path: ' + sourceFilePath, getAttributeValueSourceLocation(sourceAttr));
 				}
+			}
+			var child = tagData.getFirstChildUnit();
+			while (child != null) {
+				if ((child is IMXHXTextData)) {
+					var textData:IMXHXTextData = cast child;
+					if (!canIgnoreTextData(textData)) {
+						errorTagWithSourceMustBeEmpty(tagData);
+						break;
+					}
+				} else {
+					errorTagWithSourceMustBeEmpty(tagData);
+				}
+				child = child.getNextSiblingUnit();
 			}
 		}
 		var child = tagData.getFirstChildUnit();
@@ -2813,6 +2853,10 @@ class MXHXComponent {
 
 	private static function errorDuplicateField(fieldName:String, tagData:IMXHXTagData, sourceLocation:IMXHXSourceLocation):Void {
 		reportError('Field \'${fieldName}\' is already specified for element \'${tagData.name}\'', sourceLocation);
+	}
+
+	private static function errorTagWithSourceMustBeEmpty(tagData:IMXHXTagData):Void {
+		reportError('Tag \'${tagData.name}\' must be empty if \'source\' attribute is specified', tagData);
 	}
 
 	private static function reportError(message:String, sourceLocation:IMXHXSourceLocation):Void {
