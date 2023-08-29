@@ -86,6 +86,7 @@ class MXHXComponent {
 	private static final ATTRIBUTE_INCLUDE_IN = "includeIn";
 	private static final ATTRIBUTE_ID = "id";
 	private static final ATTRIBUTE_EXCLUDE_FROM = "excludeFrom";
+	private static final ATTRIBUTE_FORMAT = "format";
 	private static final ATTRIBUTE_SOURCE = "source";
 	private static final ATTRIBUTE_TWO_WAY = "twoWay";
 	private static final ATTRIBUTE_TYPE = "type";
@@ -931,6 +932,11 @@ class MXHXComponent {
 
 	private static function handleXmlTag(tagData:IMXHXTagData, generatedFields:Array<Field>):Expr {
 		var xmlString:String = null;
+		var formatAttr = tagData.getAttributeData(ATTRIBUTE_FORMAT);
+		if (formatAttr != null) {
+			errorAttributeNotSupported(formatAttr);
+			return macro null;
+		}
 		var sourceAttr = tagData.getAttributeData(ATTRIBUTE_SOURCE);
 		if (sourceAttr != null) {
 			var sourceFilePath = sourceAttr.rawValue;
