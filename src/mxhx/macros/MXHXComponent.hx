@@ -116,6 +116,7 @@ class MXHXComponent {
 	private static final TYPE_NULL = "Null";
 	private static final TYPE_STRING = "String";
 	private static final TYPE_UINT = "UInt";
+	private static final TYPE_VECTOR = "Vector";
 	private static final TYPE_XML = "Xml";
 	private static final TYPE_HAXE_FUNCTION = "haxe.Function";
 	private static final TYPE_HAXE_CONSTRAINTS_FUNCTION = "haxe.Constraints.Function";
@@ -198,6 +199,7 @@ class MXHXComponent {
 		TAG_REPARENT,
 		TAG_SCRIPT,
 		TAG_STYLE,
+		TYPE_VECTOR,
 		// @:formatter:on
 	];
 	private static var componentCounter = 0;
