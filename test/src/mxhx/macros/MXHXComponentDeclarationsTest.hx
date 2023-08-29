@@ -67,13 +67,90 @@ class MXHXComponentDeclarationsTest extends Test {
 		Assert.notNull(result);
 	}
 
-	public function testAny():Void {
+	public function testStructAttributes():Void {
 		var result = MXHXComponent.withMarkup('
 			<tests:TestClass1 xmlns:mx="https://ns.mxhx.dev/2024/basic" xmlns:tests="https://ns.mxhx.dev/2024/tests">
 				<mx:Declarations>
-					<mx:Struct id="struct" float="123.4" floatHex="0xbeef" nan="NaN" boolean_true="true" boolean_false="false" string="hello">
+					<mx:Struct id="struct" float="123.4" float_hex="0xbeef" nan="NaN"
+						infinity="Infinity" negative_infinity="-Infinity" float_exponent="123.4e5"
+						boolean_true="true" boolean_false="false" string="hello"/>
+				</mx:Declarations>
+			</tests:TestClass1>
+		');
+		Assert.notNull(result);
+		Assert.notNull(result.struct);
+		Assert.equals(9, Reflect.fields(result.struct).length);
+		Assert.isTrue(Reflect.hasField(result.struct, "float"));
+		Assert.isTrue(Reflect.hasField(result.struct, "float_hex"));
+		Assert.isTrue(Reflect.hasField(result.struct, "nan"));
+		Assert.isTrue(Reflect.hasField(result.struct, "infinity"));
+		Assert.isTrue(Reflect.hasField(result.struct, "negative_infinity"));
+		Assert.isTrue(Reflect.hasField(result.struct, "float_exponent"));
+		Assert.isTrue(Reflect.hasField(result.struct, "boolean_true"));
+		Assert.isTrue(Reflect.hasField(result.struct, "boolean_false"));
+		Assert.isTrue(Reflect.hasField(result.struct, "string"));
+		Assert.equals(123.4, Reflect.field(result.struct, "float"));
+		Assert.equals(0xbeef, Reflect.field(result.struct, "float_hex"));
+		Assert.isTrue(Math.isNaN(Reflect.field(result.struct, "nan")));
+		Assert.equals(Math.POSITIVE_INFINITY, Reflect.field(result.struct, "infinity"));
+		Assert.equals(Math.NEGATIVE_INFINITY, Reflect.field(result.struct, "negative_infinity"));
+		Assert.equals(123.4e5, Reflect.field(result.struct, "float_exponent"));
+		Assert.isTrue(Reflect.field(result.struct, "boolean_true"));
+		Assert.isFalse(Reflect.field(result.struct, "boolean_false"));
+		Assert.equals("hello", Reflect.field(result.struct, "string"));
+	}
+
+	public function testStructAttributesExtraWhitespace():Void {
+		var result = MXHXComponent.withMarkup('
+			<tests:TestClass1 xmlns:mx="https://ns.mxhx.dev/2024/basic" xmlns:tests="https://ns.mxhx.dev/2024/tests">
+				<mx:Declarations>
+					<mx:Struct id="struct" float=" 123.4 " float_hex=" 0xbeef " nan=" NaN "
+						infinity=" Infinity " negative_infinity=" -Infinity " float_exponent=" 123.4e5 "
+						boolean_true=" true " boolean_false=" false " string=" hello "/>
+				</mx:Declarations>
+			</tests:TestClass1>
+		');
+		Assert.notNull(result);
+		Assert.notNull(result.struct);
+		Assert.equals(9, Reflect.fields(result.struct).length);
+		Assert.isTrue(Reflect.hasField(result.struct, "float"));
+		Assert.isTrue(Reflect.hasField(result.struct, "float_hex"));
+		Assert.isTrue(Reflect.hasField(result.struct, "nan"));
+		Assert.isTrue(Reflect.hasField(result.struct, "infinity"));
+		Assert.isTrue(Reflect.hasField(result.struct, "negative_infinity"));
+		Assert.isTrue(Reflect.hasField(result.struct, "float_exponent"));
+		Assert.isTrue(Reflect.hasField(result.struct, "boolean_true"));
+		Assert.isTrue(Reflect.hasField(result.struct, "boolean_false"));
+		Assert.isTrue(Reflect.hasField(result.struct, "string"));
+		Assert.equals(123.4, Reflect.field(result.struct, "float"));
+		Assert.equals(0xbeef, Reflect.field(result.struct, "float_hex"));
+		Assert.isTrue(Math.isNaN(Reflect.field(result.struct, "nan")));
+		Assert.equals(Math.POSITIVE_INFINITY, Reflect.field(result.struct, "infinity"));
+		Assert.equals(Math.NEGATIVE_INFINITY, Reflect.field(result.struct, "negative_infinity"));
+		Assert.equals(123.4e5, Reflect.field(result.struct, "float_exponent"));
+		Assert.isTrue(Reflect.field(result.struct, "boolean_true"));
+		Assert.isFalse(Reflect.field(result.struct, "boolean_false"));
+		Assert.equals(" hello ", Reflect.field(result.struct, "string"));
+	}
+
+	public function testStructChildElements():Void {
+		var result = MXHXComponent.withMarkup('
+			<tests:TestClass1 xmlns:mx="https://ns.mxhx.dev/2024/basic" xmlns:tests="https://ns.mxhx.dev/2024/tests">
+				<mx:Declarations>
+					<mx:Struct id="struct">
+						<mx:float>123.4</mx:float>
+						<mx:float_hex>0xbeef</mx:float_hex>
+						<mx:nan>NaN</mx:nan>
+						<mx:infinity>Infinity</mx:infinity>
+						<mx:negative_infinity>-Infinity</mx:negative_infinity>
+						<mx:float_exponent>123.4e5</mx:float_exponent>
+						<mx:boolean_true>true</mx:boolean_true>
+						<mx:boolean_false>false</mx:boolean_false>
+						<mx:string>hello</mx:string>
 						<mx:object>
-							<mx:Struct integer="567"/>
+							<mx:Struct>
+								<mx:integer>567</mx:integer>
+							</mx:Struct>
 						</mx:object>
 					</mx:Struct>
 				</mx:Declarations>
@@ -81,17 +158,23 @@ class MXHXComponentDeclarationsTest extends Test {
 		');
 		Assert.notNull(result);
 		Assert.notNull(result.struct);
-		Assert.equals(7, Reflect.fields(result.struct).length);
+		Assert.equals(10, Reflect.fields(result.struct).length);
 		Assert.isTrue(Reflect.hasField(result.struct, "float"));
-		Assert.isTrue(Reflect.hasField(result.struct, "floatHex"));
+		Assert.isTrue(Reflect.hasField(result.struct, "float_hex"));
 		Assert.isTrue(Reflect.hasField(result.struct, "nan"));
+		Assert.isTrue(Reflect.hasField(result.struct, "infinity"));
+		Assert.isTrue(Reflect.hasField(result.struct, "negative_infinity"));
+		Assert.isTrue(Reflect.hasField(result.struct, "float_exponent"));
 		Assert.isTrue(Reflect.hasField(result.struct, "boolean_true"));
 		Assert.isTrue(Reflect.hasField(result.struct, "boolean_false"));
 		Assert.isTrue(Reflect.hasField(result.struct, "string"));
 		Assert.isTrue(Reflect.hasField(result.struct, "object"));
 		Assert.equals(123.4, Reflect.field(result.struct, "float"));
-		Assert.equals(0xbeef, Reflect.field(result.struct, "floatHex"));
+		Assert.equals(0xbeef, Reflect.field(result.struct, "float_hex"));
 		Assert.isTrue(Math.isNaN(Reflect.field(result.struct, "nan")));
+		Assert.equals(Math.POSITIVE_INFINITY, Reflect.field(result.struct, "infinity"));
+		Assert.equals(Math.NEGATIVE_INFINITY, Reflect.field(result.struct, "negative_infinity"));
+		Assert.equals(123.4e5, Reflect.field(result.struct, "float_exponent"));
 		Assert.isTrue(Reflect.field(result.struct, "boolean_true"));
 		Assert.isFalse(Reflect.field(result.struct, "boolean_false"));
 		Assert.equals("hello", Reflect.field(result.struct, "string"));
@@ -99,7 +182,74 @@ class MXHXComponentDeclarationsTest extends Test {
 		Assert.equals(567, Reflect.field(Reflect.field(result.struct, "object"), "integer"));
 	}
 
-	public function testAnyEmpty():Void {
+	public function testStructChildElementsExtraWhitespace():Void {
+		var result = MXHXComponent.withMarkup('
+			<tests:TestClass1 xmlns:mx="https://ns.mxhx.dev/2024/basic" xmlns:tests="https://ns.mxhx.dev/2024/tests">
+				<mx:Declarations>
+					<mx:Struct id="struct">
+						<mx:float>
+							123.4
+						</mx:float>
+						<mx:float_hex>
+							0xbeef
+						</mx:float_hex>
+						<mx:nan>
+							NaN
+						</mx:nan>
+						<mx:infinity>
+							Infinity
+						</mx:infinity>
+						<mx:negative_infinity>
+							-Infinity
+						</mx:negative_infinity>
+						<mx:float_exponent>
+							123.4e5
+						</mx:float_exponent>
+						<mx:boolean_true>
+							true
+						</mx:boolean_true>
+						<mx:boolean_false>
+							false
+						</mx:boolean_false>
+						<mx:string> hello </mx:string>
+						<mx:object>
+							<mx:Struct>
+								<mx:integer>
+									567
+								</mx:integer>
+							</mx:Struct>
+						</mx:object>
+					</mx:Struct>
+				</mx:Declarations>
+			</tests:TestClass1>
+		');
+		Assert.notNull(result);
+		Assert.notNull(result.struct);
+		Assert.equals(10, Reflect.fields(result.struct).length);
+		Assert.isTrue(Reflect.hasField(result.struct, "float"));
+		Assert.isTrue(Reflect.hasField(result.struct, "float_hex"));
+		Assert.isTrue(Reflect.hasField(result.struct, "nan"));
+		Assert.isTrue(Reflect.hasField(result.struct, "infinity"));
+		Assert.isTrue(Reflect.hasField(result.struct, "negative_infinity"));
+		Assert.isTrue(Reflect.hasField(result.struct, "float_exponent"));
+		Assert.isTrue(Reflect.hasField(result.struct, "boolean_true"));
+		Assert.isTrue(Reflect.hasField(result.struct, "boolean_false"));
+		Assert.isTrue(Reflect.hasField(result.struct, "string"));
+		Assert.isTrue(Reflect.hasField(result.struct, "object"));
+		Assert.equals(123.4, Reflect.field(result.struct, "float"));
+		Assert.equals(0xbeef, Reflect.field(result.struct, "float_hex"));
+		Assert.isTrue(Math.isNaN(Reflect.field(result.struct, "nan")));
+		Assert.equals(Math.POSITIVE_INFINITY, Reflect.field(result.struct, "infinity"));
+		Assert.equals(Math.NEGATIVE_INFINITY, Reflect.field(result.struct, "negative_infinity"));
+		Assert.equals(123.4e5, Reflect.field(result.struct, "float_exponent"));
+		Assert.isTrue(Reflect.field(result.struct, "boolean_true"));
+		Assert.isFalse(Reflect.field(result.struct, "boolean_false"));
+		Assert.equals(" hello ", Reflect.field(result.struct, "string"));
+		Assert.notNull(Reflect.field(result.struct, "object"));
+		Assert.equals(567, Reflect.field(Reflect.field(result.struct, "object"), "integer"));
+	}
+
+	public function testStructEmpty():Void {
 		var result = MXHXComponent.withMarkup('
 			<tests:TestClass1 xmlns:mx="https://ns.mxhx.dev/2024/basic" xmlns:tests="https://ns.mxhx.dev/2024/tests">
 				<mx:Declarations>
@@ -112,7 +262,7 @@ class MXHXComponentDeclarationsTest extends Test {
 		Assert.equals(0, Reflect.fields(result.struct).length);
 	}
 
-	public function testAnyEmptyExtraWhitespace():Void {
+	public function testStructEmptyExtraWhitespace():Void {
 		var result = MXHXComponent.withMarkup('
 			<tests:TestClass1 xmlns:mx="https://ns.mxhx.dev/2024/basic" xmlns:tests="https://ns.mxhx.dev/2024/tests">
 				<mx:Declarations>
@@ -126,7 +276,7 @@ class MXHXComponentDeclarationsTest extends Test {
 		Assert.equals(0, Reflect.fields(result.struct).length);
 	}
 
-	public function testAnyOnlyComment1():Void {
+	public function testStructOnlyComment1():Void {
 		var result = MXHXComponent.withMarkup('
 			<tests:TestClass1 xmlns:mx="https://ns.mxhx.dev/2024/basic" xmlns:tests="https://ns.mxhx.dev/2024/tests">
 				<mx:Declarations>
@@ -139,7 +289,7 @@ class MXHXComponentDeclarationsTest extends Test {
 		Assert.equals(0, Reflect.fields(result.struct).length);
 	}
 
-	public function testAnyOnlyComment2():Void {
+	public function testStructOnlyComment2():Void {
 		var result = MXHXComponent.withMarkup('
 			<tests:TestClass1 xmlns:mx="https://ns.mxhx.dev/2024/basic" xmlns:tests="https://ns.mxhx.dev/2024/tests">
 				<mx:Declarations>
@@ -154,7 +304,7 @@ class MXHXComponentDeclarationsTest extends Test {
 		Assert.equals(0, Reflect.fields(result.struct).length);
 	}
 
-	public function testAnyOnlyDocComment():Void {
+	public function testStructOnlyDocComment():Void {
 		var result = MXHXComponent.withMarkup('
 			<tests:TestClass1 xmlns:mx="https://ns.mxhx.dev/2024/basic" xmlns:tests="https://ns.mxhx.dev/2024/tests">
 				<mx:Declarations>

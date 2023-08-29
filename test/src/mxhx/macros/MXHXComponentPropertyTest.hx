@@ -11,15 +11,77 @@ import utest.Assert;
 import utest.Test;
 
 class MXHXComponentPropertyTest extends Test {
-	public function testAnyChildElement():Void {
+	public function testStructChildElementAttributes():Void {
 		var result = MXHXComponent.withMarkup('
 			<tests:TestPropertiesClass
 				xmlns:mx="https://ns.mxhx.dev/2024/basic"
 				xmlns:tests="https://ns.mxhx.dev/2024/tests">
 				<tests:struct>
-					<mx:Struct float="123.4" boolean="true" string="hello">
+					<mx:Struct float="123.4" float_hex="0xbeef" nan="NaN" boolean_true="true" boolean_false="false" string="hello"/>
+				</tests:struct>
+			</tests:TestPropertiesClass>
+		');
+		Assert.notNull(result);
+		Assert.notNull(result.struct);
+		Assert.equals(6, Reflect.fields(result.struct).length);
+		Assert.isTrue(Reflect.hasField(result.struct, "float"));
+		Assert.isTrue(Reflect.hasField(result.struct, "float_hex"));
+		Assert.isTrue(Reflect.hasField(result.struct, "nan"));
+		Assert.isTrue(Reflect.hasField(result.struct, "boolean_true"));
+		Assert.isTrue(Reflect.hasField(result.struct, "boolean_false"));
+		Assert.isTrue(Reflect.hasField(result.struct, "string"));
+		Assert.equals(123.4, Reflect.field(result.struct, "float"));
+		Assert.equals(0xbeef, Reflect.field(result.struct, "float_hex"));
+		Assert.isTrue(Math.isNaN(Reflect.field(result.struct, "nan")));
+		Assert.isTrue(Reflect.field(result.struct, "boolean_true"));
+		Assert.isFalse(Reflect.field(result.struct, "boolean_false"));
+		Assert.equals("hello", Reflect.field(result.struct, "string"));
+	}
+
+	public function testStructChildElementAttributesExtraWhitespace():Void {
+		var result = MXHXComponent.withMarkup('
+			<tests:TestPropertiesClass
+				xmlns:mx="https://ns.mxhx.dev/2024/basic"
+				xmlns:tests="https://ns.mxhx.dev/2024/tests">
+				<tests:struct>
+					<mx:Struct float=" 123.4 " float_hex=" 0xbeef " nan=" NaN " boolean_true=" true " boolean_false=" false " string=" hello "/>
+				</tests:struct>
+			</tests:TestPropertiesClass>
+		');
+		Assert.notNull(result);
+		Assert.notNull(result.struct);
+		Assert.equals(6, Reflect.fields(result.struct).length);
+		Assert.isTrue(Reflect.hasField(result.struct, "float"));
+		Assert.isTrue(Reflect.hasField(result.struct, "float_hex"));
+		Assert.isTrue(Reflect.hasField(result.struct, "nan"));
+		Assert.isTrue(Reflect.hasField(result.struct, "boolean_true"));
+		Assert.isTrue(Reflect.hasField(result.struct, "boolean_false"));
+		Assert.isTrue(Reflect.hasField(result.struct, "string"));
+		Assert.equals(123.4, Reflect.field(result.struct, "float"));
+		Assert.equals(0xbeef, Reflect.field(result.struct, "float_hex"));
+		Assert.isTrue(Math.isNaN(Reflect.field(result.struct, "nan")));
+		Assert.isTrue(Reflect.field(result.struct, "boolean_true"));
+		Assert.isFalse(Reflect.field(result.struct, "boolean_false"));
+		Assert.equals(" hello ", Reflect.field(result.struct, "string"));
+	}
+
+	public function testStructChildElementChildren():Void {
+		var result = MXHXComponent.withMarkup('
+			<tests:TestPropertiesClass
+				xmlns:mx="https://ns.mxhx.dev/2024/basic"
+				xmlns:tests="https://ns.mxhx.dev/2024/tests">
+				<tests:struct>
+					<mx:Struct>
+						<mx:float>123.4</mx:float>
+						<mx:float_hex>0xbeef</mx:float_hex>
+						<mx:nan>NaN</mx:nan>
+						<mx:boolean_true>true</mx:boolean_true>
+						<mx:boolean_false>false</mx:boolean_false>
+						<mx:string>hello</mx:string>
 						<mx:object>
-							<mx:Struct integer="567"/>
+							<mx:Struct>
+								<mx:integer>567</mx:integer>
+							</mx:Struct>
 						</mx:object>
 					</mx:Struct>
 				</tests:struct>
@@ -27,15 +89,77 @@ class MXHXComponentPropertyTest extends Test {
 		');
 		Assert.notNull(result);
 		Assert.notNull(result.struct);
-		Assert.equals(4, Reflect.fields(result.struct).length);
+		Assert.equals(7, Reflect.fields(result.struct).length);
 		Assert.isTrue(Reflect.hasField(result.struct, "float"));
-		Assert.isTrue(Reflect.hasField(result.struct, "boolean"));
+		Assert.isTrue(Reflect.hasField(result.struct, "float_hex"));
+		Assert.isTrue(Reflect.hasField(result.struct, "nan"));
+		Assert.isTrue(Reflect.hasField(result.struct, "boolean_true"));
+		Assert.isTrue(Reflect.hasField(result.struct, "boolean_false"));
 		Assert.isTrue(Reflect.hasField(result.struct, "string"));
 		Assert.isTrue(Reflect.hasField(result.struct, "object"));
 		Assert.equals(123.4, Reflect.field(result.struct, "float"));
-		Assert.isTrue(Reflect.field(result.struct, "boolean"));
+		Assert.equals(0xbeef, Reflect.field(result.struct, "float_hex"));
+		Assert.isTrue(Math.isNaN(Reflect.field(result.struct, "nan")));
+		Assert.isTrue(Reflect.field(result.struct, "boolean_true"));
+		Assert.isFalse(Reflect.field(result.struct, "boolean_false"));
 		Assert.equals("hello", Reflect.field(result.struct, "string"));
 		Assert.notNull(Reflect.field(result.struct, "object"));
+		Assert.equals(1, Reflect.fields(result.struct.object).length);
+		Assert.equals(567, Reflect.field(Reflect.field(result.struct, "object"), "integer"));
+	}
+
+	public function testStructChildElementChildrenExtraWhitespace():Void {
+		var result = MXHXComponent.withMarkup('
+			<tests:TestPropertiesClass
+				xmlns:mx="https://ns.mxhx.dev/2024/basic"
+				xmlns:tests="https://ns.mxhx.dev/2024/tests">
+				<tests:struct>
+					<mx:Struct>
+						<mx:float>
+							123.4
+						</mx:float>
+						<mx:float_hex>
+							0xbeef
+						</mx:float_hex>
+						<mx:nan>
+							NaN
+						</mx:nan>
+						<mx:boolean_true>
+							true
+						</mx:boolean_true>
+						<mx:boolean_false>
+							false
+						</mx:boolean_false>
+						<mx:string> hello </mx:string>
+						<mx:object>
+							<mx:Struct>
+								<mx:integer>
+									567
+								</mx:integer>
+							</mx:Struct>
+						</mx:object>
+					</mx:Struct>
+				</tests:struct>
+			</tests:TestPropertiesClass>
+		');
+		Assert.notNull(result);
+		Assert.notNull(result.struct);
+		Assert.equals(7, Reflect.fields(result.struct).length);
+		Assert.isTrue(Reflect.hasField(result.struct, "float"));
+		Assert.isTrue(Reflect.hasField(result.struct, "float_hex"));
+		Assert.isTrue(Reflect.hasField(result.struct, "nan"));
+		Assert.isTrue(Reflect.hasField(result.struct, "boolean_true"));
+		Assert.isTrue(Reflect.hasField(result.struct, "boolean_false"));
+		Assert.isTrue(Reflect.hasField(result.struct, "string"));
+		Assert.isTrue(Reflect.hasField(result.struct, "object"));
+		Assert.equals(123.4, Reflect.field(result.struct, "float"));
+		Assert.equals(0xbeef, Reflect.field(result.struct, "float_hex"));
+		Assert.isTrue(Math.isNaN(Reflect.field(result.struct, "nan")));
+		Assert.isTrue(Reflect.field(result.struct, "boolean_true"));
+		Assert.isFalse(Reflect.field(result.struct, "boolean_false"));
+		Assert.equals(" hello ", Reflect.field(result.struct, "string"));
+		Assert.notNull(Reflect.field(result.struct, "object"));
+		Assert.equals(1, Reflect.fields(result.struct.object).length);
 		Assert.equals(567, Reflect.field(Reflect.field(result.struct, "object"), "integer"));
 	}
 
