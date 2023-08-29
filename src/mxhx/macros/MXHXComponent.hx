@@ -930,6 +930,11 @@ class MXHXComponent {
 	}
 
 	private static function handleXmlTag(tagData:IMXHXTagData, generatedFields:Array<Field>):Expr {
+		var sourceAttr = tagData.getAttributeData(ATTRIBUTE_SOURCE);
+		if (sourceAttr != null) {
+			errorAttributeNotSupported(sourceAttr);
+			return macro null;
+		}
 		var xmlDoc = Xml.createDocument();
 		var current = tagData.getFirstChildUnit();
 		var parentStack:Array<Xml> = [xmlDoc];
@@ -1004,6 +1009,11 @@ class MXHXComponent {
 	}
 
 	private static function handleModelTag(tagData:IMXHXTagData, generatedFields:Array<Field>):Expr {
+		var sourceAttr = tagData.getAttributeData(ATTRIBUTE_SOURCE);
+		if (sourceAttr != null) {
+			errorAttributeNotSupported(sourceAttr);
+			return macro null;
+		}
 		var current = tagData.getFirstChildUnit();
 		var model:ModelObject;
 		var rootTag:IMXHXTagData = null;
@@ -1539,6 +1549,13 @@ class MXHXComponent {
 	}
 
 	private static function handleInstanceTagAssignableFromText(tagData:IMXHXTagData, typeSymbol:IMXHXTypeSymbol, generatedFields:Array<Field>):Expr {
+		if (typeSymbol != null && typeSymbol.pack.length == 0 && typeSymbol.name == TYPE_STRING) {
+			var sourceAttr = tagData.getAttributeData(ATTRIBUTE_SOURCE);
+			if (sourceAttr != null) {
+				errorAttributeNotSupported(sourceAttr);
+				return macro null;
+			}
+		}
 		var initExpr:Expr = null;
 		var child = tagData.getFirstChildUnit();
 		var bindingTextData:IMXHXTextData = null;
