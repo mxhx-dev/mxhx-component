@@ -1021,6 +1021,12 @@ class MXHXComponent {
 		}
 		var valueExpr = macro Xml.parse($v{xmlString});
 
+		for (attribute in tagData.attributeData) {
+			if (attribute.name != ATTRIBUTE_ID && attribute.name != ATTRIBUTE_FORMAT && attribute.name != ATTRIBUTE_SOURCE) {
+				errorAttributeUnexpected(attribute);
+			}
+		}
+
 		var id:String = null;
 		var idAttr = tagData.getAttributeData(ATTRIBUTE_ID);
 		if (idAttr != null) {
@@ -1150,6 +1156,12 @@ class MXHXComponent {
 			valueExpr = createModelObjectExpr(model, tagData);
 		} else {
 			valueExpr = {expr: EObjectDecl([]), pos: sourceLocationToContextPosition(tagData)};
+		}
+
+		for (attribute in tagData.attributeData) {
+			if (attribute.name != ATTRIBUTE_ID && attribute.name != ATTRIBUTE_SOURCE) {
+				errorAttributeUnexpected(attribute);
+			}
 		}
 
 		var id:String = null;
