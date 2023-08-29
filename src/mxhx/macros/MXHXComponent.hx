@@ -2100,6 +2100,11 @@ class MXHXComponent {
 						return;
 					}
 					var fieldName = tagData.shortName;
+					if (attributeAndChildNames.exists(fieldName)) {
+						errorDuplicateField(fieldName, tagData.parentTag, tagData);
+						return;
+					}
+					attributeAndChildNames.set(fieldName, true);
 					var valueExpr = createValueExprForFieldTag(tagData, null, null, null, outerDocumentTypePath, generatedFields);
 					var initExpr = macro $i{targetIdentifier}.$fieldName = ${valueExpr};
 					initExprs.push(initExpr);
@@ -2142,18 +2147,17 @@ class MXHXComponent {
 					}
 				} else if ((resolvedTag is IMXHXFieldSymbol)) {
 					var fieldSymbol:IMXHXFieldSymbol = cast resolvedTag;
-
-					if (attributeAndChildNames.exists(tagData.name)) {
-						errorDuplicateField(tagData.name, tagData.parentTag, tagData);
+					var fieldName = fieldSymbol.name;
+					if (attributeAndChildNames.exists(fieldName)) {
+						errorDuplicateField(fieldName, tagData.parentTag, tagData);
 						return;
 					}
-					attributeAndChildNames.set(tagData.name, true);
+					attributeAndChildNames.set(fieldName, true);
 					if (tagData.stateName != null) {
 						errorStatesNotSupported(tagData);
 						return;
 					}
 					checkForInvalidAttributes(tagData, false);
-					var fieldName = fieldSymbol.name;
 					var valueExpr = createValueExprForFieldTag(tagData, null, fieldSymbol, null, outerDocumentTypePath, generatedFields);
 					var initExpr = macro $i{targetIdentifier}.$fieldName = ${valueExpr};
 					initExprs.push(initExpr);

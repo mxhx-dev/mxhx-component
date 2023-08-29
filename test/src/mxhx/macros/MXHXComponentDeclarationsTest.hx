@@ -182,9 +182,6 @@ class MXHXComponentDeclarationsTest extends Test {
 						canBeNull="890.1">
 						<tests:struct>
 							<mx:Struct float="123.4" boolean="true" string="hello">
-								<mx:float>123.4</mx:float>
-								<mx:boolean>true</mx:boolean>
-								<mx:string>hello</mx:string>
 								<mx:object>
 									<mx:Struct>
 										<mx:integer>567</mx:integer>
