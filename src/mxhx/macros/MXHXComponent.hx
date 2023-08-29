@@ -82,6 +82,7 @@ class MXHXComponent {
 	private static final PACKAGE_RESERVED = ["mxhx", "_reserved"];
 	private static final ATTRIBUTE_CLASS_NAME = "className";
 	private static final ATTRIBUTE_DESTINATION = "destination";
+	private static final ATTRIBUTE_IMPLEMENTS = "implements";
 	private static final ATTRIBUTE_INCLUDE_IN = "includeIn";
 	private static final ATTRIBUTE_ID = "id";
 	private static final ATTRIBUTE_EXCLUDE_FROM = "excludeFrom";
@@ -462,6 +463,10 @@ class MXHXComponent {
 
 	private static function createTypeDefinitionFromTagData(rootTag:IMXHXTagData, typePath:TypePath, outerDocumentTypePath:TypePath):TypeDefinition {
 		var buildFields:Array<Field> = [];
+		var implementsAttrData = rootTag.getAttributeData(ATTRIBUTE_IMPLEMENTS);
+		if (implementsAttrData != null) {
+			reportError('The \'${ATTRIBUTE_IMPLEMENTS}\' attribute is not supported', implementsAttrData);
+		}
 		var resolvedTag = handleRootTag(rootTag, INIT_FUNCTION_NAME, typePath, buildFields);
 
 		var resolvedType:IMXHXTypeSymbol = null;
@@ -695,6 +700,9 @@ class MXHXComponent {
 				&& parentSymbol.pack.length == 0
 				&& (parentSymbol.name == TYPE_ANY || parentSymbol.name == TYPE_DYNAMIC);
 			var isLanguageAttribute = ATTRIBUTES_THAT_CAN_BE_UNRESOLVED.indexOf(attrData.name) != -1;
+			if (!isLanguageAttribute && attrData.name == ATTRIBUTE_IMPLEMENTS && attrData.parentTag == attrData.parentTag.parent.rootTag) {
+				isLanguageAttribute = true;
+			}
 			if (isAnyOrDynamic && !isLanguageAttribute) {
 				var valueExpr = createValueExprForDynamic(attrData.rawValue);
 				var setExpr = macro Reflect.setField($i{targetIdentifier}, $v{attrData.shortName}, ${valueExpr});
