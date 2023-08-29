@@ -945,7 +945,12 @@ class MXHXComponent {
 			} else if ((current is IMXHXTextData)) {
 				var textData:IMXHXTextData = cast current;
 				var textChild = switch (textData.textType) {
-					case Text | Whitespace: Xml.createPCData(textData.content);
+					case Text:
+						if (textContentContainsBinding(textData.content)) {
+							reportError('Binding is not supported here', textData);
+						}
+						Xml.createPCData(textData.content);
+					case Whitespace: Xml.createPCData(textData.content);
 					case CData: Xml.createCData(textData.content);
 					case Comment | DocComment: Xml.createComment(textData.content);
 				}
@@ -1100,6 +1105,9 @@ class MXHXComponent {
 						Context.warning('Ignoring attribute \'${fieldName}\' because other XML content exists',
 							sourceLocationToContextPosition(current.location));
 					}
+				}
+				if (textContentContainsBinding(textData.content)) {
+					reportError('Binding is not supported here', textData);
 				}
 				return createValueExprForDynamic(textData.content);
 			}
