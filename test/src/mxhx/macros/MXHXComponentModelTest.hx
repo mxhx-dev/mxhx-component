@@ -82,6 +82,25 @@ class MXHXComponentModelTest extends Test {
 		Assert.equals(123.4, result.model.child);
 	}
 
+	public function testModelFloatNegative():Void {
+		var result = MXHXComponent.withMarkup('
+			<tests:TestClass1 xmlns:mx="https://ns.mxhx.dev/2024/basic" xmlns:tests="https://ns.mxhx.dev/2024/tests">
+				<mx:Declarations>
+					<mx:Model id="model">
+						<root>
+							<child>-123.4</child>
+						</root>
+					</mx:Model>
+				</mx:Declarations>
+			</tests:TestClass1>
+		');
+		Assert.notNull(result);
+		Assert.notNull(result.model);
+		Assert.equals(1, Reflect.fields(result.model).length);
+		Assert.isOfType(result.model.child, Float);
+		Assert.equals(-123.4, result.model.child);
+	}
+
 	public function testModelFloatExtraWhitespace():Void {
 		var result = MXHXComponent.withMarkup('
 			<tests:TestClass1 xmlns:mx="https://ns.mxhx.dev/2024/basic" xmlns:tests="https://ns.mxhx.dev/2024/tests">
@@ -291,6 +310,25 @@ class MXHXComponentModelTest extends Test {
 		Assert.equals(1, Reflect.fields(result.model).length);
 		Assert.isOfType(result.model.child, Int);
 		Assert.equals(567, result.model.child);
+	}
+
+	public function testModelIntNegative():Void {
+		var result = MXHXComponent.withMarkup('
+			<tests:TestClass1 xmlns:mx="https://ns.mxhx.dev/2024/basic" xmlns:tests="https://ns.mxhx.dev/2024/tests">
+				<mx:Declarations>
+					<mx:Model id="model">
+						<root>
+							<child>-567</child>
+						</root>
+					</mx:Model>
+				</mx:Declarations>
+			</tests:TestClass1>
+		');
+		Assert.notNull(result);
+		Assert.notNull(result.model);
+		Assert.equals(1, Reflect.fields(result.model).length);
+		Assert.isOfType(result.model.child, Int);
+		Assert.equals(-567, result.model.child);
 	}
 
 	public function testModelIntExtraWhitespace():Void {
