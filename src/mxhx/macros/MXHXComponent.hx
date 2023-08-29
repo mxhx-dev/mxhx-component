@@ -1634,19 +1634,19 @@ class MXHXComponent {
 					initExpr = macro null;
 					reportError('Failed to load file with path: ' + sourceFilePath, getAttributeValueSourceLocation(sourceAttr));
 				}
-			}
-			var child = tagData.getFirstChildUnit();
-			while (child != null) {
-				if ((child is IMXHXTextData)) {
-					var textData:IMXHXTextData = cast child;
-					if (!canIgnoreTextData(textData)) {
+				var child = tagData.getFirstChildUnit();
+				while (child != null) {
+					if ((child is IMXHXTextData)) {
+						var textData:IMXHXTextData = cast child;
+						if (!canIgnoreTextData(textData)) {
+							errorTagWithSourceMustBeEmpty(tagData);
+							break;
+						}
+					} else {
 						errorTagWithSourceMustBeEmpty(tagData);
-						break;
 					}
-				} else {
-					errorTagWithSourceMustBeEmpty(tagData);
+					child = child.getNextSiblingUnit();
 				}
-				child = child.getNextSiblingUnit();
 			}
 		}
 		var child = tagData.getFirstChildUnit();
