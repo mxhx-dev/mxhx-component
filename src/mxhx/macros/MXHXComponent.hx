@@ -930,68 +930,76 @@ class MXHXComponent {
 	}
 
 	private static function handleXmlTag(tagData:IMXHXTagData, generatedFields:Array<Field>):Expr {
+		var xmlString:String = null;
 		var sourceAttr = tagData.getAttributeData(ATTRIBUTE_SOURCE);
 		if (sourceAttr != null) {
-			errorAttributeNotSupported(sourceAttr);
-			return macro null;
+			var sourceFilePath = sourceAttr.rawValue;
+			try {
+				xmlString = loadFile(sourceFilePath);
+			} catch (e:Dynamic) {
+				reportError('Failed to load file with path: ' + sourceFilePath, getAttributeValueSourceLocation(sourceAttr));
+				return macro null;
+			}
 		}
-		var xmlDoc = Xml.createDocument();
-		var current = tagData.getFirstChildUnit();
-		var parentStack:Array<Xml> = [xmlDoc];
-		var tagDataStack:Array<IMXHXTagData> = [];
-		while (current != null) {
-			if ((current is IMXHXTagData)) {
-				var tagData:IMXHXTagData = cast current;
-				if (tagData.isOpenTag()) {
-					if (parentStack.length == 1 && xmlDoc.elements().hasNext()) {
-						reportError("Only one root tag is allowed", tagData);
-						break;
-					}
-					var elementChild = Xml.createElement(tagData.name);
-					for (attrData in tagData.attributeData) {
-						elementChild.set(attrData.name, attrData.rawValue);
-					}
-					parentStack[parentStack.length - 1].addChild(elementChild);
-					if (!tagData.isEmptyTag()) {
-						parentStack.push(elementChild);
-						tagDataStack.push(tagData);
-					}
-				}
-			} else if ((current is IMXHXTextData)) {
-				var textData:IMXHXTextData = cast current;
-				var textChild = switch (textData.textType) {
-					case Text:
-						if (textContentContainsBinding(textData.content)) {
-							reportError('Binding is not supported here', textData);
+		if (xmlString == null) {
+			var xmlDoc = Xml.createDocument();
+			var current = tagData.getFirstChildUnit();
+			var parentStack:Array<Xml> = [xmlDoc];
+			var tagDataStack:Array<IMXHXTagData> = [];
+			while (current != null) {
+				if ((current is IMXHXTagData)) {
+					var tagData:IMXHXTagData = cast current;
+					if (tagData.isOpenTag()) {
+						if (parentStack.length == 1 && xmlDoc.elements().hasNext()) {
+							reportError("Only one root tag is allowed", tagData);
+							break;
 						}
-						Xml.createPCData(textData.content);
-					case Whitespace: Xml.createPCData(textData.content);
-					case CData: Xml.createCData(textData.content);
-					case Comment | DocComment: Xml.createComment(textData.content);
+						var elementChild = Xml.createElement(tagData.name);
+						for (attrData in tagData.attributeData) {
+							elementChild.set(attrData.name, attrData.rawValue);
+						}
+						parentStack[parentStack.length - 1].addChild(elementChild);
+						if (!tagData.isEmptyTag()) {
+							parentStack.push(elementChild);
+							tagDataStack.push(tagData);
+						}
+					}
+				} else if ((current is IMXHXTextData)) {
+					var textData:IMXHXTextData = cast current;
+					var textChild = switch (textData.textType) {
+						case Text:
+							if (textContentContainsBinding(textData.content)) {
+								reportError('Binding is not supported here', textData);
+							}
+							Xml.createPCData(textData.content);
+						case Whitespace: Xml.createPCData(textData.content);
+						case CData: Xml.createCData(textData.content);
+						case Comment | DocComment: Xml.createComment(textData.content);
+					}
+					parentStack[parentStack.length - 1].addChild(textChild);
+				} else if ((current is IMXHXInstructionData)) {
+					var instructionData:IMXHXInstructionData = cast current;
+					var instructionChild = Xml.createProcessingInstruction(instructionData.instructionText);
+					parentStack[parentStack.length - 1].addChild(instructionChild);
 				}
-				parentStack[parentStack.length - 1].addChild(textChild);
-			} else if ((current is IMXHXInstructionData)) {
-				var instructionData:IMXHXInstructionData = cast current;
-				var instructionChild = Xml.createProcessingInstruction(instructionData.instructionText);
-				parentStack[parentStack.length - 1].addChild(instructionChild);
+				if (tagDataStack.length > 0 && tagDataStack[tagDataStack.length - 1] == current) {
+					// just added a tag to the stack, so read its children
+					var tagData:IMXHXTagData = cast current;
+					current = tagData.getFirstChildUnit();
+				} else {
+					current = current.getNextSiblingUnit();
+				}
+				// if the top-most tag on the stack has no more child units,
+				// return to its parent tag
+				while (current == null && tagDataStack.length > 0) {
+					var parentTag = tagDataStack.pop();
+					parentStack.pop();
+					current = parentTag.getNextSiblingUnit();
+				}
 			}
-			if (tagDataStack.length > 0 && tagDataStack[tagDataStack.length - 1] == current) {
-				// just added a tag to the stack, so read its children
-				var tagData:IMXHXTagData = cast current;
-				current = tagData.getFirstChildUnit();
-			} else {
-				current = current.getNextSiblingUnit();
-			}
-			// if the top-most tag on the stack has no more child units,
-			// return to its parent tag
-			while (current == null && tagDataStack.length > 0) {
-				var parentTag = tagDataStack.pop();
-				parentStack.pop();
-				current = parentTag.getNextSiblingUnit();
-			}
-		}
 
-		var xmlString = xmlDoc.toString();
+			xmlString = xmlDoc.toString();
+		}
 		var valueExpr = macro Xml.parse($v{xmlString});
 
 		var id:String = null;
