@@ -226,7 +226,7 @@ class MXHXComponent {
 		if (filePath == null) {
 			filePath = localClass.name + ".mxhx";
 		}
-		var mxhxText = loadMXHXFile(filePath);
+		var mxhxText = loadFile(filePath);
 		posInfos = {file: filePath, min: 0, max: mxhxText.length};
 		if (mxhxResolver == null) {
 			createResolver();
@@ -305,7 +305,7 @@ class MXHXComponent {
 		}
 		var outerDocumentTypePath:TypePath = null;
 		if (typeDef == null) {
-			var mxhxText = loadMXHXFile(filePath);
+			var mxhxText = loadFile(filePath);
 			posInfos = {file: filePath, min: 0, max: mxhxText.length};
 			if (mxhxResolver == null) {
 				createResolver();
@@ -1549,21 +1549,31 @@ class MXHXComponent {
 	}
 
 	private static function handleInstanceTagAssignableFromText(tagData:IMXHXTagData, typeSymbol:IMXHXTypeSymbol, generatedFields:Array<Field>):Expr {
+		var initExpr:Expr = null;
+		var isStringWithSource = false;
 		if (typeSymbol != null && typeSymbol.pack.length == 0 && typeSymbol.name == TYPE_STRING) {
 			var sourceAttr = tagData.getAttributeData(ATTRIBUTE_SOURCE);
 			if (sourceAttr != null) {
-				errorAttributeNotSupported(sourceAttr);
-				return macro null;
+				isStringWithSource = true;
+				var sourceFilePath = sourceAttr.rawValue;
+				try {
+					var stringSource = loadFile(sourceFilePath);
+					initExpr = macro $v{stringSource};
+				} catch (e:Dynamic) {
+					initExpr = macro null;
+					reportError('Failed to load file with path: ' + sourceFilePath, getAttributeValueSourceLocation(sourceAttr));
+				}
 			}
 		}
-		var initExpr:Expr = null;
 		var child = tagData.getFirstChildUnit();
 		var bindingTextData:IMXHXTextData = null;
-		if (child != null && (child is IMXHXTextData) && child.getNextSiblingUnit() == null) {
-			var textData = cast(child, IMXHXTextData);
-			if (textData.textType == Text && isLanguageTypeAssignableFromText(typeSymbol)) {
-				initExpr = handleTextContentAsExpr(textData.content, typeSymbol, null, textData);
-				bindingTextData = textData;
+		if (initExpr == null) {
+			if (child != null && (child is IMXHXTextData) && child.getNextSiblingUnit() == null) {
+				var textData = cast(child, IMXHXTextData);
+				if (textData.textType == Text && isLanguageTypeAssignableFromText(typeSymbol)) {
+					initExpr = handleTextContentAsExpr(textData.content, typeSymbol, null, textData);
+					bindingTextData = textData;
+				}
 			}
 		}
 		if (initExpr == null) {
@@ -1646,6 +1656,9 @@ class MXHXComponent {
 			}
 		}
 		for (attribute in tagData.attributeData) {
+			if (attribute.name == ATTRIBUTE_SOURCE && isStringWithSource) {
+				continue;
+			}
 			if (attribute.name != ATTRIBUTE_ID) {
 				errorAttributeUnexpected(attribute);
 			}
@@ -2844,10 +2857,10 @@ class MXHXComponent {
 		return Path.join([modulePath, filePath]);
 	}
 
-	private static function loadMXHXFile(filePath:String):String {
+	private static function loadFile(filePath:String):String {
 		filePath = resolveFilePath(filePath);
 		if (!FileSystem.exists(filePath)) {
-			throw 'MXHX component file not found: ${filePath}';
+			throw 'File not found: ${filePath}';
 		}
 		return File.getContent(filePath);
 	}
