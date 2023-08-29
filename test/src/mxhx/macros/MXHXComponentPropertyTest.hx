@@ -164,7 +164,7 @@ class MXHXComponentPropertyTest extends Test {
 		Assert.equals(0, result.array.length);
 	}
 
-	public function testBoolAttribute():Void {
+	public function testBoolTrueAttribute():Void {
 		var result = MXHXComponent.withMarkup('
 			<tests:TestPropertiesClass
 				xmlns:mx="https://ns.mxhx.dev/2024/basic"
@@ -176,7 +176,19 @@ class MXHXComponentPropertyTest extends Test {
 		Assert.isTrue(result.boolean);
 	}
 
-	public function testBoolChildElement():Void {
+	public function testBoolTrueAttributeExtraWhitespace():Void {
+		var result = MXHXComponent.withMarkup('
+			<tests:TestPropertiesClass
+				xmlns:mx="https://ns.mxhx.dev/2024/basic"
+				xmlns:tests="https://ns.mxhx.dev/2024/tests"
+				boolean=" true "/>
+		');
+		Assert.notNull(result);
+		Assert.isOfType(result.boolean, Bool);
+		Assert.isTrue(result.boolean);
+	}
+
+	public function testBoolTrueChildElement():Void {
 		var result = MXHXComponent.withMarkup('
 			<tests:TestPropertiesClass
 				xmlns:mx="https://ns.mxhx.dev/2024/basic"
@@ -189,7 +201,22 @@ class MXHXComponentPropertyTest extends Test {
 		Assert.isTrue(result.boolean);
 	}
 
-	public function testBoolChildElementComment1():Void {
+	public function testBoolTrueChildElementExtraWhitespace():Void {
+		var result = MXHXComponent.withMarkup('
+			<tests:TestPropertiesClass
+				xmlns:mx="https://ns.mxhx.dev/2024/basic"
+				xmlns:tests="https://ns.mxhx.dev/2024/tests">
+				<tests:boolean>
+					true
+				</tests:boolean>
+			</tests:TestPropertiesClass>
+		');
+		Assert.notNull(result);
+		Assert.isOfType(result.boolean, Bool);
+		Assert.isTrue(result.boolean);
+	}
+
+	public function testBoolTrueChildElementComment1():Void {
 		var result = MXHXComponent.withMarkup('
 			<tests:TestPropertiesClass
 				xmlns:mx="https://ns.mxhx.dev/2024/basic"
@@ -202,7 +229,7 @@ class MXHXComponentPropertyTest extends Test {
 		Assert.isTrue(result.boolean);
 	}
 
-	public function testBoolChildElementComment2():Void {
+	public function testBoolTrueChildElementComment2():Void {
 		var result = MXHXComponent.withMarkup('
 			<tests:TestPropertiesClass
 				xmlns:mx="https://ns.mxhx.dev/2024/basic"
@@ -215,7 +242,7 @@ class MXHXComponentPropertyTest extends Test {
 		Assert.isTrue(result.boolean);
 	}
 
-	public function testBoolChildElementComment3():Void {
+	public function testBoolTrueChildElementComment3():Void {
 		var result = MXHXComponent.withMarkup('
 			<tests:TestPropertiesClass
 				xmlns:mx="https://ns.mxhx.dev/2024/basic"
@@ -228,7 +255,7 @@ class MXHXComponentPropertyTest extends Test {
 		Assert.isTrue(result.boolean);
 	}
 
-	public function testBoolChildElementCData():Void {
+	public function testBoolTrueChildElementCData():Void {
 		var result = MXHXComponent.withMarkup('
 			<tests:TestPropertiesClass
 				xmlns:mx="https://ns.mxhx.dev/2024/basic"
@@ -241,7 +268,7 @@ class MXHXComponentPropertyTest extends Test {
 		Assert.isTrue(result.boolean);
 	}
 
-	public function testBoolChildElementRedundant():Void {
+	public function testBoolTrueChildElementRedundant():Void {
 		var result = MXHXComponent.withMarkup('
 			<tests:TestPropertiesClass
 				xmlns:mx="https://ns.mxhx.dev/2024/basic"
@@ -756,12 +783,39 @@ class MXHXComponentPropertyTest extends Test {
 		Assert.equals(123.4, result.float);
 	}
 
+	public function testFloatAttributeExtraWhitespace():Void {
+		var result = MXHXComponent.withMarkup('
+			<tests:TestPropertiesClass
+				xmlns:mx="https://ns.mxhx.dev/2024/basic"
+				xmlns:tests="https://ns.mxhx.dev/2024/tests"
+				float=" 123.4 "/>
+		');
+		Assert.notNull(result);
+		Assert.isOfType(result.float, Float);
+		Assert.equals(123.4, result.float);
+	}
+
 	public function testFloatChildElement():Void {
 		var result = MXHXComponent.withMarkup('
 			<tests:TestPropertiesClass
 				xmlns:mx="https://ns.mxhx.dev/2024/basic"
 				xmlns:tests="https://ns.mxhx.dev/2024/tests">
 				<tests:float>123.4</tests:float>
+			</tests:TestPropertiesClass>
+		');
+		Assert.notNull(result);
+		Assert.isOfType(result.float, Float);
+		Assert.equals(123.4, result.float);
+	}
+
+	public function testFloatChildElementExtraWhitespace():Void {
+		var result = MXHXComponent.withMarkup('
+			<tests:TestPropertiesClass
+				xmlns:mx="https://ns.mxhx.dev/2024/basic"
+				xmlns:tests="https://ns.mxhx.dev/2024/tests">
+				<tests:float>
+					123.4
+				</tests:float>
 			</tests:TestPropertiesClass>
 		');
 		Assert.notNull(result);
@@ -875,12 +929,99 @@ class MXHXComponentPropertyTest extends Test {
 		Assert.equals(567, result.integer);
 	}
 
+	public function testIntAttributeExtraWhitespace():Void {
+		var result = MXHXComponent.withMarkup('
+			<tests:TestPropertiesClass
+				xmlns:mx="https://ns.mxhx.dev/2024/basic"
+				xmlns:tests="https://ns.mxhx.dev/2024/tests"
+				integer="567"/>
+		');
+		Assert.notNull(result);
+		Assert.isOfType(result.integer, Int);
+		Assert.equals(567, result.integer);
+	}
+
+	public function testIntAttributeHexLowerCase():Void {
+		var result = MXHXComponent.withMarkup('
+			<tests:TestPropertiesClass
+				xmlns:mx="https://ns.mxhx.dev/2024/basic"
+				xmlns:tests="https://ns.mxhx.dev/2024/tests"
+				integer="0xbeef"/>
+		');
+		Assert.notNull(result);
+		Assert.isOfType(result.integer, Int);
+		Assert.equals(0xbeef, result.integer);
+	}
+
+	public function testIntAttributeHexLowerCaseNegative():Void {
+		var result = MXHXComponent.withMarkup('
+			<tests:TestPropertiesClass
+				xmlns:mx="https://ns.mxhx.dev/2024/basic"
+				xmlns:tests="https://ns.mxhx.dev/2024/tests"
+				integer="-0xbeef"/>
+		');
+		Assert.notNull(result);
+		Assert.isOfType(result.integer, Int);
+		Assert.equals(-0xbeef, result.integer);
+	}
+
+	public function testIntAttributeHexUpperCase():Void {
+		var result = MXHXComponent.withMarkup('
+			<tests:TestPropertiesClass
+				xmlns:mx="https://ns.mxhx.dev/2024/basic"
+				xmlns:tests="https://ns.mxhx.dev/2024/tests"
+				integer="0xBEEF"/>
+		');
+		Assert.notNull(result);
+		Assert.isOfType(result.integer, Int);
+		Assert.equals(0xbeef, result.integer);
+	}
+
+	public function testIntAttributeHexUpperCaseNegative():Void {
+		var result = MXHXComponent.withMarkup('
+			<tests:TestPropertiesClass
+				xmlns:mx="https://ns.mxhx.dev/2024/basic"
+				xmlns:tests="https://ns.mxhx.dev/2024/tests"
+				integer="-0xBEEF"/>
+		');
+		Assert.notNull(result);
+		Assert.isOfType(result.integer, Int);
+		Assert.equals(-0xbeef, result.integer);
+	}
+
+	public function testIntAttributeHexLowerCaseExtraWhitespace():Void {
+		var result = MXHXComponent.withMarkup('
+			<tests:TestPropertiesClass
+				xmlns:mx="https://ns.mxhx.dev/2024/basic"
+				xmlns:tests="https://ns.mxhx.dev/2024/tests"
+				integer=" 0xbeef "/>
+		');
+		Assert.notNull(result);
+		Assert.isOfType(result.integer, Int);
+		Assert.equals(0xbeef, result.integer);
+	}
+
 	public function testIntChildElement():Void {
 		var result = MXHXComponent.withMarkup('
 			<tests:TestPropertiesClass
 				xmlns:mx="https://ns.mxhx.dev/2024/basic"
 				xmlns:tests="https://ns.mxhx.dev/2024/tests">
 				<tests:integer>567</tests:integer>
+			</tests:TestPropertiesClass>
+		');
+		Assert.notNull(result);
+		Assert.isOfType(result.integer, Int);
+		Assert.equals(567, result.integer);
+	}
+
+	public function testIntChildElementExtraWhitespace():Void {
+		var result = MXHXComponent.withMarkup('
+			<tests:TestPropertiesClass
+				xmlns:mx="https://ns.mxhx.dev/2024/basic"
+				xmlns:tests="https://ns.mxhx.dev/2024/tests">
+				<tests:integer>
+					567
+				</tests:integer>
 			</tests:TestPropertiesClass>
 		');
 		Assert.notNull(result);
@@ -1006,6 +1147,18 @@ class MXHXComponentPropertyTest extends Test {
 		Assert.equals("", result.string);
 	}
 
+	public function testStringAttributeExtraWhitespace():Void {
+		var result = MXHXComponent.withMarkup('
+			<tests:TestPropertiesClass
+				xmlns:mx="https://ns.mxhx.dev/2024/basic"
+				xmlns:tests="https://ns.mxhx.dev/2024/tests"
+				string=" hello "/>
+		');
+		Assert.notNull(result);
+		Assert.isOfType(result.string, String);
+		Assert.equals(" hello ", result.string);
+	}
+
 	public function testStringChildElement():Void {
 		var result = MXHXComponent.withMarkup('
 			<tests:TestPropertiesClass
@@ -1017,6 +1170,19 @@ class MXHXComponentPropertyTest extends Test {
 		Assert.notNull(result);
 		Assert.isOfType(result.string, String);
 		Assert.equals("hello", result.string);
+	}
+
+	public function testStringChildElementExtraWhitespace():Void {
+		var result = MXHXComponent.withMarkup('
+			<tests:TestPropertiesClass
+				xmlns:mx="https://ns.mxhx.dev/2024/basic"
+				xmlns:tests="https://ns.mxhx.dev/2024/tests">
+				<tests:string> hello </tests:string>
+			</tests:TestPropertiesClass>
+		');
+		Assert.notNull(result);
+		Assert.isOfType(result.string, String);
+		Assert.equals(" hello ", result.string);
 	}
 
 	public function testStringChildElementComment1():Void {
@@ -1303,12 +1469,55 @@ class MXHXComponentPropertyTest extends Test {
 		#end
 	}
 
+	public function testUIntAttributeExtraWhitespacee():Void {
+		var result = MXHXComponent.withMarkup('
+			<tests:TestPropertiesClass
+				xmlns:mx="https://ns.mxhx.dev/2024/basic"
+				xmlns:tests="https://ns.mxhx.dev/2024/tests"
+				unsignedInteger=" 4000000000 "/>
+		');
+		Assert.notNull(result);
+		Assert.isOfType(result.unsignedInteger, Int);
+		#if eval
+		final expected = Std.int(4000000000);
+		Assert.equals(expected, result.unsignedInteger);
+		#else
+		// uint comparison doesn't always work on some targets
+		final expected:Float = 4000000000.0;
+		final uintAsFloatValue:Float = result.unsignedInteger;
+		Assert.equals(expected, uintAsFloatValue);
+		#end
+	}
+
 	public function testUIntChildElement():Void {
 		var result = MXHXComponent.withMarkup('
 			<tests:TestPropertiesClass
 				xmlns:mx="https://ns.mxhx.dev/2024/basic"
 				xmlns:tests="https://ns.mxhx.dev/2024/tests">
 				<tests:unsignedInteger>4000000000</tests:unsignedInteger>
+			</tests:TestPropertiesClass>
+		');
+		Assert.notNull(result);
+		Assert.isOfType(result.unsignedInteger, Int);
+		#if eval
+		final expected = Std.int(4000000000);
+		Assert.equals(expected, result.unsignedInteger);
+		#else
+		// uint comparison doesn't always work on some targets
+		final expected:Float = 4000000000.0;
+		final uintAsFloatValue:Float = result.unsignedInteger;
+		Assert.equals(expected, uintAsFloatValue);
+		#end
+	}
+
+	public function testUIntChildElementExtraWhitespace():Void {
+		var result = MXHXComponent.withMarkup('
+			<tests:TestPropertiesClass
+				xmlns:mx="https://ns.mxhx.dev/2024/basic"
+				xmlns:tests="https://ns.mxhx.dev/2024/tests">
+				<tests:unsignedInteger>
+					4000000000
+				</tests:unsignedInteger>
 			</tests:TestPropertiesClass>
 		');
 		Assert.notNull(result);

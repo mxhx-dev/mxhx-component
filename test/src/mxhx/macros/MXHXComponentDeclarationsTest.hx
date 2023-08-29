@@ -202,8 +202,8 @@ class MXHXComponentDeclarationsTest extends Test {
 		Assert.equals(123.4, result.strictlyTyped.float);
 		Assert.equals("hello", result.strictlyTyped.string);
 		Assert.equals(567, result.strictlyTyped.integer);
-		Assert.notNull(result.strictlyTyped.struct);
 		Assert.equals(890.1, result.strictlyTyped.canBeNull);
+		Assert.notNull(result.strictlyTyped.struct);
 		Assert.equals(4, Reflect.fields(result.strictlyTyped.struct).length);
 		Assert.isTrue(Reflect.hasField(result.strictlyTyped.struct, "float"));
 		Assert.isTrue(Reflect.hasField(result.strictlyTyped.struct, "boolean"));
@@ -214,6 +214,30 @@ class MXHXComponentDeclarationsTest extends Test {
 		Assert.equals("hello", Reflect.field(result.strictlyTyped.struct, "string"));
 		Assert.notNull(Reflect.field(result.strictlyTyped.struct, "object"));
 		Assert.equals(567, Reflect.field(Reflect.field(result.strictlyTyped.struct, "object"), "integer"));
+	}
+
+	public function testStrictExtraWhitespace():Void {
+		var result = MXHXComponent.withMarkup('
+			<tests:TestClass1 xmlns:mx="https://ns.mxhx.dev/2024/basic" xmlns:tests="https://ns.mxhx.dev/2024/tests">
+				<mx:Declarations>
+					<tests:TestPropertiesClass
+						id="strictlyTyped"
+						boolean=" true "
+						float=" 123.4 "
+						integer=" 567 "
+						string=" hello "
+						canBeNull=" 890.1 ">
+					</tests:TestPropertiesClass>
+				</mx:Declarations>
+			</tests:TestClass1>
+		');
+		Assert.notNull(result);
+		Assert.notNull(result.strictlyTyped);
+		Assert.isTrue(result.strictlyTyped.boolean);
+		Assert.equals(123.4, result.strictlyTyped.float);
+		Assert.equals(" hello ", result.strictlyTyped.string);
+		Assert.equals(567, result.strictlyTyped.integer);
+		Assert.equals(890.1, result.strictlyTyped.canBeNull);
 	}
 
 	public function testAbstractEnumValue():Void {
