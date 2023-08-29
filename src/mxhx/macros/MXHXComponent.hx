@@ -1182,10 +1182,19 @@ class MXHXComponent {
 		if (model.value != null) {
 			return createValueExprForDynamic(model.value);
 		}
-		var textType:MXHXTextType = null;
 		if (model.text.length > 0) {
 			var hasFields = model.fields.iterator().hasNext() && model.strongFields;
-			var hasMultipleTextTypes = model.text.length > 1;
+			var hasMultipleTextTypes = false;
+			var textType:MXHXTextType = null;
+			for (textData in model.text) {
+				if (textType == null) {
+					textType = textData.textType;
+				} else if (textType != textData.textType) {
+					hasMultipleTextTypes = true;
+					break;
+				}
+			}
+			var pendingText:String = "";
 			for (textData in model.text) {
 				if (hasFields || hasMultipleTextTypes) {
 					Context.warning('Ignoring text \'${textData.content}\' because other XML content exists', sourceLocationToContextPosition(textData));
@@ -1200,8 +1209,9 @@ class MXHXComponent {
 				if (textContentContainsBinding(textData.content)) {
 					reportError('Binding is not supported here', textData);
 				}
-				return createValueExprForDynamic(textData.content);
+				pendingText += textData.content;
 			}
+			return createValueExprForDynamic(pendingText);
 		}
 		var subModelExprs:Array<Expr> = [];
 		for (fieldName => subModels in model.fields) {
