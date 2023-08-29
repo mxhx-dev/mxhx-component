@@ -1485,6 +1485,46 @@ class MXHXComponentDeclarationsTest extends Test {
 		Assert.equals("      ", result.string);
 	}
 
+	public function testStringSource():Void {
+		var result = MXHXComponent.withMarkup('
+			<tests:TestClass1 xmlns:mx="https://ns.mxhx.dev/2024/basic" xmlns:tests="https://ns.mxhx.dev/2024/tests">
+				<mx:Declarations>
+					<mx:String id="string" source="source.txt"/>
+				</mx:Declarations>
+			</tests:TestClass1>
+		');
+		Assert.notNull(result);
+		Assert.isOfType(result.string, String);
+		Assert.equals("hello", result.string);
+	}
+
+	public function testStringSourceEmptyContent():Void {
+		var result = MXHXComponent.withMarkup('
+			<tests:TestClass1 xmlns:mx="https://ns.mxhx.dev/2024/basic" xmlns:tests="https://ns.mxhx.dev/2024/tests">
+				<mx:Declarations>
+					<mx:String id="string" source="source.txt"></mx:String>
+				</mx:Declarations>
+			</tests:TestClass1>
+		');
+		Assert.notNull(result);
+		Assert.isOfType(result.string, String);
+		Assert.equals("hello", result.string);
+	}
+
+	public function testStringSourceEmptyContentExtraWhitespace():Void {
+		var result = MXHXComponent.withMarkup('
+			<tests:TestClass1 xmlns:mx="https://ns.mxhx.dev/2024/basic" xmlns:tests="https://ns.mxhx.dev/2024/tests">
+				<mx:Declarations>
+					<mx:String id="string" source="source.txt">
+					</mx:String>
+				</mx:Declarations>
+			</tests:TestClass1>
+		');
+		Assert.notNull(result);
+		Assert.isOfType(result.string, String);
+		Assert.equals("hello", result.string);
+	}
+
 	public function testUInt():Void {
 		var result = MXHXComponent.withMarkup('
 			<tests:TestClass1 xmlns:mx="https://ns.mxhx.dev/2024/basic" xmlns:tests="https://ns.mxhx.dev/2024/tests">
@@ -2296,6 +2336,133 @@ class MXHXComponentDeclarationsTest extends Test {
 		Assert.notNull(firstChild);
 		Assert.equals(XmlType.Comment, firstChild.nodeType);
 		Assert.equals(" comment ", firstChild.nodeValue);
+	}
+
+	public function testXmlSource():Void {
+		var result = MXHXComponent.withMarkup('
+			<tests:TestClass1 xmlns:mx="https://ns.mxhx.dev/2024/basic" xmlns:tests="https://ns.mxhx.dev/2024/tests">
+				<mx:Declarations>
+					<mx:Xml id="xml" source="source.xml"/>
+				</mx:Declarations>
+			</tests:TestClass1>
+		');
+		Assert.notNull(result);
+		Assert.isOfType(result.xml, Xml);
+		var xml:Xml = result.xml;
+		Assert.equals(XmlType.Document, xml.nodeType);
+		var rootElement:Xml = xml.firstChild();
+		Assert.notNull(rootElement);
+		Assert.equals(XmlType.Element, rootElement.nodeType);
+		Assert.equals("root", rootElement.nodeName);
+		Assert.isFalse(rootElement.attributes().hasNext());
+		var elements = rootElement.elements();
+		Assert.isTrue(elements.hasNext());
+		var element = elements.next();
+		Assert.equals(XmlType.Element, element.nodeType);
+		var child = element.firstChild();
+		Assert.notNull(child);
+		Assert.equals(XmlType.PCData, child.nodeType);
+		Assert.equals("One", child.nodeValue);
+		Assert.isTrue(elements.hasNext());
+		var element = elements.next();
+		Assert.equals(XmlType.Element, element.nodeType);
+		var child = element.firstChild();
+		Assert.notNull(child);
+		Assert.equals(XmlType.PCData, child.nodeType);
+		Assert.equals("Two", child.nodeValue);
+		Assert.isTrue(elements.hasNext());
+		var element = elements.next();
+		Assert.equals(XmlType.Element, element.nodeType);
+		var child = element.firstChild();
+		Assert.notNull(child);
+		Assert.equals(XmlType.PCData, child.nodeType);
+		Assert.equals("Three", child.nodeValue);
+		Assert.isFalse(elements.hasNext());
+	}
+
+	public function testXmlSourceEmptyContent():Void {
+		var result = MXHXComponent.withMarkup('
+			<tests:TestClass1 xmlns:mx="https://ns.mxhx.dev/2024/basic" xmlns:tests="https://ns.mxhx.dev/2024/tests">
+				<mx:Declarations>
+					<mx:Xml id="xml" source="source.xml"></mx:Xml>
+				</mx:Declarations>
+			</tests:TestClass1>
+		');
+		Assert.notNull(result);
+		Assert.isOfType(result.xml, Xml);
+		var xml:Xml = result.xml;
+		Assert.equals(XmlType.Document, xml.nodeType);
+		var rootElement:Xml = xml.firstChild();
+		Assert.notNull(rootElement);
+		Assert.equals(XmlType.Element, rootElement.nodeType);
+		Assert.equals("root", rootElement.nodeName);
+		Assert.isFalse(rootElement.attributes().hasNext());
+		var elements = rootElement.elements();
+		Assert.isTrue(elements.hasNext());
+		var element = elements.next();
+		Assert.equals(XmlType.Element, element.nodeType);
+		var child = element.firstChild();
+		Assert.notNull(child);
+		Assert.equals(XmlType.PCData, child.nodeType);
+		Assert.equals("One", child.nodeValue);
+		Assert.isTrue(elements.hasNext());
+		var element = elements.next();
+		Assert.equals(XmlType.Element, element.nodeType);
+		var child = element.firstChild();
+		Assert.notNull(child);
+		Assert.equals(XmlType.PCData, child.nodeType);
+		Assert.equals("Two", child.nodeValue);
+		Assert.isTrue(elements.hasNext());
+		var element = elements.next();
+		Assert.equals(XmlType.Element, element.nodeType);
+		var child = element.firstChild();
+		Assert.notNull(child);
+		Assert.equals(XmlType.PCData, child.nodeType);
+		Assert.equals("Three", child.nodeValue);
+		Assert.isFalse(elements.hasNext());
+	}
+
+	public function testXmlSourceEmptyContentExtraWhitespacee():Void {
+		var result = MXHXComponent.withMarkup('
+			<tests:TestClass1 xmlns:mx="https://ns.mxhx.dev/2024/basic" xmlns:tests="https://ns.mxhx.dev/2024/tests">
+				<mx:Declarations>
+					<mx:Xml id="xml" source="source.xml">
+					</mx:Xml>
+				</mx:Declarations>
+			</tests:TestClass1>
+		');
+		Assert.notNull(result);
+		Assert.isOfType(result.xml, Xml);
+		var xml:Xml = result.xml;
+		Assert.equals(XmlType.Document, xml.nodeType);
+		var rootElement:Xml = xml.firstChild();
+		Assert.notNull(rootElement);
+		Assert.equals(XmlType.Element, rootElement.nodeType);
+		Assert.equals("root", rootElement.nodeName);
+		Assert.isFalse(rootElement.attributes().hasNext());
+		var elements = rootElement.elements();
+		Assert.isTrue(elements.hasNext());
+		var element = elements.next();
+		Assert.equals(XmlType.Element, element.nodeType);
+		var child = element.firstChild();
+		Assert.notNull(child);
+		Assert.equals(XmlType.PCData, child.nodeType);
+		Assert.equals("One", child.nodeValue);
+		Assert.isTrue(elements.hasNext());
+		var element = elements.next();
+		Assert.equals(XmlType.Element, element.nodeType);
+		var child = element.firstChild();
+		Assert.notNull(child);
+		Assert.equals(XmlType.PCData, child.nodeType);
+		Assert.equals("Two", child.nodeValue);
+		Assert.isTrue(elements.hasNext());
+		var element = elements.next();
+		Assert.equals(XmlType.Element, element.nodeType);
+		var child = element.firstChild();
+		Assert.notNull(child);
+		Assert.equals(XmlType.PCData, child.nodeType);
+		Assert.equals("Three", child.nodeValue);
+		Assert.isFalse(elements.hasNext());
 	}
 
 	public function testComplexEnumValueWithoutParameters():Void {

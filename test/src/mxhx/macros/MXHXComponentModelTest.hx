@@ -214,4 +214,59 @@ class MXHXComponentModelTest extends Test {
 		Assert.isOfType(result.model.child, String);
 		Assert.equals("hello", result.model.child);
 	}
+
+	public function testModelSource():Void {
+		var result = MXHXComponent.withMarkup('
+			<tests:TestClass1 xmlns:mx="https://ns.mxhx.dev/2024/basic" xmlns:tests="https://ns.mxhx.dev/2024/tests">
+				<mx:Declarations>
+					<mx:Model id="model" source="source.xml"/>
+				</mx:Declarations>
+			</tests:TestClass1>
+		');
+		Assert.notNull(result);
+		Assert.notNull(result.model);
+		Assert.equals(1, Reflect.fields(result.model).length);
+		Assert.isOfType(result.model.child, Array);
+		Assert.equals(3, result.model.child.length);
+		Assert.equals("One", result.model.child[0]);
+		Assert.equals("Two", result.model.child[1]);
+		Assert.equals("Three", result.model.child[2]);
+	}
+
+	public function testModelSourceEmptyContent():Void {
+		var result = MXHXComponent.withMarkup('
+			<tests:TestClass1 xmlns:mx="https://ns.mxhx.dev/2024/basic" xmlns:tests="https://ns.mxhx.dev/2024/tests">
+				<mx:Declarations>
+					<mx:Model id="model" source="source.xml"></mx:Model>
+				</mx:Declarations>
+			</tests:TestClass1>
+		');
+		Assert.notNull(result);
+		Assert.notNull(result.model);
+		Assert.equals(1, Reflect.fields(result.model).length);
+		Assert.isOfType(result.model.child, Array);
+		Assert.equals(3, result.model.child.length);
+		Assert.equals("One", result.model.child[0]);
+		Assert.equals("Two", result.model.child[1]);
+		Assert.equals("Three", result.model.child[2]);
+	}
+
+	public function testModelSourceEmptyContentExtraWhitespace():Void {
+		var result = MXHXComponent.withMarkup('
+			<tests:TestClass1 xmlns:mx="https://ns.mxhx.dev/2024/basic" xmlns:tests="https://ns.mxhx.dev/2024/tests">
+				<mx:Declarations>
+					<mx:Model id="model" source="source.xml">
+					</mx:Model>
+				</mx:Declarations>
+			</tests:TestClass1>
+		');
+		Assert.notNull(result);
+		Assert.notNull(result.model);
+		Assert.equals(1, Reflect.fields(result.model).length);
+		Assert.isOfType(result.model.child, Array);
+		Assert.equals(3, result.model.child.length);
+		Assert.equals("One", result.model.child[0]);
+		Assert.equals("Two", result.model.child[1]);
+		Assert.equals("Three", result.model.child[2]);
+	}
 }
