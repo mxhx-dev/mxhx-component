@@ -2477,32 +2477,33 @@ class MXHXComponent {
 	}
 
 	private static function createValueExprForDynamic(value:String):Expr {
-		if (value == VALUE_TRUE || value == VALUE_FALSE) {
-			var boolValue = value == VALUE_TRUE;
+		var trimmed = StringTools.trim(value);
+		if (trimmed == VALUE_TRUE || trimmed == VALUE_FALSE) {
+			var boolValue = trimmed == VALUE_TRUE;
 			return macro $v{boolValue};
 		}
-		if (~/^-?[0-9]+?$/.match(value)) {
-			var intValue = Std.parseInt(value);
-			var intAsFloatValue = Std.parseFloat(value);
+		if (~/^-?[0-9]+?$/.match(trimmed)) {
+			var intValue = Std.parseInt(trimmed);
+			var intAsFloatValue = Std.parseFloat(trimmed);
 			if (intValue != null && intValue == intAsFloatValue) {
 				return macro $v{intValue};
 			}
 			var uintValue:UInt = Std.int(intAsFloatValue);
 			return macro $v{uintValue};
 		}
-		if (~/^-?[0-9]+(\.[0-9]+)?(e\-?\d+)?$/.match(value)) {
-			var floatValue = Std.parseFloat(value);
+		if (~/^-?[0-9]+(\.[0-9]+)?(e\-?\d+)?$/.match(trimmed)) {
+			var floatValue = Std.parseFloat(trimmed);
 			return macro $v{floatValue};
 		}
-		if (~/^-?0x[0-9a-fA-F]+$/.match(value)) {
-			var intValue = Std.parseInt(value);
+		if (~/^-?0x[0-9a-fA-F]+$/.match(trimmed)) {
+			var intValue = Std.parseInt(trimmed);
 			return macro $v{intValue};
 		}
-		if (value == VALUE_NAN) {
+		if (trimmed == VALUE_NAN) {
 			return macro Math.NaN;
-		} else if (value == VALUE_INFINITY) {
+		} else if (trimmed == VALUE_INFINITY) {
 			return macro Math.POSITIVE_INFINITY;
-		} else if (value == VALUE_NEGATIVE_INFINITY) {
+		} else if (trimmed == VALUE_NEGATIVE_INFINITY) {
 			return macro Math.NEGATIVE_INFINITY;
 		}
 		// it can always be parsed as a string
