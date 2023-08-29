@@ -1017,12 +1017,30 @@ class MXHXComponent {
 	}
 
 	private static function handleModelTag(tagData:IMXHXTagData, generatedFields:Array<Field>):Expr {
+		var current:IMXHXUnitData = null;
 		var sourceAttr = tagData.getAttributeData(ATTRIBUTE_SOURCE);
 		if (sourceAttr != null) {
-			errorAttributeNotSupported(sourceAttr);
-			return macro null;
+			var modelString:String = null;
+			var sourceFilePath = sourceAttr.rawValue;
+			try {
+				modelString = loadFile(sourceFilePath);
+			} catch (e:Dynamic) {
+				reportError('Failed to load file with path: ' + sourceFilePath, getAttributeValueSourceLocation(sourceAttr));
+				return macro null;
+			}
+			var mxhxParser = new MXHXParser(modelString, sourceFilePath);
+			var mxhxData = mxhxParser.parse();
+			if (mxhxData.problems.length > 0) {
+				for (problem in mxhxData.problems) {
+					reportError(problem.message, problem);
+				}
+				return macro null;
+			}
+			current = mxhxData.rootTag;
 		}
-		var current = tagData.getFirstChildUnit();
+		if (current == null) {
+			current = tagData.getFirstChildUnit();
+		}
 		var model:ModelObject;
 		var rootTag:IMXHXTagData = null;
 		var parentStack:Array<ModelObject> = [new ModelObject()];
