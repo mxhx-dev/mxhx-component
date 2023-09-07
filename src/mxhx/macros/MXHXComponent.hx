@@ -2501,66 +2501,99 @@ class MXHXComponent {
 		}
 	}
 
-	private static function createValueExprForDynamic(value:String):String {
+	private static function createValueForDynamic(value:String):Any {
 		var trimmed = StringTools.trim(value);
 		if (trimmed == VALUE_TRUE || trimmed == VALUE_FALSE) {
-			var boolValue = trimmed == VALUE_TRUE;
-			return Std.string(boolValue);
+			return trimmed == VALUE_TRUE;
 		}
 		if (~/^-?[0-9]+?$/.match(trimmed)) {
 			var intValue = Std.parseInt(trimmed);
 			var intAsFloatValue = Std.parseFloat(trimmed);
 			if (intValue != null && intValue == intAsFloatValue) {
-				return Std.string(intValue);
+				return intValue;
 			}
-			var uintValue:UInt = Std.int(intAsFloatValue);
-			return Std.string(uintValue);
+			return Std.int(intAsFloatValue);
 		}
 		if (~/^-?[0-9]+(\.[0-9]+)?(e\-?\d+)?$/.match(trimmed)) {
-			var floatValue = Std.parseFloat(trimmed);
-			return Std.string(floatValue);
+			return Std.parseFloat(trimmed);
 		}
 		if (~/^-?0x[0-9a-fA-F]+$/.match(trimmed)) {
-			var intValue = Std.parseInt(trimmed);
-			return Std.string(intValue);
+			return Std.parseInt(trimmed);
 		}
 		if (trimmed == VALUE_NAN) {
-			return CONSTANT_MATH_NAN;
+			return Math.NaN;
 		} else if (trimmed == VALUE_INFINITY) {
-			return CONSTANT_MATH_POSITIVE_INFINITY;
+			return Math.POSITIVE_INFINITY;
 		} else if (trimmed == VALUE_NEGATIVE_INFINITY) {
-			return CONSTANT_MATH_NEGATIVE_INFINITY;
+			return Math.NEGATIVE_INFINITY;
 		}
 		// it can always be parsed as a string
-		return '"${value}"';
+		return value;
 	}
 
-	private static function createDefaultValueExprForTypeSymbol(typeSymbol:IMXHXTypeSymbol, location:IMXHXSourceLocation):String {
+	private static function createValueExprForDynamic(value:String):String {
+		var createdValue = createValueForDynamic(value);
+		if ((createdValue is String)) {
+			// need to add quotes around a string
+			return '"${createdValue}"';
+		} else if ((createdValue is Float)) {
+			// these can't be converted to string
+			if (Math.isNaN(createdValue)) {
+				return CONSTANT_MATH_NAN;
+			} else if (createdValue == Math.POSITIVE_INFINITY) {
+				return CONSTANT_MATH_POSITIVE_INFINITY;
+			} else if (createdValue == Math.NEGATIVE_INFINITY) {
+				return CONSTANT_MATH_NEGATIVE_INFINITY;
+			}
+		}
+		return Std.string(createdValue);
+	}
+
+	private static function createDefaultValueForTypeSymbol(typeSymbol:IMXHXTypeSymbol, location:IMXHXSourceLocation):Any {
 		if (typeSymbol.pack.length == 0) {
 			switch (typeSymbol.name) {
 				case TYPE_BOOL:
-					return VALUE_FALSE;
+					return false;
 				case TYPE_EREG:
-					return LITERAL_EMPTY_EREG;
+					return ~//;
 				case TYPE_FLOAT:
-					return CONSTANT_MATH_NAN;
+					return Math.NaN;
 				case TYPE_INT:
-					return LITERAL_ZERO;
+					return 0;
 				case TYPE_STRING:
 					if ((location is IMXHXTagData)) {
 						var parentTag = cast(location, IMXHXTagData).parentTag;
 						if (isLanguageTag(TAG_DECLARATIONS, parentTag)) {
-							return LITERAL_NULL;
+							return null;
 						}
 					}
-					return LITERAL_EMPTY_STRING;
+					return "";
 				case TYPE_UINT:
-					return LITERAL_ZERO;
+					return 0;
 				default:
-					return LITERAL_NULL;
+					return null;
 			}
 		}
-		return LITERAL_NULL;
+		return null;
+	}
+
+	private static function createDefaultValueExprForTypeSymbol(typeSymbol:IMXHXTypeSymbol, location:IMXHXSourceLocation):String {
+		if (typeSymbol.pack.length == 0) {
+			// these can't be converted to string
+			switch (typeSymbol.name) {
+				case TYPE_EREG:
+					return LITERAL_EMPTY_EREG;
+				case TYPE_FLOAT:
+					return CONSTANT_MATH_NAN;
+				default:
+			}
+		}
+		var defaultValue = createDefaultValueForTypeSymbol(typeSymbol, location);
+		if ((defaultValue is String)) {
+			// need to add quotes around a string
+			return '"${defaultValue}"';
+		}
+		return Std.string(defaultValue);
 	}
 
 	private static function createValueExprForTypeSymbol(typeSymbol:IMXHXTypeSymbol, value:String, fromCdata:Bool, location:IMXHXSourceLocation):String {
