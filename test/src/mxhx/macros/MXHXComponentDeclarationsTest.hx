@@ -1700,21 +1700,39 @@ class MXHXComponentDeclarationsTest extends Test {
 		var result = MXHXComponent.withMarkup('
 			<tests:TestClass1 xmlns:mx="https://ns.mxhx.dev/2024/basic" xmlns:tests="https://ns.mxhx.dev/2024/tests">
 				<mx:Declarations>
-					<mx:UInt id="uint">4000000000</mx:UInt>
+					<mx:UInt id="uint">0xFFFFFFFF</mx:UInt>
 				</mx:Declarations>
 			</tests:TestClass1>
 		');
 		Assert.notNull(result);
 		Assert.isOfType(result.uint, Int);
-		#if eval
-		final expected = Std.int(4000000000);
-		Assert.equals(expected, result.uint);
-		#else
-		// uint comparison doesn't always work on some targets
-		final expected:Float = 4000000000.0;
-		final uintAsFloatValue:Float = result.uint;
-		Assert.equals(expected, uintAsFloatValue);
-		#end
+		Assert.equals(0xFFFFFFFF, result.uint);
+	}
+
+	public function testUIntHexLowerCase():Void {
+		var result = MXHXComponent.withMarkup('
+			<tests:TestClass1 xmlns:mx="https://ns.mxhx.dev/2024/basic" xmlns:tests="https://ns.mxhx.dev/2024/tests">
+				<mx:Declarations>
+					<mx:UInt id="uint">0xffffffff</mx:UInt>
+				</mx:Declarations>
+			</tests:TestClass1>
+		');
+		Assert.notNull(result);
+		Assert.isOfType(result.uint, Int);
+		Assert.equals(0xFFFFFFFF, result.uint);
+	}
+
+	public function testUIntDecimal():Void {
+		var result = MXHXComponent.withMarkup('
+			<tests:TestClass1 xmlns:mx="https://ns.mxhx.dev/2024/basic" xmlns:tests="https://ns.mxhx.dev/2024/tests">
+				<mx:Declarations>
+					<mx:UInt id="uint">1234</mx:UInt>
+				</mx:Declarations>
+			</tests:TestClass1>
+		');
+		Assert.notNull(result);
+		Assert.isOfType(result.uint, Int);
+		Assert.equals(1234, result.uint);
 	}
 
 	public function testUIntExtraWhitespace():Void {
@@ -1722,85 +1740,53 @@ class MXHXComponentDeclarationsTest extends Test {
 			<tests:TestClass1 xmlns:mx="https://ns.mxhx.dev/2024/basic" xmlns:tests="https://ns.mxhx.dev/2024/tests">
 				<mx:Declarations>
 					<mx:UInt id="uint">
-						4000000000
+						0xFFFFFFFF
 					</mx:UInt>
 				</mx:Declarations>
 			</tests:TestClass1>
 		');
 		Assert.notNull(result);
 		Assert.isOfType(result.uint, Int);
-		#if eval
-		final expected = Std.int(4000000000);
-		Assert.equals(expected, result.uint);
-		#else
-		// uint comparison doesn't always work on some targets
-		final expected:Float = 4000000000.0;
-		final uintAsFloatValue:Float = result.uint;
-		Assert.equals(expected, uintAsFloatValue);
-		#end
+		Assert.equals(0xFFFFFFFF, result.uint);
 	}
 
 	public function testUIntComment1():Void {
 		var result = MXHXComponent.withMarkup('
 			<tests:TestClass1 xmlns:mx="https://ns.mxhx.dev/2024/basic" xmlns:tests="https://ns.mxhx.dev/2024/tests">
 				<mx:Declarations>
-					<mx:UInt id="uint">4000000000<!-- comment --></mx:UInt>
+					<mx:UInt id="uint">0xFFFFFFFF<!-- comment --></mx:UInt>
 				</mx:Declarations>
 			</tests:TestClass1>
 		');
 		Assert.notNull(result);
 		Assert.isOfType(result.uint, Int);
-		#if eval
-		final expected = Std.int(4000000000);
-		Assert.equals(expected, result.uint);
-		#else
-		// uint comparison doesn't always work on some targets
-		final expected:Float = 4000000000.0;
-		final uintAsFloatValue:Float = result.uint;
-		Assert.equals(expected, uintAsFloatValue);
-		#end
+		Assert.equals(0xFFFFFFFF, result.uint);
 	}
 
 	public function testUIntComment2():Void {
 		var result = MXHXComponent.withMarkup('
 			<tests:TestClass1 xmlns:mx="https://ns.mxhx.dev/2024/basic" xmlns:tests="https://ns.mxhx.dev/2024/tests">
 				<mx:Declarations>
-					<mx:UInt id="uint"><!-- comment -->4000000000</mx:UInt>
+					<mx:UInt id="uint"><!-- comment -->0xFFFFFFFF</mx:UInt>
 				</mx:Declarations>
 			</tests:TestClass1>
 		');
 		Assert.notNull(result);
 		Assert.isOfType(result.uint, Int);
-		#if eval
-		final expected = Std.int(4000000000);
-		Assert.equals(expected, result.uint);
-		#else
-		// uint comparison doesn't always work on some targets
-		final expected:Float = 4000000000.0;
-		final uintAsFloatValue:Float = result.uint;
-		Assert.equals(expected, uintAsFloatValue);
-		#end
+		Assert.equals(0xFFFFFFFF, result.uint);
 	}
 
 	public function testUIntComment3():Void {
 		var result = MXHXComponent.withMarkup('
 			<tests:TestClass1 xmlns:mx="https://ns.mxhx.dev/2024/basic" xmlns:tests="https://ns.mxhx.dev/2024/tests">
 				<mx:Declarations>
-					<mx:UInt id="uint">4000000<!-- comment -->000</mx:UInt>
+					<mx:UInt id="uint">0xFFFFF<!-- comment -->FFF</mx:UInt>
 				</mx:Declarations>
 			</tests:TestClass1>
 		');
 		Assert.notNull(result);
 		Assert.isOfType(result.uint, Int);
-		#if eval
-		final expected = Std.int(4000000000);
-		Assert.equals(expected, result.uint);
-		#else
-		// uint comparison doesn't always work on some targets
-		final expected:Float = 4000000000.0;
-		final uintAsFloatValue:Float = result.uint;
-		Assert.equals(expected, uintAsFloatValue);
-		#end
+		Assert.equals(0xFFFFFFFF, result.uint);
 	}
 
 	public function testUIntEmpty():Void {
@@ -1858,67 +1844,17 @@ class MXHXComponentDeclarationsTest extends Test {
 		Assert.equals(0, result.uint);
 	}
 
-	public function testUIntHexLowerCase():Void {
-		var result = MXHXComponent.withMarkup('
-			<tests:TestClass1 xmlns:mx="https://ns.mxhx.dev/2024/basic" xmlns:tests="https://ns.mxhx.dev/2024/tests">
-				<mx:Declarations>
-					<mx:UInt id="uint">0xee6b2800</mx:UInt>
-				</mx:Declarations>
-			</tests:TestClass1>
-		');
-		Assert.notNull(result);
-		Assert.isOfType(result.uint, Int);
-		#if eval
-		final expected = Std.int(4000000000);
-		Assert.equals(expected, result.uint);
-		#else
-		// uint comparison doesn't always work on some targets
-		final expected:Float = 4000000000.0;
-		final uintAsFloatValue:Float = result.uint;
-		Assert.equals(expected, uintAsFloatValue);
-		#end
-	}
-
-	public function testUIntHexUpperCase():Void {
-		var result = MXHXComponent.withMarkup('
-			<tests:TestClass1 xmlns:mx="https://ns.mxhx.dev/2024/basic" xmlns:tests="https://ns.mxhx.dev/2024/tests">
-				<mx:Declarations>
-					<mx:UInt id="uint">0xEE6B2800</mx:UInt>
-				</mx:Declarations>
-			</tests:TestClass1>
-		');
-		Assert.notNull(result);
-		Assert.isOfType(result.uint, Int);
-		#if eval
-		final expected = Std.int(4000000000);
-		Assert.equals(expected, result.uint);
-		#else
-		// uint comparison doesn't always work on some targets
-		final expected:Float = 4000000000.0;
-		final uintAsFloatValue:Float = result.uint;
-		Assert.equals(expected, uintAsFloatValue);
-		#end
-	}
-
 	public function testUIntCData():Void {
 		var result = MXHXComponent.withMarkup('
 			<tests:TestClass1 xmlns:mx="https://ns.mxhx.dev/2024/basic" xmlns:tests="https://ns.mxhx.dev/2024/tests">
 				<mx:Declarations>
-					<mx:UInt id="uint"><![CDATA[4000000000]]></mx:UInt>
+					<mx:UInt id="uint"><![CDATA[0xFFFFFFFF]]></mx:UInt>
 				</mx:Declarations>
 			</tests:TestClass1>
 		');
 		Assert.notNull(result);
 		Assert.isOfType(result.uint, Int);
-		#if eval
-		final expected = Std.int(4000000000);
-		Assert.equals(expected, result.uint);
-		#else
-		// uint comparison doesn't always work on some targets
-		final expected:Float = 4000000000.0;
-		final uintAsFloatValue:Float = result.uint;
-		Assert.equals(expected, uintAsFloatValue);
-		#end
+		Assert.equals(0xFFFFFFFF, result.uint);
 	}
 
 	public function testArray():Void {

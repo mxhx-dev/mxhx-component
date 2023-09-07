@@ -1575,19 +1575,11 @@ class MXHXComponentPropertyTest extends Test {
 			<tests:TestPropertiesClass
 				xmlns:mx="https://ns.mxhx.dev/2024/basic"
 				xmlns:tests="https://ns.mxhx.dev/2024/tests"
-				unsignedInteger="4000000000"/>
+				unsignedInteger="0xFFFFFFFF"/>
 		');
 		Assert.notNull(result);
 		Assert.isOfType(result.unsignedInteger, Int);
-		#if eval
-		final expected = Std.int(4000000000);
-		Assert.equals(expected, result.unsignedInteger);
-		#else
-		// uint comparison doesn't always work on some targets
-		final expected:Float = 4000000000.0;
-		final uintAsFloatValue:Float = result.unsignedInteger;
-		Assert.equals(expected, uintAsFloatValue);
-		#end
+		Assert.equals(0xFFFFFFFF, result.unsignedInteger);
 	}
 
 	public function testUIntAttributeExtraWhitespacee():Void {
@@ -1595,19 +1587,11 @@ class MXHXComponentPropertyTest extends Test {
 			<tests:TestPropertiesClass
 				xmlns:mx="https://ns.mxhx.dev/2024/basic"
 				xmlns:tests="https://ns.mxhx.dev/2024/tests"
-				unsignedInteger=" 4000000000 "/>
+				unsignedInteger=" 0xFFFFFFFF "/>
 		');
 		Assert.notNull(result);
 		Assert.isOfType(result.unsignedInteger, Int);
-		#if eval
-		final expected = Std.int(4000000000);
-		Assert.equals(expected, result.unsignedInteger);
-		#else
-		// uint comparison doesn't always work on some targets
-		final expected:Float = 4000000000.0;
-		final uintAsFloatValue:Float = result.unsignedInteger;
-		Assert.equals(expected, uintAsFloatValue);
-		#end
+		Assert.equals(0xFFFFFFFF, result.unsignedInteger);
 	}
 
 	public function testUIntChildElement():Void {
@@ -1615,20 +1599,12 @@ class MXHXComponentPropertyTest extends Test {
 			<tests:TestPropertiesClass
 				xmlns:mx="https://ns.mxhx.dev/2024/basic"
 				xmlns:tests="https://ns.mxhx.dev/2024/tests">
-				<tests:unsignedInteger>4000000000</tests:unsignedInteger>
+				<tests:unsignedInteger>0xFFFFFFFF</tests:unsignedInteger>
 			</tests:TestPropertiesClass>
 		');
 		Assert.notNull(result);
 		Assert.isOfType(result.unsignedInteger, Int);
-		#if eval
-		final expected = Std.int(4000000000);
-		Assert.equals(expected, result.unsignedInteger);
-		#else
-		// uint comparison doesn't always work on some targets
-		final expected:Float = 4000000000.0;
-		final uintAsFloatValue:Float = result.unsignedInteger;
-		Assert.equals(expected, uintAsFloatValue);
-		#end
+		Assert.equals(0xFFFFFFFF, result.unsignedInteger);
 	}
 
 	public function testUIntChildElementExtraWhitespace():Void {
@@ -1637,21 +1613,13 @@ class MXHXComponentPropertyTest extends Test {
 				xmlns:mx="https://ns.mxhx.dev/2024/basic"
 				xmlns:tests="https://ns.mxhx.dev/2024/tests">
 				<tests:unsignedInteger>
-					4000000000
+					0xFFFFFFFF
 				</tests:unsignedInteger>
 			</tests:TestPropertiesClass>
 		');
 		Assert.notNull(result);
 		Assert.isOfType(result.unsignedInteger, Int);
-		#if eval
-		final expected = Std.int(4000000000);
-		Assert.equals(expected, result.unsignedInteger);
-		#else
-		// uint comparison doesn't always work on some targets
-		final expected:Float = 4000000000.0;
-		final uintAsFloatValue:Float = result.unsignedInteger;
-		Assert.equals(expected, uintAsFloatValue);
-		#end
+		Assert.equals(0xFFFFFFFF, result.unsignedInteger);
 	}
 
 	public function testUIntChildElementComment1():Void {
@@ -1659,20 +1627,12 @@ class MXHXComponentPropertyTest extends Test {
 			<tests:TestPropertiesClass
 				xmlns:mx="https://ns.mxhx.dev/2024/basic"
 				xmlns:tests="https://ns.mxhx.dev/2024/tests">
-				<tests:unsignedInteger>4000000000<!-- comment --></tests:unsignedInteger>
+				<tests:unsignedInteger>0xFFFFFFFF<!-- comment --></tests:unsignedInteger>
 			</tests:TestPropertiesClass>
 		');
 		Assert.notNull(result);
 		Assert.isOfType(result.unsignedInteger, Int);
-		#if eval
-		final expected = Std.int(4000000000);
-		Assert.equals(expected, result.unsignedInteger);
-		#else
-		// uint comparison doesn't always work on some targets
-		final expected:Float = 4000000000.0;
-		final uintAsFloatValue:Float = result.unsignedInteger;
-		Assert.equals(expected, uintAsFloatValue);
-		#end
+		Assert.equals(0xFFFFFFFF, result.unsignedInteger);
 	}
 
 	public function testUIntChildElementComment2():Void {
@@ -1680,20 +1640,12 @@ class MXHXComponentPropertyTest extends Test {
 			<tests:TestPropertiesClass
 				xmlns:mx="https://ns.mxhx.dev/2024/basic"
 				xmlns:tests="https://ns.mxhx.dev/2024/tests">
-				<tests:unsignedInteger><!-- comment -->4000000000</tests:unsignedInteger>
+				<tests:unsignedInteger><!-- comment -->0xFFFFFFFF</tests:unsignedInteger>
 			</tests:TestPropertiesClass>
 		');
 		Assert.notNull(result);
 		Assert.isOfType(result.unsignedInteger, Int);
-		#if eval
-		final expected = Std.int(4000000000);
-		Assert.equals(expected, result.unsignedInteger);
-		#else
-		// uint comparison doesn't always work on some targets
-		final expected:Float = 4000000000.0;
-		final uintAsFloatValue:Float = result.unsignedInteger;
-		Assert.equals(expected, uintAsFloatValue);
-		#end
+		Assert.equals(0xFFFFFFFF, result.unsignedInteger);
 	}
 
 	public function testUIntChildElementComment3():Void {
@@ -1701,20 +1653,12 @@ class MXHXComponentPropertyTest extends Test {
 			<tests:TestPropertiesClass
 				xmlns:mx="https://ns.mxhx.dev/2024/basic"
 				xmlns:tests="https://ns.mxhx.dev/2024/tests">
-				<tests:unsignedInteger>4000000<!-- comment -->000</tests:unsignedInteger>
+				<tests:unsignedInteger>0xFFFFF<!-- comment -->FFF</tests:unsignedInteger>
 			</tests:TestPropertiesClass>
 		');
 		Assert.notNull(result);
 		Assert.isOfType(result.unsignedInteger, Int);
-		#if eval
-		final expected = Std.int(4000000000);
-		Assert.equals(expected, result.unsignedInteger);
-		#else
-		// uint comparison doesn't always work on some targets
-		final expected:Float = 4000000000.0;
-		final uintAsFloatValue:Float = result.unsignedInteger;
-		Assert.equals(expected, uintAsFloatValue);
-		#end
+		Assert.equals(0xFFFFFFFF, result.unsignedInteger);
 	}
 
 	public function testUIntChildElementCData():Void {
@@ -1722,20 +1666,12 @@ class MXHXComponentPropertyTest extends Test {
 			<tests:TestPropertiesClass
 				xmlns:mx="https://ns.mxhx.dev/2024/basic"
 				xmlns:tests="https://ns.mxhx.dev/2024/tests">
-				<tests:unsignedInteger><![CDATA[4000000000]]></tests:unsignedInteger>
+				<tests:unsignedInteger><![CDATA[0xFFFFFFFF]]></tests:unsignedInteger>
 			</tests:TestPropertiesClass>
 		');
 		Assert.notNull(result);
 		Assert.isOfType(result.unsignedInteger, Int);
-		#if eval
-		final expected = Std.int(4000000000);
-		Assert.equals(expected, result.unsignedInteger);
-		#else
-		// uint comparison doesn't always work on some targets
-		final expected:Float = 4000000000.0;
-		final uintAsFloatValue:Float = result.unsignedInteger;
-		Assert.equals(expected, uintAsFloatValue);
-		#end
+		Assert.equals(0xFFFFFFFF, result.unsignedInteger);
 	}
 
 	public function testUIntChildElementRedundant():Void {
@@ -1743,20 +1679,12 @@ class MXHXComponentPropertyTest extends Test {
 			<tests:TestPropertiesClass
 				xmlns:mx="https://ns.mxhx.dev/2024/basic"
 				xmlns:tests="https://ns.mxhx.dev/2024/tests">
-				<tests:unsignedInteger><mx:UInt>4000000000</mx:UInt></tests:unsignedInteger>
+				<tests:unsignedInteger><mx:UInt>0xFFFFFFFF</mx:UInt></tests:unsignedInteger>
 			</tests:TestPropertiesClass>
 		');
 		Assert.notNull(result);
 		Assert.isOfType(result.unsignedInteger, Int);
-		#if eval
-		final expected = Std.int(4000000000);
-		Assert.equals(expected, result.unsignedInteger);
-		#else
-		// uint comparison doesn't always work on some targets
-		final expected:Float = 4000000000.0;
-		final uintAsFloatValue:Float = result.unsignedInteger;
-		Assert.equals(expected, uintAsFloatValue);
-		#end
+		Assert.equals(0xFFFFFFFF, result.unsignedInteger);
 	}
 
 	public function testUIntChildElementRedundantEmpty():Void {

@@ -126,6 +126,13 @@ class MXHXComponent {
 	private static final VALUE_NAN = "NaN";
 	private static final VALUE_INFINITY = "Infinity";
 	private static final VALUE_NEGATIVE_INFINITY = "-Infinity";
+	private static final LITERAL_NULL = "null";
+	private static final LITERAL_ZERO = "0";
+	private static final LITERAL_EMPTY_EREG = "~//";
+	private static final LITERAL_EMPTY_STRING = '""';
+	private static final CONSTANT_MATH_NAN = "Math.NaN";
+	private static final CONSTANT_MATH_POSITIVE_INFINITY = "Math.POSITIVE_INFINITY";
+	private static final CONSTANT_MATH_NEGATIVE_INFINITY = "Math.NEGATIVE_INFINITY";
 	private static final TAG_BINDING = "Binding";
 	private static final TAG_COMPONENT = "Component";
 	private static final TAG_DESIGN_LAYER = "DesignLayer";
@@ -532,8 +539,7 @@ class MXHXComponent {
 		return typeDef;
 	}
 
-	private static function handleRootTag(tagData:IMXHXTagData, initFunctionName:String, outerDocumentTypePath:TypePath,
-			buildFields:Array<Field>):IMXHXSymbol {
+	private static function handleRootTag(tagData:IMXHXTagData, initFunctionName:String, outerDocumentTypePath:TypePath, buildFields:Array<Field>):IMXHXSymbol {
 		var resolvedTag = mxhxResolver.resolveTag(tagData);
 		if (resolvedTag == null) {
 			errorTagUnexpected(tagData);
@@ -707,7 +713,7 @@ class MXHXComponent {
 				isLanguageAttribute = true;
 			}
 			if (isAnyOrDynamic && !isLanguageAttribute) {
-				var valueExpr = createValueExprForDynamic(attrData.rawValue);
+				var valueExpr = Context.parse(createValueExprForDynamic(attrData.rawValue), sourceLocationToContextPosition(attrData));
 				var setExpr = macro Reflect.setField($i{targetIdentifier}, $v{attrData.shortName}, ${valueExpr});
 				initExprs.push(setExpr);
 				return;
@@ -753,7 +759,9 @@ class MXHXComponent {
 			var fieldSymbol:IMXHXFieldSymbol = cast resolved;
 			var fieldName = fieldSymbol.name;
 			var destination = macro $i{targetIdentifier}.$fieldName;
-			var valueExpr = handleTextContentAsExpr(attrData.rawValue, fieldSymbol.type, attrData.valueStart, getAttributeValueSourceLocation(attrData));
+			var valueExpr = Context.parse(handleTextContentAsExpr(attrData.rawValue, fieldSymbol.type, attrData.valueStart,
+				getAttributeValueSourceLocation(attrData)),
+				sourceLocationToContextPosition(getAttributeValueSourceLocation(attrData)));
 			if (dataBindingCallback != null && textContentContainsBinding(attrData.rawValue)) {
 				var bindingExpr = dataBindingCallback(valueExpr, destination, macro this);
 				initExprs.push(bindingExpr);
@@ -782,37 +790,43 @@ class MXHXComponent {
 					if (fullYear != null) {
 						errorDuplicateField(FIELD_FULL_YEAR, tagData, getAttributeNameSourceLocation(attrData));
 					}
-					fullYear = createValueExprForTypeSymbol(intType, attrData.rawValue, false, attrData);
+					fullYear = Context.parse(createValueExprForTypeSymbol(intType, attrData.rawValue, false, attrData),
+						sourceLocationToContextPosition(getAttributeValueSourceLocation(attrData)));
 				case FIELD_MONTH:
 					hasCustom = true;
 					if (month != null) {
 						errorDuplicateField(FIELD_MONTH, tagData, getAttributeNameSourceLocation(attrData));
 					}
-					month = createValueExprForTypeSymbol(intType, attrData.rawValue, false, attrData);
+					month = Context.parse(createValueExprForTypeSymbol(intType, attrData.rawValue, false, attrData),
+						sourceLocationToContextPosition(getAttributeValueSourceLocation(attrData)));
 				case FIELD_DATE:
 					hasCustom = true;
 					if (date != null) {
 						errorDuplicateField(FIELD_DATE, tagData, getAttributeNameSourceLocation(attrData));
 					}
-					date = createValueExprForTypeSymbol(intType, attrData.rawValue, false, attrData);
+					date = Context.parse(createValueExprForTypeSymbol(intType, attrData.rawValue, false, attrData),
+						sourceLocationToContextPosition(getAttributeValueSourceLocation(attrData)));
 				case FIELD_HOURS:
 					hasCustom = true;
 					if (hours != null) {
 						errorDuplicateField(FIELD_HOURS, tagData, getAttributeNameSourceLocation(attrData));
 					}
-					hours = createValueExprForTypeSymbol(intType, attrData.rawValue, false, attrData);
+					hours = Context.parse(createValueExprForTypeSymbol(intType, attrData.rawValue, false, attrData),
+						sourceLocationToContextPosition(getAttributeValueSourceLocation(attrData)));
 				case FIELD_MINUTES:
 					hasCustom = true;
 					if (minutes != null) {
 						errorDuplicateField(FIELD_MINUTES, tagData, getAttributeNameSourceLocation(attrData));
 					}
-					minutes = createValueExprForTypeSymbol(intType, attrData.rawValue, false, attrData);
+					minutes = Context.parse(createValueExprForTypeSymbol(intType, attrData.rawValue, false, attrData),
+						sourceLocationToContextPosition(getAttributeValueSourceLocation(attrData)));
 				case FIELD_SECONDS:
 					hasCustom = true;
 					if (seconds != null) {
 						errorDuplicateField(FIELD_SECONDS, tagData, getAttributeNameSourceLocation(attrData));
 					}
-					seconds = createValueExprForTypeSymbol(intType, attrData.rawValue, false, attrData);
+					seconds = Context.parse(createValueExprForTypeSymbol(intType, attrData.rawValue, false, attrData),
+						sourceLocationToContextPosition(getAttributeValueSourceLocation(attrData)));
 			}
 		}
 
@@ -1180,7 +1194,7 @@ class MXHXComponent {
 
 	private static function createModelObjectExpr(model:ModelObject, sourceLocation:IMXHXSourceLocation):Expr {
 		if (model.value != null) {
-			return createValueExprForDynamic(model.value);
+			return Context.parse(createValueExprForDynamic(model.value), sourceLocationToContextPosition(sourceLocation));
 		}
 		if (model.text.length > 0) {
 			var hasFields = model.fields.iterator().hasNext() && model.strongFields;
@@ -1211,7 +1225,7 @@ class MXHXComponent {
 				}
 				pendingText += textData.content;
 			}
-			return createValueExprForDynamic(pendingText);
+			return Context.parse(createValueExprForDynamic(pendingText), sourceLocationToContextPosition(sourceLocation));
 		}
 		var subModelExprs:Array<Expr> = [];
 		for (fieldName => subModels in model.fields) {
@@ -1588,7 +1602,8 @@ class MXHXComponent {
 					if (attrLookup.exists(argName)) {
 						var attrData = attrLookup.get(argName);
 						attrLookup.remove(argName);
-						var valueExpr = createValueExprForTypeSymbol(arg.type, attrData.rawValue, false, attrData);
+						var valueExpr = Context.parse(createValueExprForTypeSymbol(arg.type, attrData.rawValue, false, attrData),
+							sourceLocationToContextPosition(getAttributeValueSourceLocation(attrData)));
 						initArgs.push(valueExpr);
 					} else if (tagLookup.exists(argName)) {
 						var grandChildTag = tagLookup.get(argName);
@@ -1665,7 +1680,7 @@ class MXHXComponent {
 			if (child != null && (child is IMXHXTextData) && child.getNextSiblingUnit() == null) {
 				var textData = cast(child, IMXHXTextData);
 				if (textData.textType == Text && isLanguageTypeAssignableFromText(typeSymbol)) {
-					initExpr = handleTextContentAsExpr(textData.content, typeSymbol, null, textData);
+					initExpr = Context.parse(handleTextContentAsExpr(textData.content, typeSymbol, null, textData), sourceLocationToContextPosition(textData));
 					bindingTextData = textData;
 				}
 			}
@@ -1680,7 +1695,7 @@ class MXHXComponent {
 						errorTagUnexpected(tagData);
 					} else {
 						// no text found, so use default value instead
-						initExpr = createDefaultValueExprForTypeSymbol(typeSymbol, tagData);
+						initExpr = Context.parse(createDefaultValueExprForTypeSymbol(typeSymbol, tagData), sourceLocationToContextPosition(tagData));
 					}
 					// no more children
 					break;
@@ -1730,7 +1745,8 @@ class MXHXComponent {
 				}
 				child = child.getNextSiblingUnit();
 				if (child == null && pendingText != null) {
-					initExpr = createValueExprForTypeSymbol(typeSymbol, pendingText, pendingTextIncludesCData, tagData);
+					initExpr = Context.parse(createValueExprForTypeSymbol(typeSymbol, pendingText, pendingTextIncludesCData, tagData),
+						sourceLocationToContextPosition(tagData));
 				}
 			} while (child != null || initExpr == null);
 		}
@@ -1760,8 +1776,8 @@ class MXHXComponent {
 		return initExpr;
 	}
 
-	private static function handleTextContentAsExpr(text:String, fieldType:IMXHXTypeSymbol, textStartOffset:Int, sourceLocation:IMXHXSourceLocation):Expr {
-		var expr:Expr = null;
+	private static function handleTextContentAsExpr(text:String, fieldType:IMXHXTypeSymbol, textStartOffset:Int, sourceLocation:IMXHXSourceLocation):String {
+		var expr:String = null;
 		var startIndex = 0;
 		var pendingText:String = "";
 		do {
@@ -1773,9 +1789,9 @@ class MXHXComponent {
 				pendingText += text.substring(startIndex);
 				if (pendingText.length > 0) {
 					if (expr == null) {
-						expr = macro $v{pendingText};
+						expr = '"${pendingText}"';
 					} else {
-						expr = macro $expr + $v{pendingText};
+						expr = expr + ' + "${pendingText}"';
 					}
 					pendingText = "";
 				}
@@ -1811,18 +1827,17 @@ class MXHXComponent {
 					}
 					if (pendingText.length > 0) {
 						if (expr == null) {
-							expr = macro $v{pendingText};
+							expr = '"${pendingText}"';
 						} else {
-							expr = macro $expr + $v{pendingText};
+							expr = expr + ' + "${pendingText}"';
 						}
 						pendingText = "";
 					}
 					var bindingContent = text.substring(bindingStartIndex + 1, bindingEndIndex);
-					var bindingExpr = Context.parse(bindingContent, sourceLocationToContextPosition(sourceLocation));
 					if (expr == null) {
-						expr = macro $bindingExpr;
+						expr = bindingContent;
 					} else {
-						expr = macro $expr + $bindingExpr;
+						expr = expr + " + " + bindingContent;
 					}
 					startIndex = bindingEndIndex + 1;
 				}
@@ -2286,7 +2301,7 @@ class MXHXComponent {
 			if ((current is IMXHXTextData)) {
 				var textData = cast(current, IMXHXTextData);
 				if (textData == firstChild && next == null && textData.textType == Text && isLanguageTypeAssignableFromText(fieldType)) {
-					return handleTextContentAsExpr(textData.content, fieldType, 0, textData);
+					return Context.parse(handleTextContentAsExpr(textData.content, fieldType, 0, textData), sourceLocationToContextPosition(textData));
 				}
 				if (!canIgnoreTextData(textData)) {
 					if (valueExprs.length > 0) {
@@ -2335,9 +2350,10 @@ class MXHXComponent {
 		if (pendingText != null) {
 			var valueExpr:Expr = null;
 			if (fieldType != null) {
-				valueExpr = createValueExprForTypeSymbol(fieldType, pendingText, pendingTextIncludesCData, tagData);
+				valueExpr = Context.parse(createValueExprForTypeSymbol(fieldType, pendingText, pendingTextIncludesCData, tagData),
+					sourceLocationToContextPosition(tagData));
 			} else {
-				valueExpr = createValueExprForDynamic(pendingText);
+				valueExpr = Context.parse(createValueExprForDynamic(pendingText), sourceLocationToContextPosition(tagData));
 			}
 			valueExprs.push(valueExpr);
 		}
@@ -2427,9 +2443,10 @@ class MXHXComponent {
 					case CData: true;
 					default: false;
 				}
-				return createValueExprForTypeSymbol(assignedToType, textData.content, fromCdata, unitData);
+				return Context.parse(createValueExprForTypeSymbol(assignedToType, textData.content, fromCdata, unitData),
+					sourceLocationToContextPosition(unitData));
 			}
-			return createValueExprForDynamic(textData.content);
+			return Context.parse(createValueExprForDynamic(textData.content), sourceLocationToContextPosition(unitData));
 		} else if ((unitData is IMXHXInstructionData)) {
 			// safe to ignore
 			return null;
@@ -2480,69 +2497,69 @@ class MXHXComponent {
 		}
 	}
 
-	private static function createValueExprForDynamic(value:String):Expr {
+	private static function createValueExprForDynamic(value:String):String {
 		var trimmed = StringTools.trim(value);
 		if (trimmed == VALUE_TRUE || trimmed == VALUE_FALSE) {
 			var boolValue = trimmed == VALUE_TRUE;
-			return macro $v{boolValue};
+			return Std.string(boolValue);
 		}
 		if (~/^-?[0-9]+?$/.match(trimmed)) {
 			var intValue = Std.parseInt(trimmed);
 			var intAsFloatValue = Std.parseFloat(trimmed);
 			if (intValue != null && intValue == intAsFloatValue) {
-				return macro $v{intValue};
+				return Std.string(intValue);
 			}
 			var uintValue:UInt = Std.int(intAsFloatValue);
-			return macro $v{uintValue};
+			return Std.string(uintValue);
 		}
 		if (~/^-?[0-9]+(\.[0-9]+)?(e\-?\d+)?$/.match(trimmed)) {
 			var floatValue = Std.parseFloat(trimmed);
-			return macro $v{floatValue};
+			return Std.string(floatValue);
 		}
 		if (~/^-?0x[0-9a-fA-F]+$/.match(trimmed)) {
 			var intValue = Std.parseInt(trimmed);
-			return macro $v{intValue};
+			return Std.string(intValue);
 		}
 		if (trimmed == VALUE_NAN) {
-			return macro Math.NaN;
+			return CONSTANT_MATH_NAN;
 		} else if (trimmed == VALUE_INFINITY) {
-			return macro Math.POSITIVE_INFINITY;
+			return CONSTANT_MATH_POSITIVE_INFINITY;
 		} else if (trimmed == VALUE_NEGATIVE_INFINITY) {
-			return macro Math.NEGATIVE_INFINITY;
+			return CONSTANT_MATH_NEGATIVE_INFINITY;
 		}
 		// it can always be parsed as a string
-		return macro $v{value};
+		return '"${value}"';
 	}
 
-	private static function createDefaultValueExprForTypeSymbol(typeSymbol:IMXHXTypeSymbol, location:IMXHXSourceLocation):Expr {
+	private static function createDefaultValueExprForTypeSymbol(typeSymbol:IMXHXTypeSymbol, location:IMXHXSourceLocation):String {
 		if (typeSymbol.pack.length == 0) {
 			switch (typeSymbol.name) {
 				case TYPE_BOOL:
-					return macro false;
+					return VALUE_FALSE;
 				case TYPE_EREG:
-					return macro ~//;
+					return LITERAL_EMPTY_EREG;
 				case TYPE_FLOAT:
-					return macro Math.NaN;
+					return CONSTANT_MATH_NAN;
 				case TYPE_INT:
-					return macro 0;
+					return LITERAL_ZERO;
 				case TYPE_STRING:
 					if ((location is IMXHXTagData)) {
 						var parentTag = cast(location, IMXHXTagData).parentTag;
 						if (isLanguageTag(TAG_DECLARATIONS, parentTag)) {
-							return macro null;
+							return LITERAL_NULL;
 						}
 					}
-					return macro "";
+					return LITERAL_EMPTY_STRING;
 				case TYPE_UINT:
-					return macro 0;
+					return LITERAL_ZERO;
 				default:
-					return macro null;
+					return LITERAL_NULL;
 			}
 		}
-		return macro null;
+		return LITERAL_NULL;
 	}
 
-	private static function createValueExprForTypeSymbol(typeSymbol:IMXHXTypeSymbol, value:String, fromCdata:Bool, location:IMXHXSourceLocation):Expr {
+	private static function createValueExprForTypeSymbol(typeSymbol:IMXHXTypeSymbol, value:String, fromCdata:Bool, location:IMXHXSourceLocation):String {
 		var current = typeSymbol;
 		while ((current is IMXHXAbstractSymbol)) {
 			var abstractSymbol:IMXHXAbstractSymbol = cast current;
@@ -2572,10 +2589,9 @@ class MXHXComponent {
 			if (enumField != null) {
 				if (enumSymbol.pack.length > 0) {
 					var fieldExprParts = enumSymbol.pack.concat([enumSymbol.name, trimmedValue]);
-					return macro $p{fieldExprParts};
+					return fieldExprParts.join(".");
 				} else {
-					var fieldExprParts = [enumSymbol.name, trimmedValue];
-					return macro $p{fieldExprParts};
+					return '${enumSymbol.name}.${trimmedValue}';
 				}
 			}
 		}
@@ -2589,9 +2605,7 @@ class MXHXComponent {
 		if (typeSymbol.pack.length == 1 && typeSymbol.pack[0] == "haxe") {
 			switch (typeSymbol.name) {
 				case TYPE_FUNCTION:
-					value = StringTools.trim(value);
-					var typeParts = value.split(".");
-					return macro $p{typeParts};
+					return StringTools.trim(value);
 				default:
 			}
 		} else if (typeSymbol.pack.length == 0) {
@@ -2599,17 +2613,14 @@ class MXHXComponent {
 				case TYPE_BOOL:
 					value = StringTools.trim(value);
 					if (value == VALUE_TRUE || value == VALUE_FALSE) {
-						var boolValue = value == VALUE_TRUE;
-						return macro $v{boolValue};
+						return Std.string(value);
 					}
 				case TYPE_CLASS:
-					value = StringTools.trim(value);
-					var typeParts = value.split(".");
-					return macro $p{typeParts};
+					return StringTools.trim(value);
 				case TYPE_EREG:
 					value = StringTools.trim(value);
 					if (value.length == 0) {
-						return macro ~//;
+						return LITERAL_EMPTY_EREG;
 					}
 					// if not empty, must start with ~/ and have final / before flags
 					if (!~/^~\/.*?\/[a-z]*$/.match(value)) {
@@ -2619,29 +2630,29 @@ class MXHXComponent {
 					var endSlashIndex = value.lastIndexOf("/");
 					var expression = value.substring(2, endSlashIndex);
 					var flags = value.substr(endSlashIndex + 1);
-					return macro new EReg($v{expression}, $v{flags});
+					return 'new EReg("${expression}", "${flags}")';
 				case TYPE_FLOAT:
 					value = StringTools.trim(value);
 					if (value == VALUE_NAN) {
-						return macro Math.NaN;
+						return CONSTANT_MATH_NAN;
 					} else if (value == VALUE_INFINITY) {
-						return macro Math.POSITIVE_INFINITY;
+						return CONSTANT_MATH_POSITIVE_INFINITY;
 					} else if (value == VALUE_NEGATIVE_INFINITY) {
-						return macro Math.NEGATIVE_INFINITY;
+						return CONSTANT_MATH_NEGATIVE_INFINITY;
 					}
 					if (~/^-?0x[0-9a-fA-F]+$/.match(value)) {
 						var floatValue = Std.parseInt(value);
-						return macro $v{floatValue};
+						return Std.string(floatValue);
 					}
 					if (~/^-?[0-9]+(\.[0-9]+)?(e\-?\d+)?$/.match(value)) {
 						var floatValue = Std.parseFloat(value);
-						return macro $v{floatValue};
+						return Std.string(floatValue);
 					}
 				case TYPE_INT:
 					value = StringTools.trim(value);
 					var intValue = Std.parseInt(value);
 					if (intValue != null) {
-						return macro $v{intValue};
+						return Std.string(intValue);
 					}
 				case TYPE_STRING:
 					var inDeclarations = false;
@@ -2654,7 +2665,7 @@ class MXHXComponent {
 					if (fromCdata && inDeclarations && value.length == 0) {
 						// cdata is only modified when in mx:Declarations
 						// and the length is 0
-						return macro null;
+						return LITERAL_NULL;
 					} else if (!fromCdata) {
 						var trimmed = StringTools.trim(value);
 						// if non-cdata consists of only whitespace,
@@ -2662,28 +2673,28 @@ class MXHXComponent {
 						// unless it's in the mx:Declarations tag, then null
 						if (trimmed.length == 0) {
 							if (inDeclarations) {
-								return macro null;
+								return LITERAL_NULL;
 							} else {
-								return macro $v{trimmed};
+								return '"${trimmed}"';
 							}
 						}
 					}
 					// otherwise, don't modify the original value
-					return macro $v{value};
+					return '"${value}"';
 				case TYPE_UINT:
 					value = StringTools.trim(value);
 					if (~/^0x[0-9a-fA-F]+$/.match(value)) {
 						var uintValue = Std.parseInt(value);
-						return macro $v{uintValue};
+						return Std.string(uintValue);
 					}
 					if (~/^[0-9]+$/.match(value)) {
 						var uintValue = Std.parseInt(value);
 						var uintAsFloatValue = Std.parseFloat(value);
 						if (uintValue != null && uintValue == uintAsFloatValue) {
-							return macro $v{uintValue};
+							return Std.string(uintValue);
 						}
 						var uintAsIntValue:UInt = Std.int(uintAsFloatValue);
-						return macro $v{uintAsIntValue};
+						return Std.string(uintAsIntValue);
 					}
 				default:
 			}
