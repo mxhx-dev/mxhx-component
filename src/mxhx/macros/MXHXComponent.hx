@@ -218,9 +218,9 @@ class MXHXComponent {
 	private static var languageUri:String = null;
 	private static var mxhxResolver:IMXHXResolver;
 	private static var manifests:Map<String, Map<String, String>> = [];
-	private static var dataBindingCallback:(Expr, Expr, Expr) -> Expr;
-	private static var dispatchEventCallback:(Expr, String) -> Expr;
-	private static var addEventListenerCallback:(Expr, String, Expr) -> Expr;
+	private static var dataBindingCallback:(String, String, String) -> String;
+	private static var dispatchEventCallback:(String, String) -> String;
+	private static var addEventListenerCallback:(String, String, String) -> String;
 	#end
 
 	/**
@@ -435,15 +435,15 @@ class MXHXComponent {
 		manifests.set(uri, mappings);
 	}
 
-	public static function setDataBindingCallback(callback:(Expr, Expr, Expr) -> Expr):Void {
+	public static function setDataBindingCallback(callback:(String, String, String) -> String):Void {
 		dataBindingCallback = callback;
 	}
 
-	public static function setDispatchEventCallback(callback:(Expr, String) -> Expr):Void {
+	public static function setDispatchEventCallback(callback:(String, String) -> String):Void {
 		dispatchEventCallback = callback;
 	}
 
-	public static function setAddEventListenerCallback(callback:(Expr, String, Expr) -> Expr):Void {
+	public static function setAddEventListenerCallback(callback:(String, String, String) -> String):Void {
 		addEventListenerCallback = callback;
 	}
 
@@ -751,24 +751,23 @@ class MXHXComponent {
 				errorEventsNotConfigured(attrData);
 				return;
 			} else {
-				var dispatcherExpr = macro $i{targetIdentifier};
-				var eventName = eventSymbol.name;
-				var listenerExpr = Context.parse(attrData.rawValue, sourceLocationToContextPosition(attrData));
-				var addEventExpr = addEventListenerCallback(dispatcherExpr, eventName, listenerExpr);
+				var addEventExpr = Context.parse(addEventListenerCallback(targetIdentifier, eventSymbol.name, attrData.rawValue),
+					sourceLocationToContextPosition(getAttributeValueSourceLocation(attrData)));
 				initExprs.push(addEventExpr);
 			}
 		} else if ((resolved is IMXHXFieldSymbol)) {
 			var fieldSymbol:IMXHXFieldSymbol = cast resolved;
 			var fieldName = fieldSymbol.name;
-			var destination = macro $i{targetIdentifier}.$fieldName;
-			var valueExpr = Context.parse(handleTextContentAsExpr(attrData.rawValue, fieldSymbol.type, attrData.valueStart,
-				getAttributeValueSourceLocation(attrData)),
-				sourceLocationToContextPosition(getAttributeValueSourceLocation(attrData)));
+			var valueExpr = handleTextContentAsExpr(attrData.rawValue, fieldSymbol.type, attrData.valueStart, getAttributeValueSourceLocation(attrData));
 			if (dataBindingCallback != null && textContentContainsBinding(attrData.rawValue)) {
-				var bindingExpr = dataBindingCallback(valueExpr, destination, macro this);
+				var destination = '${targetIdentifier}.${fieldName}';
+				var bindingExpr = Context.parse(dataBindingCallback(valueExpr, destination, KEYWORD_THIS),
+					sourceLocationToContextPosition(getAttributeValueSourceLocation(attrData)));
 				initExprs.push(bindingExpr);
 			} else {
-				var setExpr = macro $destination = ${valueExpr};
+				var destination = macro $i{targetIdentifier}.$fieldName;
+				var source = Context.parse(valueExpr, sourceLocationToContextPosition(getAttributeValueSourceLocation(attrData)));
+				var setExpr = macro $destination = $source;
 				initExprs.push(setExpr);
 			}
 		} else {
@@ -1646,8 +1645,8 @@ class MXHXComponent {
 		return null;
 	}
 
-	private static function handleInstanceTagAssignableFromText(tagData:IMXHXTagData, typeSymbol:IMXHXTypeSymbol, generatedFields:Array<Field>):Expr {
-		var initExpr:Expr = null;
+	private static function handleInstanceTagAssignableFromText(tagData:IMXHXTagData, typeSymbol:IMXHXTypeSymbol, generatedFields:Array<Field>):String {
+		var initExpr:String = null;
 		var isStringWithSource = false;
 		if (typeSymbol != null && typeSymbol.pack.length == 0 && typeSymbol.name == TYPE_STRING) {
 			var sourceAttr = tagData.getAttributeData(ATTRIBUTE_SOURCE);
@@ -1656,9 +1655,9 @@ class MXHXComponent {
 				var sourceFilePath = sourceAttr.rawValue;
 				try {
 					var stringSource = loadFile(sourceFilePath);
-					initExpr = macro $v{stringSource};
+					initExpr = '"${stringSource}"';
 				} catch (e:Dynamic) {
-					initExpr = macro null;
+					initExpr = LITERAL_NULL;
 					reportError('Failed to load file with path: ' + sourceFilePath, getAttributeValueSourceLocation(sourceAttr));
 				}
 				var child = tagData.getFirstChildUnit();
@@ -1682,7 +1681,7 @@ class MXHXComponent {
 			if (child != null && (child is IMXHXTextData) && child.getNextSiblingUnit() == null) {
 				var textData = cast(child, IMXHXTextData);
 				if (textData.textType == Text && isLanguageTypeAssignableFromText(typeSymbol)) {
-					initExpr = Context.parse(handleTextContentAsExpr(textData.content, typeSymbol, null, textData), sourceLocationToContextPosition(textData));
+					initExpr = handleTextContentAsExpr(textData.content, typeSymbol, null, textData);
 					bindingTextData = textData;
 				}
 			}
@@ -1697,7 +1696,7 @@ class MXHXComponent {
 						errorTagUnexpected(tagData);
 					} else {
 						// no text found, so use default value instead
-						initExpr = Context.parse(createDefaultValueExprForTypeSymbol(typeSymbol, tagData), sourceLocationToContextPosition(tagData));
+						initExpr = createDefaultValueExprForTypeSymbol(typeSymbol, tagData);
 					}
 					// no more children
 					break;
@@ -1747,24 +1746,23 @@ class MXHXComponent {
 				}
 				child = child.getNextSiblingUnit();
 				if (child == null && pendingText != null) {
-					initExpr = Context.parse(createValueExprForTypeSymbol(typeSymbol, pendingText, pendingTextIncludesCData, tagData),
-						sourceLocationToContextPosition(tagData));
+					initExpr = createValueExprForTypeSymbol(typeSymbol, pendingText, pendingTextIncludesCData, tagData);
 				}
 			} while (child != null || initExpr == null);
 		}
 		var idAttr = tagData.getAttributeData(ATTRIBUTE_ID);
 		if (idAttr != null) {
 			var id = idAttr.rawValue;
-			var destination = macro this.$id;
 			var typePath:TypePath = typeSymbolToTypePath(typeSymbol);
 			if (typeSymbol.pack.length == 0 && typeSymbol.name == TYPE_CLASS) {
 				typePath.params = [TPType(TPath({pack: [], name: TYPE_DYNAMIC}))];
 			}
 			addFieldForID(id, TPath(typePath), idAttr, generatedFields);
 			if (bindingTextData != null && dataBindingCallback != null && textContentContainsBinding(bindingTextData.content)) {
-				initExpr = dataBindingCallback(initExpr, destination, macro this);
+				initExpr = dataBindingCallback(initExpr, 'this.${id}', KEYWORD_THIS);
 			} else {
-				initExpr = macro $destination = $initExpr;
+				var destination = macro this.$id;
+				initExpr = 'this.${id} = ' + initExpr;
 			}
 		}
 		for (attribute in tagData.attributeData) {
@@ -1900,10 +1898,12 @@ class MXHXComponent {
 			if (!tagContainsOnlyText(tagData)) {
 				initExpr = handleInstanceTagEnumValue(tagData, typeSymbol, generatedFields);
 			} else {
-				initExpr = handleInstanceTagAssignableFromText(tagData, typeSymbol, generatedFields);
+				initExpr = Context.parse(handleInstanceTagAssignableFromText(tagData, typeSymbol, generatedFields),
+					sourceLocationToContextPosition(getTagTextSourceLocation(tagData)));
 			}
 		} else if (isLanguageTypeAssignableFromText(typeSymbol)) {
-			initExpr = handleInstanceTagAssignableFromText(tagData, typeSymbol, generatedFields);
+			initExpr = Context.parse(handleInstanceTagAssignableFromText(tagData, typeSymbol, generatedFields),
+				sourceLocationToContextPosition(getTagTextSourceLocation(tagData)));
 		} else {
 			initExpr = handleInstanceTag(tagData, null, outerDocumentTypePath, generatedFields);
 		}
@@ -2265,12 +2265,14 @@ class MXHXComponent {
 			errorUnexpected(childUnit);
 			break;
 		}
-		var sourceExpr = Context.parse(sourceAttrData.rawValue, sourceLocationToContextPosition(sourceAttrData));
-		var destExpr = Context.parse(destAttrData.rawValue, sourceLocationToContextPosition(destAttrData));
+		var sourceText = sourceAttrData.rawValue;
+		var destText = destAttrData.rawValue;
 		if (dataBindingCallback != null) {
-			var bindingExpr = dataBindingCallback(sourceExpr, destExpr, macro this);
+			var bindingExpr = Context.parse(dataBindingCallback(sourceText, destText, KEYWORD_THIS), sourceLocationToContextPosition(tagData));
 			initExprs.push(bindingExpr);
 		} else {
+			var sourceExpr = Context.parse(sourceText, sourceLocationToContextPosition(getAttributeValueSourceLocation(sourceAttrData)));
+			var destExpr = Context.parse(destText, sourceLocationToContextPosition(getAttributeValueSourceLocation(destAttrData)));
 			var setExpr = macro $destExpr = $sourceExpr;
 			initExprs.push(setExpr);
 		}
@@ -2353,9 +2355,9 @@ class MXHXComponent {
 			var valueExpr:Expr = null;
 			if (fieldType != null) {
 				valueExpr = Context.parse(createValueExprForTypeSymbol(fieldType, pendingText, pendingTextIncludesCData, tagData),
-					sourceLocationToContextPosition(tagData));
+					sourceLocationToContextPosition(getTagTextSourceLocation(tagData)));
 			} else {
-				valueExpr = Context.parse(createValueExprForDynamic(pendingText), sourceLocationToContextPosition(tagData));
+				valueExpr = Context.parse(createValueExprForDynamic(pendingText), sourceLocationToContextPosition(getTagTextSourceLocation(tagData)));
 			}
 			valueExprs.push(valueExpr);
 		}
@@ -2724,8 +2726,7 @@ class MXHXComponent {
 			access: [APublic],
 			meta: [{name: ":bindable", params: [macro $v{eventName}], pos: pos}]
 		});
-		var dispatcherExpr = macro this;
-		var dispatchExpr = dispatchEventCallback(dispatcherExpr, eventName);
+		var dispatchExpr = Context.parse(dispatchEventCallback(KEYWORD_THIS, eventName), pos);
 		generatedFields.push({
 			name: 'set_${id}',
 			pos: pos,
@@ -2959,6 +2960,17 @@ class MXHXComponent {
 			return attrData;
 		}
 		return new CustomMXHXSourceLocation(attrData.valueStart, attrData.valueEnd, attrData.source);
+	}
+
+	private static function getTagTextSourceLocation(tagData:IMXHXTagData):IMXHXSourceLocation {
+		var current = tagData.getFirstChildUnit();
+		while (current != null) {
+			if ((current is IMXHXTextData)) {
+				return current;
+			}
+			current = current.getNextSiblingUnit();
+		}
+		return tagData;
 	}
 
 	private static function resolveFilePath(filePath:String):String {
