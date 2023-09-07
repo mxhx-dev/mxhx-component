@@ -130,6 +130,7 @@ class MXHXComponent {
 	private static final LITERAL_ZERO = "0";
 	private static final LITERAL_EMPTY_EREG = "~//";
 	private static final LITERAL_EMPTY_STRING = '""';
+	private static final LITERAL_EMPTY_STRUCT = "{}";
 	private static final CONSTANT_MATH_NAN = "Math.NaN";
 	private static final CONSTANT_MATH_POSITIVE_INFINITY = "Math.POSITIVE_INFINITY";
 	private static final CONSTANT_MATH_NEGATIVE_INFINITY = "Math.NEGATIVE_INFINITY";
@@ -944,12 +945,12 @@ class MXHXComponent {
 		return valueExpr;
 	}
 
-	private static function handleXmlTag(tagData:IMXHXTagData, generatedFields:Array<Field>):Expr {
+	private static function handleXmlTag(tagData:IMXHXTagData, generatedFields:Array<Field>):String {
 		var xmlString:String = null;
 		var formatAttr = tagData.getAttributeData(ATTRIBUTE_FORMAT);
 		if (formatAttr != null) {
 			errorAttributeNotSupported(formatAttr);
-			return macro null;
+			return LITERAL_NULL;
 		}
 		var sourceAttr = tagData.getAttributeData(ATTRIBUTE_SOURCE);
 		if (sourceAttr != null) {
@@ -958,7 +959,7 @@ class MXHXComponent {
 				xmlString = loadFile(sourceFilePath);
 			} catch (e:Dynamic) {
 				reportError('Failed to load file with path: ' + sourceFilePath, getAttributeValueSourceLocation(sourceAttr));
-				return macro null;
+				return LITERAL_NULL;
 			}
 			var child = tagData.getFirstChildUnit();
 			while (child != null) {
@@ -1033,7 +1034,7 @@ class MXHXComponent {
 
 			xmlString = xmlDoc.toString();
 		}
-		var valueExpr = macro Xml.parse($v{xmlString});
+		var valueExpr = 'Xml.parse(\'${xmlString}\')';
 
 		for (attribute in tagData.attributeData) {
 			if (attribute.name != ATTRIBUTE_ID && attribute.name != ATTRIBUTE_FORMAT && attribute.name != ATTRIBUTE_SOURCE) {
@@ -1049,13 +1050,13 @@ class MXHXComponent {
 		if (id != null) {
 			var instanceTypePath:TypePath = {name: TYPE_XML, pack: []};
 			addFieldForID(id, TPath(instanceTypePath), idAttr, generatedFields);
-			return macro this.$id = $valueExpr;
+			return 'this.${id} = ' + valueExpr;
 		}
 
 		return valueExpr;
 	}
 
-	private static function handleModelTag(tagData:IMXHXTagData, generatedFields:Array<Field>):Expr {
+	private static function handleModelTag(tagData:IMXHXTagData, generatedFields:Array<Field>):String {
 		var current:IMXHXUnitData = null;
 		var sourceAttr = tagData.getAttributeData(ATTRIBUTE_SOURCE);
 		if (sourceAttr != null) {
@@ -1065,7 +1066,7 @@ class MXHXComponent {
 				modelString = loadFile(sourceFilePath);
 			} catch (e:Dynamic) {
 				reportError('Failed to load file with path: ' + sourceFilePath, getAttributeValueSourceLocation(sourceAttr));
-				return macro null;
+				return LITERAL_NULL;
 			}
 			var mxhxParser = new MXHXParser(modelString, sourceFilePath);
 			var mxhxData = mxhxParser.parse();
@@ -1073,7 +1074,7 @@ class MXHXComponent {
 				for (problem in mxhxData.problems) {
 					reportError(problem.message, problem);
 				}
-				return macro null;
+				return LITERAL_NULL;
 			}
 			current = mxhxData.rootTag;
 
@@ -1165,11 +1166,11 @@ class MXHXComponent {
 			}
 		}
 
-		var valueExpr:Expr = null;
+		var valueExpr:String = null;
 		if (model != null) {
 			valueExpr = createModelObjectExpr(model, tagData);
 		} else {
-			valueExpr = {expr: EObjectDecl([]), pos: sourceLocationToContextPosition(tagData)};
+			valueExpr = LITERAL_EMPTY_STRUCT;
 		}
 
 		for (attribute in tagData.attributeData) {
@@ -1186,15 +1187,15 @@ class MXHXComponent {
 		if (id != null) {
 			var instanceTypePath:TypePath = {name: TYPE_DYNAMIC, pack: []};
 			addFieldForID(id, TPath(instanceTypePath), idAttr, generatedFields);
-			return macro this.$id = $valueExpr;
+			return 'this.${id} = ' + valueExpr;
 		}
 
 		return valueExpr;
 	}
 
-	private static function createModelObjectExpr(model:ModelObject, sourceLocation:IMXHXSourceLocation):Expr {
+	private static function createModelObjectExpr(model:ModelObject, sourceLocation:IMXHXSourceLocation):String {
 		if (model.value != null) {
-			return Context.parse(createValueExprForDynamic(model.value), sourceLocationToContextPosition(sourceLocation));
+			return createValueExprForDynamic(model.value);
 		}
 		if (model.text.length > 0) {
 			var hasFields = model.fields.iterator().hasNext() && model.strongFields;
@@ -1225,38 +1226,38 @@ class MXHXComponent {
 				}
 				pendingText += textData.content;
 			}
-			return Context.parse(createValueExprForDynamic(pendingText), sourceLocationToContextPosition(sourceLocation));
+			return createValueExprForDynamic(pendingText);
 		}
-		var subModelExprs:Array<Expr> = [];
+		var subModelExprs:Array<String> = [];
 		for (fieldName => subModels in model.fields) {
 			if (subModels.length == 1) {
 				var subModelSrcExpr = createModelObjectExpr(subModels[0], sourceLocation);
-				var subModelExpr = macro Reflect.setField(model, $v{fieldName}, $subModelSrcExpr);
+				var subModelExpr = 'Reflect.setField(model, "${fieldName}", ${subModelSrcExpr})';
 				subModelExprs.push(subModelExpr);
 			} else {
-				var arrayExprs:Array<Expr> = [];
+				var arrayExprs:Array<String> = [];
 				for (i in 0...subModels.length) {
 					var subModel = subModels[i];
 					var subModelSrcExpr = createModelObjectExpr(subModel, sourceLocation);
-					var arrayExpr = macro array[$v{i}] = $subModelSrcExpr;
+					var arrayExpr = 'array[${i}] = ' + subModelSrcExpr;
 					arrayExprs.push(arrayExpr);
 				}
-				var subModelExpr = macro {
+				var subModelExpr = '{
 					var array:Array<Any> = [];
-					$b{arrayExprs};
-					Reflect.setField(model, $v{fieldName}, array);
-				}
+					${arrayExprs.join(";")};
+					Reflect.setField(model, "${fieldName}", array);
+				}';
 				subModelExprs.push(subModelExpr);
 			}
 		}
 		if (subModelExprs.length == 0) {
-			return {expr: EObjectDecl([]), pos: sourceLocationToContextPosition(sourceLocation)};
+			return LITERAL_EMPTY_STRUCT;
 		}
-		return macro {
+		return '{
 			var model = {};
-			$b{subModelExprs};
+			${subModelExprs.join(";")};
 			model;
-		}
+		}';
 	}
 
 	private static function handleComponentTag(tagData:IMXHXTagData, assignedToType:IMXHXTypeSymbol, outerDocumentTypePath:TypePath,
@@ -1376,7 +1377,7 @@ class MXHXComponent {
 		if (resolvedType.pack.length == 0) {
 			switch (resolvedType.name) {
 				case TYPE_XML:
-					return handleXmlTag(tagData, generatedFields);
+					return Context.parse(handleXmlTag(tagData, generatedFields), sourceLocationToContextPosition(tagData));
 				case TYPE_DATE:
 					return handleDateTag(tagData, generatedFields);
 				default:
@@ -1940,7 +1941,7 @@ class MXHXComponent {
 			return;
 		}
 		if (isLanguageTag(TAG_MODEL, tagData)) {
-			var initExpr = handleModelTag(tagData, generatedFields);
+			var initExpr = Context.parse(handleModelTag(tagData, generatedFields), sourceLocationToContextPosition(tagData));
 			initExprs.push(initExpr);
 			return;
 		}
@@ -2430,7 +2431,7 @@ class MXHXComponent {
 				return handleComponentTag(tagData, assignedToType, outerDocumentTypePath, generatedFields);
 			}
 			if (isLanguageTag(TAG_MODEL, tagData)) {
-				return handleModelTag(tagData, generatedFields);
+				return Context.parse(handleModelTag(tagData, generatedFields), sourceLocationToContextPosition(tagData));
 			}
 			return handleInstanceTag(tagData, assignedToType, outerDocumentTypePath, generatedFields);
 		} else if ((unitData is IMXHXTextData)) {
