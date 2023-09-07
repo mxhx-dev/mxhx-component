@@ -714,7 +714,8 @@ class MXHXComponent {
 				isLanguageAttribute = true;
 			}
 			if (isAnyOrDynamic && !isLanguageAttribute) {
-				var valueExpr = Context.parse(createValueExprForDynamic(attrData.rawValue), sourceLocationToContextPosition(attrData));
+				var valueExpr = Context.parse(createValueExprForDynamic(attrData.rawValue),
+					sourceLocationToContextPosition(getAttributeValueSourceLocation(attrData)));
 				var setExpr = macro Reflect.setField($i{targetIdentifier}, $v{attrData.shortName}, ${valueExpr});
 				initExprs.push(setExpr);
 				return;
