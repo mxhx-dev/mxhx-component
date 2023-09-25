@@ -88,6 +88,12 @@ class MXHXMacroResolverTest extends Test {
 		Assert.equals("fixtures.TestPropertiesClass", resolved);
 	}
 
+	public function testResolveAnyField():Void {
+		var resolved = resolveQnameFieldType("fixtures.TestPropertiesClass", "any");
+		Assert.notNull(resolved);
+		Assert.equals("Any", resolved);
+	}
+
 	public function testResolveArrayField():Void {
 		var resolved = resolveQnameFieldType("fixtures.TestPropertiesClass", "array");
 		Assert.notNull(resolved);
@@ -113,6 +119,13 @@ class MXHXMacroResolverTest extends Test {
 		Assert.equals("Date", resolved);
 	}
 
+	public function testResolveDynamicField():Void {
+		var resolved = resolveQnameFieldType("fixtures.TestPropertiesClass", "struct");
+		Assert.notNull(resolved);
+		// TODO: fix the % that should be used only internally
+		Assert.equals("Dynamic<%>", resolved);
+	}
+
 	public function testResolveERegField():Void {
 		var resolved = resolveQnameFieldType("fixtures.TestPropertiesClass", "ereg");
 		Assert.notNull(resolved);
@@ -122,6 +135,16 @@ class MXHXMacroResolverTest extends Test {
 	public function testResolveFloatField():Void {
 		var resolved = resolveQnameFieldType("fixtures.TestPropertiesClass", "float");
 		Assert.equals("Float", resolved);
+	}
+
+	public function testResolveFunctionConstraintField():Void {
+		var resolved = resolveQnameFieldType("fixtures.TestPropertiesClass", "func");
+		Assert.equals("haxe.Constraints.Function", resolved);
+	}
+
+	public function testResolveFunctionSignatureField():Void {
+		var resolved = resolveQnameFieldType("fixtures.TestPropertiesClass", "funcTyped");
+		Assert.equals("haxe.Constraints.Function", resolved);
 	}
 
 	public function testResolveIntField():Void {
@@ -158,6 +181,24 @@ class MXHXMacroResolverTest extends Test {
 		var resolved = resolveQnameFieldType("fixtures.TestPropertiesClass", "strictlyTyped");
 		Assert.notNull(resolved);
 		Assert.equals("fixtures.TestPropertiesClass", resolved);
+	}
+
+	public function testResolveAbstractEnumValueField():Void {
+		var resolved = resolveQnameFieldType("fixtures.TestPropertiesClass", "abstractEnumValue");
+		Assert.notNull(resolved);
+		Assert.equals("fixtures.TestPropertyAbstractEnum", resolved);
+	}
+
+	public function testResolveEnumValueField():Void {
+		var resolved = resolveQnameFieldType("fixtures.TestPropertiesClass", "enumValue");
+		Assert.notNull(resolved);
+		Assert.equals("fixtures.TestPropertyEnum", resolved);
+	}
+
+	public function testResolveClassFromModuleWithDifferentName():Void {
+		var resolved = resolveQnameFieldType("fixtures.TestPropertiesClass", "classFromModuleWithDifferentName");
+		Assert.notNull(resolved);
+		Assert.equals("fixtures.ModuleWithClassThatHasDifferentName.ThisClassHasADifferentNameThanItsModule", resolved);
 	}
 
 	public function testResolveFieldWithTypeParameter():Void {

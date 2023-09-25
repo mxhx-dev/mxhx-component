@@ -7,6 +7,7 @@ import fixtures.ModuleWithClassThatHasDifferentName.ThisClassHasADifferentNameTh
 class TestPropertiesClass {
 	public function new() {}
 
+	public var any:Any;
 	public var struct:Dynamic;
 	public var boolean:Bool;
 	public var ereg:EReg;
