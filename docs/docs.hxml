@@ -1,5 +1,6 @@
 -cp ../src
 -lib mxhx-parser
+-lib mxhx-resolver
 -D doc_gen
 --macro include("mxhx.macros")
 --no-output
@@ -7,4 +8,4 @@
 -js dummy.js
 
 --next
--cmd haxelib run dox -o ../bin/api -i ../bin/xml/types.xml --include mxhx.macros --toplevel-package mxhx.macros --title "MXHX Parser API Reference" -theme ./mxhx-theme -D website "https://mxhx.dev" -D textColor 0x292522 -D source-path "https://github.com/mxhx-dev/mxhx-component/tree/main/src/"
+-cmd haxelib run dox -o ../bin/api -i ../bin/xml/types.xml --include mxhx.macros --toplevel-package mxhx.macros --title "MXHX Component API Reference" -theme ./mxhx-theme -D website "https://mxhx.dev" -D textColor 0x292522 -D source-path "https://github.com/mxhx-dev/mxhx-component/tree/main/src/"

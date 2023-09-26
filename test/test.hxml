@@ -1,6 +1,7 @@
 -cp ../src
 -cp src
 -lib mxhx-parser
+-lib mxhx-resolver
 -lib utest
 -D mxhx-disable-experimental-warning
 --macro mxhx.macros.MXHXComponent.registerManifest("https://ns.mxhx.dev/2024/tests", "mxhx-manifest.xml")

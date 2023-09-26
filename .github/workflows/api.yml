@@ -19,6 +19,7 @@ jobs:
         run: |
           haxelib install dox --quiet
           haxelib git mxhx-parser https://github.com/mxhx-dev/mxhx-parser.git --quiet
+          haxelib git mxhx-resolver https://github.com/mxhx-dev/mxhx-resolver.git --quiet
           haxelib dev mxhx-component $GITHUB_WORKSPACE
       - name: Build API reference
         working-directory: docs

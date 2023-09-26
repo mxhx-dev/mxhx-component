@@ -23,6 +23,7 @@ jobs:
           haxelib install utest --quiet
           haxelib install hxcpp --quiet
           haxelib git mxhx-parser https://github.com/mxhx-dev/mxhx-parser.git --quiet
+          haxelib git mxhx-resolver https://github.com/mxhx-dev/mxhx-resolver.git --quiet
           haxelib dev mxhx-component $GITHUB_WORKSPACE
       - name: Run Interpreter Tests
         working-directory: test

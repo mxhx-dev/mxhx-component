@@ -31,6 +31,7 @@ import mxhx.resolver.IMXHXResolver;
 import mxhx.resolver.IMXHXSymbol;
 import mxhx.resolver.IMXHXTypeSymbol;
 import mxhx.resolver.MXHXSymbolTools;
+import mxhx.resolver.macro.MXHXMacroResolver;
 import sys.FileSystem;
 import sys.io.File;
 #end
