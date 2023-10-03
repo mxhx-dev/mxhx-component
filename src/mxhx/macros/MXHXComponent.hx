@@ -158,23 +158,6 @@ class MXHXComponent {
 	private static final FIELD_SECONDS = "seconds";
 	private static final FIELD_OUTER_DOCUMENT = "outerDocument";
 	private static final FIELD_DEFAULT_OUTER_DOCUMENT = "defaultOuterDocument";
-	private static final LANGUAGE_MAPPINGS_2024 = [
-		// @:formatter:off
-		TYPE_ARRAY => TYPE_ARRAY,
-		TYPE_BOOL => TYPE_BOOL,
-		TYPE_CLASS => TYPE_CLASS,
-		TYPE_DATE => TYPE_DATE,
-		TYPE_EREG => TYPE_EREG,
-		TYPE_FLOAT => TYPE_FLOAT,
-		TYPE_FUNCTION => TYPE_HAXE_CONSTRAINTS_FUNCTION,
-		TYPE_INT => TYPE_INT,
-		TAG_OBJECT => TYPE_ANY,
-		TYPE_STRING => TYPE_STRING,
-		TAG_STRUCT => TYPE_DYNAMIC,
-		TYPE_UINT => TYPE_UINT,
-		TYPE_XML => TYPE_XML,
-		// @:formatter:on
-	];
 	private static final LANGUAGE_TYPES_ASSIGNABLE_BY_TEXT = [
 		// @:formatter:off
 		TYPE_BOOL,
@@ -218,7 +201,6 @@ class MXHXComponent {
 	private static var posInfos:{min:Int, max:Int, file:String};
 	private static var languageUri:String = null;
 	private static var mxhxResolver:IMXHXResolver;
-	private static var manifests:Map<String, Map<String, String>> = [];
 	private static var dataBindingCallback:(String, String, String) -> String;
 	private static var dispatchEventCallback:(String, String) -> String;
 	private static var addEventListenerCallback:(String, String, String) -> String;
@@ -403,39 +385,6 @@ class MXHXComponent {
 	}
 
 	#if macro
-	/**
-		Adds a custom mapping from a namespace URI to a list of components in
-		the namespace.
-	**/
-	public static function registerMappings(uri:String, mappings:Map<String, String>):Void {
-		manifests.set(uri, mappings);
-	}
-
-	/**
-		Adds a custom mapping from a namespace URI to a list of components in
-		the namespace using a manifest file.
-	**/
-	public static function registerManifest(uri:String, manifestPath:String):Void {
-		if (!FileSystem.exists(manifestPath)) {
-			Context.fatalError('Manifest file not found: ${manifestPath}', Context.currentPos());
-		}
-		var content = File.getContent(manifestPath);
-		var xml:Xml = null;
-		try {
-			xml = Xml.parse(content);
-		} catch (e:Dynamic) {
-			reportErrorForContextPosition('Error parsing invalid XML in manifest file: ${manifestPath}', Context.currentPos());
-			return;
-		}
-		var mappings:Map<String, String> = [];
-		for (componentXml in xml.firstElement().elementsNamed("component")) {
-			var xmlName = componentXml.get("id");
-			var qname = componentXml.get("class");
-			mappings.set(xmlName, qname);
-		}
-		manifests.set(uri, mappings);
-	}
-
 	public static function setDataBindingCallback(callback:(String, String, String) -> String):Void {
 		dataBindingCallback = callback;
 	}
@@ -450,11 +399,6 @@ class MXHXComponent {
 
 	private static function createResolver():Void {
 		mxhxResolver = new MXHXMacroResolver();
-		mxhxResolver.registerManifest(LANGUAGE_URI_BASIC_2024, LANGUAGE_MAPPINGS_2024);
-		mxhxResolver.registerManifest(LANGUAGE_URI_FULL_2024, LANGUAGE_MAPPINGS_2024);
-		for (uri => mappings in manifests) {
-			mxhxResolver.registerManifest(uri, mappings);
-		}
 	}
 
 	private static function createTypeDefinitionFromString(mxhxText:String, typePath:TypePath, outerDocumentTypePath:TypePath):TypeDefinition {
