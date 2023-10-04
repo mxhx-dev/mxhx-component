@@ -2977,6 +2977,10 @@ private class CustomMXHXSourceLocation implements IMXHXSourceLocation {
 	public var start:Int;
 	public var end:Int;
 	public var source:String;
+	public var line:Int;
+	public var column:Int;
+	public var endLine:Int;
+	public var endColumn:Int;
 
 	public function new(start:Int, end:Int, source:String) {
 		this.start = start;
