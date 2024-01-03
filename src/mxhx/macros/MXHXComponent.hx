@@ -954,8 +954,11 @@ class MXHXComponent {
 						case Whitespace: Xml.createPCData(textData.content);
 						case CData: Xml.createCData(textData.content);
 						case Comment | DocComment: Xml.createComment(textData.content);
+						default: null;
 					}
-					parentStack[parentStack.length - 1].addChild(textChild);
+					if (textChild != null) {
+						parentStack[parentStack.length - 1].addChild(textChild);
+					}
 				} else if ((current is IMXHXInstructionData)) {
 					var instructionData:IMXHXInstructionData = cast current;
 					var instructionChild = Xml.createProcessingInstruction(instructionData.instructionText);
