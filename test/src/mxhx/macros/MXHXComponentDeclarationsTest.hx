@@ -15,6 +15,7 @@ class MXHXComponentDeclarationsTest extends Test {
 			</tests:TestClass1>
 		');
 		Assert.notNull(result);
+		Assert.isOfType(result, TestClass1);
 	}
 
 	public function testDeclarationsEmptyExtraWhitespace():Void {
@@ -25,6 +26,7 @@ class MXHXComponentDeclarationsTest extends Test {
 			</tests:TestClass1>
 		');
 		Assert.notNull(result);
+		Assert.isOfType(result, TestClass1);
 	}
 
 	public function testDeclarationsComment1():Void {
@@ -34,6 +36,7 @@ class MXHXComponentDeclarationsTest extends Test {
 			</tests:TestClass1>
 		');
 		Assert.notNull(result);
+		Assert.isOfType(result, TestClass1);
 	}
 
 	public function testDeclarationsComment2():Void {
@@ -45,6 +48,7 @@ class MXHXComponentDeclarationsTest extends Test {
 			</tests:TestClass1>
 		');
 		Assert.notNull(result);
+		Assert.isOfType(result, TestClass1);
 	}
 
 	public function testDeclarationsDocComment1():Void {
@@ -54,6 +58,7 @@ class MXHXComponentDeclarationsTest extends Test {
 			</tests:TestClass1>
 		');
 		Assert.notNull(result);
+		Assert.isOfType(result, TestClass1);
 	}
 
 	public function testDeclarationsDocComment2():Void {
@@ -65,6 +70,7 @@ class MXHXComponentDeclarationsTest extends Test {
 			</tests:TestClass1>
 		');
 		Assert.notNull(result);
+		Assert.isOfType(result, TestClass1);
 	}
 
 	public function testStructAttributes():Void {
@@ -78,6 +84,7 @@ class MXHXComponentDeclarationsTest extends Test {
 			</tests:TestClass1>
 		');
 		Assert.notNull(result);
+		Assert.isOfType(result, TestClass1);
 		Assert.notNull(result.struct);
 		Assert.equals(9, Reflect.fields(result.struct).length);
 		Assert.isTrue(Reflect.hasField(result.struct, "float"));
@@ -111,6 +118,7 @@ class MXHXComponentDeclarationsTest extends Test {
 			</tests:TestClass1>
 		');
 		Assert.notNull(result);
+		Assert.isOfType(result, TestClass1);
 		Assert.notNull(result.struct);
 		Assert.equals(9, Reflect.fields(result.struct).length);
 		Assert.isTrue(Reflect.hasField(result.struct, "float"));
@@ -157,6 +165,7 @@ class MXHXComponentDeclarationsTest extends Test {
 			</tests:TestClass1>
 		');
 		Assert.notNull(result);
+		Assert.isOfType(result, TestClass1);
 		Assert.notNull(result.struct);
 		Assert.equals(10, Reflect.fields(result.struct).length);
 		Assert.isTrue(Reflect.hasField(result.struct, "float"));
@@ -224,6 +233,7 @@ class MXHXComponentDeclarationsTest extends Test {
 			</tests:TestClass1>
 		');
 		Assert.notNull(result);
+		Assert.isOfType(result, TestClass1);
 		Assert.notNull(result.struct);
 		Assert.equals(10, Reflect.fields(result.struct).length);
 		Assert.isTrue(Reflect.hasField(result.struct, "float"));
@@ -258,6 +268,7 @@ class MXHXComponentDeclarationsTest extends Test {
 			</tests:TestClass1>
 		');
 		Assert.notNull(result);
+		Assert.isOfType(result, TestClass1);
 		Assert.notNull(result.struct);
 		Assert.equals(0, Reflect.fields(result.struct).length);
 	}
@@ -272,6 +283,7 @@ class MXHXComponentDeclarationsTest extends Test {
 			</tests:TestClass1>
 		');
 		Assert.notNull(result);
+		Assert.isOfType(result, TestClass1);
 		Assert.notNull(result.struct);
 		Assert.equals(0, Reflect.fields(result.struct).length);
 	}
@@ -285,6 +297,7 @@ class MXHXComponentDeclarationsTest extends Test {
 			</tests:TestClass1>
 		');
 		Assert.notNull(result);
+		Assert.isOfType(result, TestClass1);
 		Assert.notNull(result.struct);
 		Assert.equals(0, Reflect.fields(result.struct).length);
 	}
@@ -300,6 +313,7 @@ class MXHXComponentDeclarationsTest extends Test {
 			</tests:TestClass1>
 		');
 		Assert.notNull(result);
+		Assert.isOfType(result, TestClass1);
 		Assert.notNull(result.struct);
 		Assert.equals(0, Reflect.fields(result.struct).length);
 	}
@@ -315,6 +329,7 @@ class MXHXComponentDeclarationsTest extends Test {
 			</tests:TestClass1>
 		');
 		Assert.notNull(result);
+		Assert.isOfType(result, TestClass1);
 		Assert.notNull(result.struct);
 		Assert.equals(0, Reflect.fields(result.struct).length);
 	}
@@ -344,6 +359,7 @@ class MXHXComponentDeclarationsTest extends Test {
 			</tests:TestClass1>
 		');
 		Assert.notNull(result);
+		Assert.isOfType(result, TestClass1);
 		Assert.notNull(result.strictlyTyped);
 		Assert.isTrue(result.strictlyTyped.boolean);
 		Assert.equals(123.4, result.strictlyTyped.float);
@@ -379,6 +395,7 @@ class MXHXComponentDeclarationsTest extends Test {
 			</tests:TestClass1>
 		');
 		Assert.notNull(result);
+		Assert.isOfType(result, TestClass1);
 		Assert.notNull(result.strictlyTyped);
 		Assert.isTrue(result.strictlyTyped.boolean);
 		Assert.equals(123.4, result.strictlyTyped.float);
@@ -396,6 +413,7 @@ class MXHXComponentDeclarationsTest extends Test {
 			</tests:TestClass1>
 		');
 		Assert.notNull(result);
+		Assert.isOfType(result, TestClass1);
 		Assert.equals(TestPropertyAbstractEnum.Value2, result.enumValue);
 	}
 
@@ -410,6 +428,7 @@ class MXHXComponentDeclarationsTest extends Test {
 			</tests:TestClass1>
 		');
 		Assert.notNull(result);
+		Assert.isOfType(result, TestClass1);
 		Assert.equals(TestPropertyAbstractEnum.Value2, result.enumValue);
 	}
 
@@ -422,6 +441,7 @@ class MXHXComponentDeclarationsTest extends Test {
 			</tests:TestClass1>
 		');
 		Assert.notNull(result);
+		Assert.isOfType(result, TestClass1);
 		Assert.equals(TestPropertyAbstractEnum.Value2, result.enumValue);
 	}
 
@@ -434,6 +454,7 @@ class MXHXComponentDeclarationsTest extends Test {
 			</tests:TestClass1>
 		');
 		Assert.notNull(result);
+		Assert.isOfType(result, TestClass1);
 		Assert.equals(TestPropertyAbstractEnum.Value2, result.enumValue);
 	}
 
@@ -446,6 +467,7 @@ class MXHXComponentDeclarationsTest extends Test {
 			</tests:TestClass1>
 		');
 		Assert.notNull(result);
+		Assert.isOfType(result, TestClass1);
 		Assert.equals(TestPropertyAbstractEnum.Value2, result.enumValue);
 	}
 
@@ -458,6 +480,7 @@ class MXHXComponentDeclarationsTest extends Test {
 			</tests:TestClass1>
 		');
 		Assert.notNull(result);
+		Assert.isOfType(result, TestClass1);
 		Assert.equals(TestPropertyAbstractEnum.Value2, result.enumValue);
 	}
 
@@ -470,6 +493,7 @@ class MXHXComponentDeclarationsTest extends Test {
 			</tests:TestClass1>
 		');
 		Assert.notNull(result);
+		Assert.isOfType(result, TestClass1);
 		Assert.equals(TestPropertyEnum.Value2, result.enumValue);
 	}
 
@@ -484,6 +508,7 @@ class MXHXComponentDeclarationsTest extends Test {
 			</tests:TestClass1>
 		');
 		Assert.notNull(result);
+		Assert.isOfType(result, TestClass1);
 		Assert.equals(TestPropertyEnum.Value2, result.enumValue);
 	}
 
@@ -496,6 +521,7 @@ class MXHXComponentDeclarationsTest extends Test {
 			</tests:TestClass1>
 		');
 		Assert.notNull(result);
+		Assert.isOfType(result, TestClass1);
 		Assert.equals(TestPropertyEnum.Value2, result.enumValue);
 	}
 
@@ -508,6 +534,7 @@ class MXHXComponentDeclarationsTest extends Test {
 			</tests:TestClass1>
 		');
 		Assert.notNull(result);
+		Assert.isOfType(result, TestClass1);
 		Assert.equals(TestPropertyEnum.Value2, result.enumValue);
 	}
 
@@ -520,6 +547,7 @@ class MXHXComponentDeclarationsTest extends Test {
 			</tests:TestClass1>
 		');
 		Assert.notNull(result);
+		Assert.isOfType(result, TestClass1);
 		Assert.equals(TestPropertyEnum.Value2, result.enumValue);
 	}
 
@@ -532,6 +560,7 @@ class MXHXComponentDeclarationsTest extends Test {
 			</tests:TestClass1>
 		');
 		Assert.notNull(result);
+		Assert.isOfType(result, TestClass1);
 		Assert.equals(TestPropertyEnum.Value2, result.enumValue);
 	}
 
@@ -544,6 +573,7 @@ class MXHXComponentDeclarationsTest extends Test {
 			</tests:TestClass1>
 		');
 		Assert.notNull(result);
+		Assert.isOfType(result, TestClass1);
 		Assert.isOfType(result.ereg, EReg);
 		#if eval
 		Assert.equals("~/[a-z]+/g", Std.string(result.ereg));
@@ -561,6 +591,7 @@ class MXHXComponentDeclarationsTest extends Test {
 			</tests:TestClass1>
 		');
 		Assert.notNull(result);
+		Assert.isOfType(result, TestClass1);
 		Assert.isOfType(result.ereg, EReg);
 		#if eval
 		Assert.equals("~/[a-z]+/g", Std.string(result.ereg));
@@ -576,6 +607,7 @@ class MXHXComponentDeclarationsTest extends Test {
 			</tests:TestClass1>
 		');
 		Assert.notNull(result);
+		Assert.isOfType(result, TestClass1);
 		Assert.isOfType(result.ereg, EReg);
 		#if eval
 		Assert.equals("~/[a-z]+/g", Std.string(result.ereg));
@@ -591,6 +623,7 @@ class MXHXComponentDeclarationsTest extends Test {
 			</tests:TestClass1>
 		');
 		Assert.notNull(result);
+		Assert.isOfType(result, TestClass1);
 		Assert.isOfType(result.ereg, EReg);
 		#if eval
 		Assert.equals("~/[a-z]+/g", Std.string(result.ereg));
@@ -606,6 +639,7 @@ class MXHXComponentDeclarationsTest extends Test {
 			</tests:TestClass1>
 		');
 		Assert.notNull(result);
+		Assert.isOfType(result, TestClass1);
 		Assert.isOfType(result.ereg, EReg);
 		#if eval
 		Assert.equals("~//", Std.string(result.ereg));
@@ -622,6 +656,7 @@ class MXHXComponentDeclarationsTest extends Test {
 			</tests:TestClass1>
 		');
 		Assert.notNull(result);
+		Assert.isOfType(result, TestClass1);
 		Assert.isOfType(result.ereg, EReg);
 		#if eval
 		Assert.equals("~//", Std.string(result.ereg));
@@ -637,6 +672,7 @@ class MXHXComponentDeclarationsTest extends Test {
 			</tests:TestClass1>
 		');
 		Assert.notNull(result);
+		Assert.isOfType(result, TestClass1);
 		Assert.isOfType(result.ereg, EReg);
 		#if eval
 		Assert.equals("~//", Std.string(result.ereg));
@@ -654,6 +690,7 @@ class MXHXComponentDeclarationsTest extends Test {
 			</tests:TestClass1>
 		');
 		Assert.notNull(result);
+		Assert.isOfType(result, TestClass1);
 		Assert.isOfType(result.ereg, EReg);
 		#if eval
 		Assert.equals("~//", Std.string(result.ereg));
@@ -669,6 +706,7 @@ class MXHXComponentDeclarationsTest extends Test {
 			</tests:TestClass1>
 		');
 		Assert.notNull(result);
+		Assert.isOfType(result, TestClass1);
 		Assert.isOfType(result.ereg, EReg);
 		#if eval
 		Assert.equals("~//", Std.string(result.ereg));
@@ -686,6 +724,7 @@ class MXHXComponentDeclarationsTest extends Test {
 			</tests:TestClass1>
 		');
 		Assert.notNull(result);
+		Assert.isOfType(result, TestClass1);
 		Assert.isOfType(result.ereg, EReg);
 		#if eval
 		Assert.equals("~//", Std.string(result.ereg));
@@ -701,6 +740,7 @@ class MXHXComponentDeclarationsTest extends Test {
 			</tests:TestClass1>
 		');
 		Assert.notNull(result);
+		Assert.isOfType(result, TestClass1);
 		Assert.isOfType(result.ereg, EReg);
 		#if eval
 		Assert.equals("~//", Std.string(result.ereg));
@@ -716,6 +756,7 @@ class MXHXComponentDeclarationsTest extends Test {
 			</tests:TestClass1>
 		');
 		Assert.notNull(result);
+		Assert.isOfType(result, TestClass1);
 		Assert.isOfType(result.ereg, EReg);
 		#if eval
 		Assert.equals("~/[a-z]+/g", Std.string(result.ereg));
@@ -731,6 +772,7 @@ class MXHXComponentDeclarationsTest extends Test {
 			</tests:TestClass1>
 		');
 		Assert.notNull(result);
+		Assert.isOfType(result, TestClass1);
 		Assert.isOfType(result.float, Float);
 		Assert.equals(123.4, result.float);
 	}
@@ -746,6 +788,7 @@ class MXHXComponentDeclarationsTest extends Test {
 			</tests:TestClass1>
 		');
 		Assert.notNull(result);
+		Assert.isOfType(result, TestClass1);
 		Assert.isOfType(result.float, Float);
 		Assert.equals(123.4, result.float);
 	}
@@ -759,6 +802,7 @@ class MXHXComponentDeclarationsTest extends Test {
 			</tests:TestClass1>
 		');
 		Assert.notNull(result);
+		Assert.isOfType(result, TestClass1);
 		Assert.isOfType(result.float, Float);
 		Assert.equals(123.4, result.float);
 	}
@@ -772,6 +816,7 @@ class MXHXComponentDeclarationsTest extends Test {
 			</tests:TestClass1>
 		');
 		Assert.notNull(result);
+		Assert.isOfType(result, TestClass1);
 		Assert.isOfType(result.float, Float);
 		Assert.equals(123.4, result.float);
 	}
@@ -785,6 +830,7 @@ class MXHXComponentDeclarationsTest extends Test {
 			</tests:TestClass1>
 		');
 		Assert.notNull(result);
+		Assert.isOfType(result, TestClass1);
 		Assert.isOfType(result.float, Float);
 		Assert.equals(123.4, result.float);
 	}
@@ -798,6 +844,7 @@ class MXHXComponentDeclarationsTest extends Test {
 			</tests:TestClass1>
 		');
 		Assert.notNull(result);
+		Assert.isOfType(result, TestClass1);
 		Assert.isOfType(result.float, Float);
 		Assert.isTrue(Math.isNaN(result.float));
 	}
@@ -812,6 +859,7 @@ class MXHXComponentDeclarationsTest extends Test {
 			</tests:TestClass1>
 		');
 		Assert.notNull(result);
+		Assert.isOfType(result, TestClass1);
 		Assert.isOfType(result.float, Float);
 		Assert.isTrue(Math.isNaN(result.float));
 	}
@@ -825,6 +873,7 @@ class MXHXComponentDeclarationsTest extends Test {
 			</tests:TestClass1>
 		');
 		Assert.notNull(result);
+		Assert.isOfType(result, TestClass1);
 		Assert.isOfType(result.float, Float);
 		Assert.isTrue(Math.isNaN(result.float));
 	}
@@ -840,6 +889,7 @@ class MXHXComponentDeclarationsTest extends Test {
 			</tests:TestClass1>
 		');
 		Assert.notNull(result);
+		Assert.isOfType(result, TestClass1);
 		Assert.isOfType(result.float, Float);
 		Assert.isTrue(Math.isNaN(result.float));
 	}
@@ -853,6 +903,7 @@ class MXHXComponentDeclarationsTest extends Test {
 			</tests:TestClass1>
 		');
 		Assert.notNull(result);
+		Assert.isOfType(result, TestClass1);
 		Assert.isOfType(result.float, Float);
 		Assert.isTrue(Math.isNaN(result.float));
 	}
@@ -868,6 +919,7 @@ class MXHXComponentDeclarationsTest extends Test {
 			</tests:TestClass1>
 		');
 		Assert.notNull(result);
+		Assert.isOfType(result, TestClass1);
 		Assert.isOfType(result.float, Float);
 		Assert.isTrue(Math.isNaN(result.float));
 	}
@@ -881,6 +933,7 @@ class MXHXComponentDeclarationsTest extends Test {
 			</tests:TestClass1>
 		');
 		Assert.notNull(result);
+		Assert.isOfType(result, TestClass1);
 		Assert.isOfType(result.float, Float);
 		Assert.equals(-123.4, result.float);
 	}
@@ -894,6 +947,7 @@ class MXHXComponentDeclarationsTest extends Test {
 			</tests:TestClass1>
 		');
 		Assert.notNull(result);
+		Assert.isOfType(result, TestClass1);
 		Assert.isOfType(result.float, Float);
 		Assert.equals(456, result.float);
 	}
@@ -907,6 +961,7 @@ class MXHXComponentDeclarationsTest extends Test {
 			</tests:TestClass1>
 		');
 		Assert.notNull(result);
+		Assert.isOfType(result, TestClass1);
 		Assert.isOfType(result.float, Float);
 		Assert.equals(-456, result.float);
 	}
@@ -920,6 +975,7 @@ class MXHXComponentDeclarationsTest extends Test {
 			</tests:TestClass1>
 		');
 		Assert.notNull(result);
+		Assert.isOfType(result, TestClass1);
 		Assert.isOfType(result.float, Float);
 		Assert.equals(0xbeef, result.float);
 	}
@@ -933,6 +989,7 @@ class MXHXComponentDeclarationsTest extends Test {
 			</tests:TestClass1>
 		');
 		Assert.notNull(result);
+		Assert.isOfType(result, TestClass1);
 		Assert.isOfType(result.float, Float);
 		Assert.equals(0xbeef, result.float);
 	}
@@ -946,6 +1003,7 @@ class MXHXComponentDeclarationsTest extends Test {
 			</tests:TestClass1>
 		');
 		Assert.notNull(result);
+		Assert.isOfType(result, TestClass1);
 		Assert.isOfType(result.float, Float);
 		Assert.equals(-0xbeef, result.float);
 	}
@@ -959,6 +1017,7 @@ class MXHXComponentDeclarationsTest extends Test {
 			</tests:TestClass1>
 		');
 		Assert.notNull(result);
+		Assert.isOfType(result, TestClass1);
 		Assert.isOfType(result.float, Float);
 		Assert.equals(123.4e5, result.float);
 	}
@@ -972,6 +1031,7 @@ class MXHXComponentDeclarationsTest extends Test {
 			</tests:TestClass1>
 		');
 		Assert.notNull(result);
+		Assert.isOfType(result, TestClass1);
 		Assert.isOfType(result.float, Float);
 		Assert.equals(123.4e-5, result.float);
 	}
@@ -985,6 +1045,7 @@ class MXHXComponentDeclarationsTest extends Test {
 			</tests:TestClass1>
 		');
 		Assert.notNull(result);
+		Assert.isOfType(result, TestClass1);
 		Assert.isOfType(result.float, Float);
 		Assert.isTrue(Math.isNaN(result.float));
 	}
@@ -998,6 +1059,7 @@ class MXHXComponentDeclarationsTest extends Test {
 			</tests:TestClass1>
 		');
 		Assert.notNull(result);
+		Assert.isOfType(result, TestClass1);
 		Assert.isOfType(result.float, Float);
 		Assert.equals(Math.POSITIVE_INFINITY, result.float);
 	}
@@ -1011,6 +1073,7 @@ class MXHXComponentDeclarationsTest extends Test {
 			</tests:TestClass1>
 		');
 		Assert.notNull(result);
+		Assert.isOfType(result, TestClass1);
 		Assert.isOfType(result.float, Float);
 		Assert.equals(Math.NEGATIVE_INFINITY, result.float);
 	}
@@ -1024,6 +1087,7 @@ class MXHXComponentDeclarationsTest extends Test {
 			</tests:TestClass1>
 		');
 		Assert.notNull(result);
+		Assert.isOfType(result, TestClass1);
 		Assert.isOfType(result.float, Float);
 		Assert.equals(123.4, result.float);
 	}
@@ -1037,6 +1101,7 @@ class MXHXComponentDeclarationsTest extends Test {
 			</tests:TestClass1>
 		');
 		Assert.notNull(result);
+		Assert.isOfType(result, TestClass1);
 		Assert.isOfType(result.boolean, Bool);
 		Assert.isTrue(result.boolean);
 	}
@@ -1052,6 +1117,7 @@ class MXHXComponentDeclarationsTest extends Test {
 			</tests:TestClass1>
 		');
 		Assert.notNull(result);
+		Assert.isOfType(result, TestClass1);
 		Assert.isOfType(result.boolean, Bool);
 		Assert.isTrue(result.boolean);
 	}
@@ -1065,6 +1131,7 @@ class MXHXComponentDeclarationsTest extends Test {
 			</tests:TestClass1>
 		');
 		Assert.notNull(result);
+		Assert.isOfType(result, TestClass1);
 		Assert.isOfType(result.boolean, Bool);
 		Assert.isTrue(result.boolean);
 	}
@@ -1090,6 +1157,7 @@ class MXHXComponentDeclarationsTest extends Test {
 			</tests:TestClass1>
 		');
 		Assert.notNull(result);
+		Assert.isOfType(result, TestClass1);
 		Assert.isOfType(result.boolean, Bool);
 		Assert.isTrue(result.boolean);
 	}
@@ -1103,6 +1171,7 @@ class MXHXComponentDeclarationsTest extends Test {
 			</tests:TestClass1>
 		');
 		Assert.notNull(result);
+		Assert.isOfType(result, TestClass1);
 		Assert.isOfType(result.boolean, Bool);
 		Assert.isFalse(result.boolean);
 	}
@@ -1129,6 +1198,7 @@ class MXHXComponentDeclarationsTest extends Test {
 			</tests:TestClass1>
 		');
 		Assert.notNull(result);
+		Assert.isOfType(result, TestClass1);
 		Assert.isOfType(result.boolean, Bool);
 		Assert.isFalse(result.boolean);
 	}
@@ -1144,6 +1214,7 @@ class MXHXComponentDeclarationsTest extends Test {
 			</tests:TestClass1>
 		');
 		Assert.notNull(result);
+		Assert.isOfType(result, TestClass1);
 		Assert.isOfType(result.boolean, Bool);
 		Assert.isFalse(result.boolean);
 	}
@@ -1157,6 +1228,7 @@ class MXHXComponentDeclarationsTest extends Test {
 			</tests:TestClass1>
 		');
 		Assert.notNull(result);
+		Assert.isOfType(result, TestClass1);
 		Assert.isOfType(result.boolean, Bool);
 		Assert.isTrue(result.boolean);
 	}
@@ -1170,6 +1242,7 @@ class MXHXComponentDeclarationsTest extends Test {
 			</tests:TestClass1>
 		');
 		Assert.notNull(result);
+		Assert.isOfType(result, TestClass1);
 		Assert.isOfType(result.type, Class);
 		Assert.equals(fixtures.TestClass1, result.type);
 	}
@@ -1185,6 +1258,7 @@ class MXHXComponentDeclarationsTest extends Test {
 			</tests:TestClass1>
 		');
 		Assert.notNull(result);
+		Assert.isOfType(result, TestClass1);
 		Assert.isOfType(result.type, Class);
 		Assert.equals(fixtures.TestClass1, result.type);
 	}
@@ -1198,6 +1272,7 @@ class MXHXComponentDeclarationsTest extends Test {
 			</tests:TestClass1>
 		');
 		Assert.notNull(result);
+		Assert.isOfType(result, TestClass1);
 		Assert.isOfType(result.type, Class);
 		Assert.equals(fixtures.TestClass1, result.type);
 	}
@@ -1211,6 +1286,7 @@ class MXHXComponentDeclarationsTest extends Test {
 			</tests:TestClass1>
 		');
 		Assert.notNull(result);
+		Assert.isOfType(result, TestClass1);
 		Assert.isOfType(result.type, Class);
 		Assert.equals(fixtures.TestClass1, result.type);
 	}
@@ -1224,6 +1300,7 @@ class MXHXComponentDeclarationsTest extends Test {
 			</tests:TestClass1>
 		');
 		Assert.notNull(result);
+		Assert.isOfType(result, TestClass1);
 		Assert.isOfType(result.type, Class);
 		Assert.equals(fixtures.TestClass1, result.type);
 	}
@@ -1288,6 +1365,7 @@ class MXHXComponentDeclarationsTest extends Test {
 			</tests:TestClass1>
 		');
 		Assert.notNull(result);
+		Assert.isOfType(result, TestClass1);
 		Assert.isOfType(result.type, Class);
 		Assert.equals(fixtures.TestClass1, result.type);
 	}
@@ -1301,6 +1379,7 @@ class MXHXComponentDeclarationsTest extends Test {
 			</tests:TestClass1>
 		');
 		Assert.notNull(result);
+		Assert.isOfType(result, TestClass1);
 		Assert.isOfType(result.integer, Int);
 		Assert.equals(123, result.integer);
 	}
@@ -1316,6 +1395,7 @@ class MXHXComponentDeclarationsTest extends Test {
 			</tests:TestClass1>
 		');
 		Assert.notNull(result);
+		Assert.isOfType(result, TestClass1);
 		Assert.isOfType(result.integer, Int);
 		Assert.equals(123, result.integer);
 	}
@@ -1329,6 +1409,7 @@ class MXHXComponentDeclarationsTest extends Test {
 			</tests:TestClass1>
 		');
 		Assert.notNull(result);
+		Assert.isOfType(result, TestClass1);
 		Assert.isOfType(result.integer, Int);
 		Assert.equals(123, result.integer);
 	}
@@ -1342,6 +1423,7 @@ class MXHXComponentDeclarationsTest extends Test {
 			</tests:TestClass1>
 		');
 		Assert.notNull(result);
+		Assert.isOfType(result, TestClass1);
 		Assert.isOfType(result.integer, Int);
 		Assert.equals(123, result.integer);
 	}
@@ -1355,6 +1437,7 @@ class MXHXComponentDeclarationsTest extends Test {
 			</tests:TestClass1>
 		');
 		Assert.notNull(result);
+		Assert.isOfType(result, TestClass1);
 		Assert.isOfType(result.integer, Int);
 		Assert.equals(123, result.integer);
 	}
@@ -1368,6 +1451,7 @@ class MXHXComponentDeclarationsTest extends Test {
 			</tests:TestClass1>
 		');
 		Assert.notNull(result);
+		Assert.isOfType(result, TestClass1);
 		Assert.isOfType(result.integer, Int);
 		Assert.equals(0, result.integer);
 	}
@@ -1382,6 +1466,7 @@ class MXHXComponentDeclarationsTest extends Test {
 			</tests:TestClass1>
 		');
 		Assert.notNull(result);
+		Assert.isOfType(result, TestClass1);
 		Assert.isOfType(result.integer, Int);
 		Assert.equals(0, result.integer);
 	}
@@ -1395,6 +1480,7 @@ class MXHXComponentDeclarationsTest extends Test {
 			</tests:TestClass1>
 		');
 		Assert.notNull(result);
+		Assert.isOfType(result, TestClass1);
 		Assert.isOfType(result.integer, Int);
 		Assert.equals(0, result.integer);
 	}
@@ -1410,6 +1496,7 @@ class MXHXComponentDeclarationsTest extends Test {
 			</tests:TestClass1>
 		');
 		Assert.notNull(result);
+		Assert.isOfType(result, TestClass1);
 		Assert.isOfType(result.integer, Int);
 		Assert.equals(0, result.integer);
 	}
@@ -1423,6 +1510,7 @@ class MXHXComponentDeclarationsTest extends Test {
 			</tests:TestClass1>
 		');
 		Assert.notNull(result);
+		Assert.isOfType(result, TestClass1);
 		Assert.isOfType(result.integer, Int);
 		Assert.equals(-123, result.integer);
 	}
@@ -1436,6 +1524,7 @@ class MXHXComponentDeclarationsTest extends Test {
 			</tests:TestClass1>
 		');
 		Assert.notNull(result);
+		Assert.isOfType(result, TestClass1);
 		Assert.isOfType(result.integer, Int);
 		Assert.equals(0xbeef, result.integer);
 	}
@@ -1449,6 +1538,7 @@ class MXHXComponentDeclarationsTest extends Test {
 			</tests:TestClass1>
 		');
 		Assert.notNull(result);
+		Assert.isOfType(result, TestClass1);
 		Assert.isOfType(result.integer, Int);
 		Assert.equals(0xbeef, result.integer);
 	}
@@ -1462,6 +1552,7 @@ class MXHXComponentDeclarationsTest extends Test {
 			</tests:TestClass1>
 		');
 		Assert.notNull(result);
+		Assert.isOfType(result, TestClass1);
 		Assert.isOfType(result.integer, Int);
 		Assert.equals(-0xbeef, result.integer);
 	}
@@ -1475,6 +1566,7 @@ class MXHXComponentDeclarationsTest extends Test {
 			</tests:TestClass1>
 		');
 		Assert.notNull(result);
+		Assert.isOfType(result, TestClass1);
 		Assert.isOfType(result.integer, Int);
 		Assert.equals(123, result.integer);
 	}
@@ -1488,6 +1580,7 @@ class MXHXComponentDeclarationsTest extends Test {
 			</tests:TestClass1>
 		');
 		Assert.notNull(result);
+		Assert.isOfType(result, TestClass1);
 		Assert.isOfType(result.string, String);
 		Assert.equals("hello", result.string);
 	}
@@ -1501,6 +1594,7 @@ class MXHXComponentDeclarationsTest extends Test {
 			</tests:TestClass1>
 		');
 		Assert.notNull(result);
+		Assert.isOfType(result, TestClass1);
 		Assert.isOfType(result.string, String);
 		Assert.equals("hello", result.string);
 	}
@@ -1514,6 +1608,7 @@ class MXHXComponentDeclarationsTest extends Test {
 			</tests:TestClass1>
 		');
 		Assert.notNull(result);
+		Assert.isOfType(result, TestClass1);
 		Assert.isOfType(result.string, String);
 		Assert.equals("hello", result.string);
 	}
@@ -1527,6 +1622,7 @@ class MXHXComponentDeclarationsTest extends Test {
 			</tests:TestClass1>
 		');
 		Assert.notNull(result);
+		Assert.isOfType(result, TestClass1);
 		Assert.isOfType(result.string, String);
 		Assert.equals("helloworld", result.string);
 	}
@@ -1580,6 +1676,7 @@ class MXHXComponentDeclarationsTest extends Test {
 			</tests:TestClass1>
 		');
 		Assert.notNull(result);
+		Assert.isOfType(result, TestClass1);
 		Assert.isOfType(result.string, String);
 		Assert.equals("MXHX & Haxe are <cool/>", result.string);
 	}
@@ -1608,6 +1705,7 @@ class MXHXComponentDeclarationsTest extends Test {
 			</tests:TestClass1>
 		');
 		Assert.notNull(result);
+		Assert.isOfType(result, TestClass1);
 		Assert.isOfType(result.string, String);
 		Assert.equals(" ", result.string);
 	}
@@ -1621,6 +1719,7 @@ class MXHXComponentDeclarationsTest extends Test {
 			</tests:TestClass1>
 		');
 		Assert.notNull(result);
+		Assert.isOfType(result, TestClass1);
 		Assert.isOfType(result.string, String);
 		Assert.equals("   ", result.string);
 	}
@@ -1636,6 +1735,7 @@ class MXHXComponentDeclarationsTest extends Test {
 			</tests:TestClass1>
 		');
 		Assert.notNull(result);
+		Assert.isOfType(result, TestClass1);
 		Assert.isOfType(result.string, String);
 		Assert.equals("   ", result.string);
 	}
@@ -1652,6 +1752,7 @@ class MXHXComponentDeclarationsTest extends Test {
 			</tests:TestClass1>
 		');
 		Assert.notNull(result);
+		Assert.isOfType(result, TestClass1);
 		Assert.isOfType(result.string, String);
 		Assert.equals("      ", result.string);
 	}
@@ -1665,6 +1766,7 @@ class MXHXComponentDeclarationsTest extends Test {
 			</tests:TestClass1>
 		');
 		Assert.notNull(result);
+		Assert.isOfType(result, TestClass1);
 		Assert.isOfType(result.string, String);
 		Assert.equals("hello", result.string);
 	}
@@ -1678,6 +1780,7 @@ class MXHXComponentDeclarationsTest extends Test {
 			</tests:TestClass1>
 		');
 		Assert.notNull(result);
+		Assert.isOfType(result, TestClass1);
 		Assert.isOfType(result.string, String);
 		Assert.equals("hello", result.string);
 	}
@@ -1692,6 +1795,7 @@ class MXHXComponentDeclarationsTest extends Test {
 			</tests:TestClass1>
 		');
 		Assert.notNull(result);
+		Assert.isOfType(result, TestClass1);
 		Assert.isOfType(result.string, String);
 		Assert.equals("hello", result.string);
 	}
@@ -1705,6 +1809,7 @@ class MXHXComponentDeclarationsTest extends Test {
 			</tests:TestClass1>
 		');
 		Assert.notNull(result);
+		Assert.isOfType(result, TestClass1);
 		Assert.isOfType(result.uint, Int);
 		Assert.equals(0xFFFFFFFF, result.uint);
 	}
@@ -1718,6 +1823,7 @@ class MXHXComponentDeclarationsTest extends Test {
 			</tests:TestClass1>
 		');
 		Assert.notNull(result);
+		Assert.isOfType(result, TestClass1);
 		Assert.isOfType(result.uint, Int);
 		Assert.equals(0xFFFFFFFF, result.uint);
 	}
@@ -1731,6 +1837,7 @@ class MXHXComponentDeclarationsTest extends Test {
 			</tests:TestClass1>
 		');
 		Assert.notNull(result);
+		Assert.isOfType(result, TestClass1);
 		Assert.isOfType(result.uint, Int);
 		Assert.equals(1234, result.uint);
 	}
@@ -1746,6 +1853,7 @@ class MXHXComponentDeclarationsTest extends Test {
 			</tests:TestClass1>
 		');
 		Assert.notNull(result);
+		Assert.isOfType(result, TestClass1);
 		Assert.isOfType(result.uint, Int);
 		Assert.equals(0xFFFFFFFF, result.uint);
 	}
@@ -1759,6 +1867,7 @@ class MXHXComponentDeclarationsTest extends Test {
 			</tests:TestClass1>
 		');
 		Assert.notNull(result);
+		Assert.isOfType(result, TestClass1);
 		Assert.isOfType(result.uint, Int);
 		Assert.equals(0xFFFFFFFF, result.uint);
 	}
@@ -1772,6 +1881,7 @@ class MXHXComponentDeclarationsTest extends Test {
 			</tests:TestClass1>
 		');
 		Assert.notNull(result);
+		Assert.isOfType(result, TestClass1);
 		Assert.isOfType(result.uint, Int);
 		Assert.equals(0xFFFFFFFF, result.uint);
 	}
@@ -1785,6 +1895,7 @@ class MXHXComponentDeclarationsTest extends Test {
 			</tests:TestClass1>
 		');
 		Assert.notNull(result);
+		Assert.isOfType(result, TestClass1);
 		Assert.isOfType(result.uint, Int);
 		Assert.equals(0xFFFFFFFF, result.uint);
 	}
@@ -1798,6 +1909,7 @@ class MXHXComponentDeclarationsTest extends Test {
 			</tests:TestClass1>
 		');
 		Assert.notNull(result);
+		Assert.isOfType(result, TestClass1);
 		Assert.isOfType(result.uint, Int);
 		Assert.equals(0, result.uint);
 	}
@@ -1812,6 +1924,7 @@ class MXHXComponentDeclarationsTest extends Test {
 			</tests:TestClass1>
 		');
 		Assert.notNull(result);
+		Assert.isOfType(result, TestClass1);
 		Assert.isOfType(result.uint, Int);
 		Assert.equals(0, result.uint);
 	}
@@ -1825,6 +1938,7 @@ class MXHXComponentDeclarationsTest extends Test {
 			</tests:TestClass1>
 		');
 		Assert.notNull(result);
+		Assert.isOfType(result, TestClass1);
 		Assert.isOfType(result.uint, Int);
 		Assert.equals(0, result.uint);
 	}
@@ -1840,6 +1954,7 @@ class MXHXComponentDeclarationsTest extends Test {
 			</tests:TestClass1>
 		');
 		Assert.notNull(result);
+		Assert.isOfType(result, TestClass1);
 		Assert.isOfType(result.uint, Int);
 		Assert.equals(0, result.uint);
 	}
@@ -1853,6 +1968,7 @@ class MXHXComponentDeclarationsTest extends Test {
 			</tests:TestClass1>
 		');
 		Assert.notNull(result);
+		Assert.isOfType(result, TestClass1);
 		Assert.isOfType(result.uint, Int);
 		Assert.equals(0xFFFFFFFF, result.uint);
 	}
@@ -2090,6 +2206,7 @@ class MXHXComponentDeclarationsTest extends Test {
 			</tests:TestClass1>
 		');
 		Assert.notNull(result);
+		Assert.isOfType(result, TestClass1);
 		Assert.isOfType(result.xml, Xml);
 		var xml:Xml = result.xml;
 		Assert.equals(XmlType.Document, xml.nodeType);
@@ -2109,6 +2226,7 @@ class MXHXComponentDeclarationsTest extends Test {
 			</tests:TestClass1>
 		');
 		Assert.notNull(result);
+		Assert.isOfType(result, TestClass1);
 		Assert.isOfType(result.xml, Xml);
 		var xml:Xml = result.xml;
 		Assert.equals(XmlType.Document, xml.nodeType);
@@ -2131,6 +2249,7 @@ class MXHXComponentDeclarationsTest extends Test {
 			</tests:TestClass1>
 		');
 		Assert.notNull(result);
+		Assert.isOfType(result, TestClass1);
 		Assert.isOfType(result.xml, Xml);
 		var xml:Xml = result.xml;
 		Assert.equals(XmlType.Document, xml.nodeType);
@@ -2158,6 +2277,7 @@ class MXHXComponentDeclarationsTest extends Test {
 			</tests:TestClass1>
 		');
 		Assert.notNull(result);
+		Assert.isOfType(result, TestClass1);
 		Assert.isOfType(result.xml, Xml);
 		var xml:Xml = result.xml;
 		Assert.equals(XmlType.Document, xml.nodeType);
@@ -2189,6 +2309,7 @@ class MXHXComponentDeclarationsTest extends Test {
 			</tests:TestClass1>
 		');
 		Assert.notNull(result);
+		Assert.isOfType(result, TestClass1);
 		Assert.isOfType(result.xml, Xml);
 		var xml:Xml = result.xml;
 		Assert.equals(XmlType.Document, xml.nodeType);
@@ -2211,6 +2332,7 @@ class MXHXComponentDeclarationsTest extends Test {
 			</tests:TestClass1>
 		');
 		Assert.notNull(result);
+		Assert.isOfType(result, TestClass1);
 		Assert.isOfType(result.xml, Xml);
 		var xml:Xml = result.xml;
 		Assert.equals(XmlType.Document, xml.nodeType);
@@ -2240,6 +2362,7 @@ class MXHXComponentDeclarationsTest extends Test {
 			</tests:TestClass1>
 		');
 		Assert.notNull(result);
+		Assert.isOfType(result, TestClass1);
 		Assert.isOfType(result.xml, Xml);
 		var xml:Xml = result.xml;
 		Assert.equals(XmlType.Document, xml.nodeType);
@@ -2275,6 +2398,7 @@ class MXHXComponentDeclarationsTest extends Test {
 			</tests:TestClass1>
 		');
 		Assert.notNull(result);
+		Assert.isOfType(result, TestClass1);
 		Assert.isOfType(result.xml, Xml);
 		var xml:Xml = result.xml;
 		Assert.equals(XmlType.Document, xml.nodeType);
@@ -2316,6 +2440,7 @@ class MXHXComponentDeclarationsTest extends Test {
 			</tests:TestClass1>
 		');
 		Assert.notNull(result);
+		Assert.isOfType(result, TestClass1);
 		Assert.isOfType(result.xml, Xml);
 		var xml:Xml = result.xml;
 		Assert.equals(XmlType.Document, xml.nodeType);
@@ -2335,6 +2460,7 @@ class MXHXComponentDeclarationsTest extends Test {
 			</tests:TestClass1>
 		');
 		Assert.notNull(result);
+		Assert.isOfType(result, TestClass1);
 		Assert.isOfType(result.xml, Xml);
 		var xml:Xml = result.xml;
 		Assert.equals(XmlType.Document, xml.nodeType);
@@ -2362,6 +2488,7 @@ class MXHXComponentDeclarationsTest extends Test {
 			</tests:TestClass1>
 		');
 		Assert.notNull(result);
+		Assert.isOfType(result, TestClass1);
 		Assert.isOfType(result.xml, Xml);
 		var xml:Xml = result.xml;
 		Assert.equals(XmlType.Document, xml.nodeType);
@@ -2381,6 +2508,7 @@ class MXHXComponentDeclarationsTest extends Test {
 			</tests:TestClass1>
 		');
 		Assert.notNull(result);
+		Assert.isOfType(result, TestClass1);
 		Assert.isOfType(result.xml, Xml);
 		var xml:Xml = result.xml;
 		Assert.equals(XmlType.Document, xml.nodeType);
@@ -2408,6 +2536,7 @@ class MXHXComponentDeclarationsTest extends Test {
 			</tests:TestClass1>
 		');
 		Assert.notNull(result);
+		Assert.isOfType(result, TestClass1);
 		Assert.isOfType(result.xml, Xml);
 		var xml:Xml = result.xml;
 		Assert.equals(XmlType.Document, xml.nodeType);
@@ -2427,6 +2556,7 @@ class MXHXComponentDeclarationsTest extends Test {
 			</tests:TestClass1>
 		');
 		Assert.notNull(result);
+		Assert.isOfType(result, TestClass1);
 		Assert.isOfType(result.xml, Xml);
 		var xml:Xml = result.xml;
 		Assert.equals(XmlType.Document, xml.nodeType);
@@ -2454,6 +2584,7 @@ class MXHXComponentDeclarationsTest extends Test {
 			</tests:TestClass1>
 		');
 		Assert.notNull(result);
+		Assert.isOfType(result, TestClass1);
 		Assert.isOfType(result.xml, Xml);
 		var xml:Xml = result.xml;
 		Assert.equals(XmlType.Document, xml.nodeType);
@@ -2496,6 +2627,7 @@ class MXHXComponentDeclarationsTest extends Test {
 			</tests:TestClass1>
 		');
 		Assert.notNull(result);
+		Assert.isOfType(result, TestClass1);
 		Assert.isOfType(result.xml, Xml);
 		var xml:Xml = result.xml;
 		Assert.equals(XmlType.Document, xml.nodeType);
@@ -2539,6 +2671,7 @@ class MXHXComponentDeclarationsTest extends Test {
 			</tests:TestClass1>
 		');
 		Assert.notNull(result);
+		Assert.isOfType(result, TestClass1);
 		Assert.isOfType(result.xml, Xml);
 		var xml:Xml = result.xml;
 		Assert.equals(XmlType.Document, xml.nodeType);
@@ -2615,6 +2748,7 @@ class MXHXComponentDeclarationsTest extends Test {
 		');
 		var now = Date.now();
 		Assert.notNull(result);
+		Assert.isOfType(result, TestClass1);
 		Assert.isOfType(result.date, Date);
 		var difference = now.getTime() - result.date.getTime();
 		Assert.isTrue(difference < 1000.0);
@@ -2629,6 +2763,7 @@ class MXHXComponentDeclarationsTest extends Test {
 			</tests:TestClass1>
 		');
 		Assert.notNull(result);
+		Assert.isOfType(result, TestClass1);
 		Assert.isOfType(result.date, Date);
 		Assert.equals(2008, result.date.getFullYear());
 	}
@@ -2642,6 +2777,7 @@ class MXHXComponentDeclarationsTest extends Test {
 			</tests:TestClass1>
 		');
 		Assert.notNull(result);
+		Assert.isOfType(result, TestClass1);
 		Assert.isOfType(result.date, Date);
 		Assert.equals(4, result.date.getMonth());
 	}
@@ -2655,6 +2791,7 @@ class MXHXComponentDeclarationsTest extends Test {
 			</tests:TestClass1>
 		');
 		Assert.notNull(result);
+		Assert.isOfType(result, TestClass1);
 		Assert.isOfType(result.date, Date);
 		Assert.equals(25, result.date.getDate());
 	}
@@ -2668,6 +2805,7 @@ class MXHXComponentDeclarationsTest extends Test {
 			</tests:TestClass1>
 		');
 		Assert.notNull(result);
+		Assert.isOfType(result, TestClass1);
 		Assert.isOfType(result.date, Date);
 		Assert.equals(3, result.date.getHours());
 	}
@@ -2681,6 +2819,7 @@ class MXHXComponentDeclarationsTest extends Test {
 			</tests:TestClass1>
 		');
 		Assert.notNull(result);
+		Assert.isOfType(result, TestClass1);
 		Assert.isOfType(result.date, Date);
 		Assert.equals(47, result.date.getMinutes());
 	}
@@ -2694,6 +2833,7 @@ class MXHXComponentDeclarationsTest extends Test {
 			</tests:TestClass1>
 		');
 		Assert.notNull(result);
+		Assert.isOfType(result, TestClass1);
 		Assert.isOfType(result.date, Date);
 		Assert.equals(51, result.date.getSeconds());
 	}
@@ -2709,6 +2849,7 @@ class MXHXComponentDeclarationsTest extends Test {
 			</tests:TestClass1>
 		');
 		Assert.notNull(result);
+		Assert.isOfType(result, TestClass1);
 		Assert.isOfType(result.date, Date);
 		Assert.equals(2008, result.date.getFullYear());
 	}
@@ -2724,6 +2865,7 @@ class MXHXComponentDeclarationsTest extends Test {
 			</tests:TestClass1>
 		');
 		Assert.notNull(result);
+		Assert.isOfType(result, TestClass1);
 		Assert.isOfType(result.date, Date);
 		Assert.equals(4, result.date.getMonth());
 	}
@@ -2739,6 +2881,7 @@ class MXHXComponentDeclarationsTest extends Test {
 			</tests:TestClass1>
 		');
 		Assert.notNull(result);
+		Assert.isOfType(result, TestClass1);
 		Assert.isOfType(result.date, Date);
 		Assert.equals(25, result.date.getDate());
 	}
@@ -2754,6 +2897,7 @@ class MXHXComponentDeclarationsTest extends Test {
 			</tests:TestClass1>
 		');
 		Assert.notNull(result);
+		Assert.isOfType(result, TestClass1);
 		Assert.isOfType(result.date, Date);
 		Assert.equals(3, result.date.getHours());
 	}
@@ -2769,6 +2913,7 @@ class MXHXComponentDeclarationsTest extends Test {
 			</tests:TestClass1>
 		');
 		Assert.notNull(result);
+		Assert.isOfType(result, TestClass1);
 		Assert.isOfType(result.date, Date);
 		Assert.equals(47, result.date.getMinutes());
 	}
@@ -2784,6 +2929,7 @@ class MXHXComponentDeclarationsTest extends Test {
 			</tests:TestClass1>
 		');
 		Assert.notNull(result);
+		Assert.isOfType(result, TestClass1);
 		Assert.isOfType(result.date, Date);
 		Assert.equals(51, result.date.getSeconds());
 	}
@@ -2801,6 +2947,7 @@ class MXHXComponentDeclarationsTest extends Test {
 			</tests:TestClass1>
 		');
 		Assert.notNull(result);
+		Assert.isOfType(result, TestClass1);
 		Assert.isOfType(result.date, Date);
 		Assert.equals(2008, result.date.getFullYear());
 		Assert.equals(4, result.date.getMonth());
