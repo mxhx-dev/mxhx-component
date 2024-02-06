@@ -1629,7 +1629,7 @@ class MXHXComponent {
 			if (child != null && (child is IMXHXTextData) && child.getNextSiblingUnit() == null) {
 				var textData = cast(child, IMXHXTextData);
 				if (textData.textType == Text && isLanguageTypeAssignableFromText(typeSymbol)) {
-					initExpr = handleTextContentAsExpr(textData.content, typeSymbol, null, textData);
+					initExpr = handleTextContentAsExpr(textData.content, typeSymbol, 0, textData);
 					bindingTextData = textData;
 				}
 			}
