@@ -5,6 +5,7 @@ import fixtures.TestClass1;
 import fixtures.TestComplexEnum;
 import fixtures.TestPropertiesClass;
 import fixtures.TestPropertyEnum;
+import mxhx.runtime.MXHXRuntimeComponent.MXHXRuntimeComponentException;
 import utest.Assert;
 import utest.Test;
 
@@ -79,7 +80,7 @@ class MXHXRuntimeComponentDeclarationsTest extends Test {
 			<tests:TestClass1 xmlns:mx="https://ns.mxhx.dev/2024/basic" xmlns:tests="https://ns.mxhx.dev/2024/tests">
 				<mx:Declarations>text</mx:Declarations>
 			</tests:TestClass1>
-		'), haxe.Exception);
+		'), MXHXRuntimeComponentException);
 	}
 
 	public function testStructAttributes():Void {
@@ -396,7 +397,7 @@ class MXHXRuntimeComponentDeclarationsTest extends Test {
 		Assert.notNull(result);
 		Assert.isTrue(idMap.exists("strictlyTyped"));
 		Assert.isOfType(result, TestClass1);
-		var strictlyTyped = Std.downcast(idMap.get("strictlyTyped"), TestPropertiesClass);
+		var strictlyTyped = Std.downcast((idMap.get("strictlyTyped") : Dynamic), TestPropertiesClass);
 		Assert.notNull(strictlyTyped);
 		Assert.isOfType(strictlyTyped, TestPropertiesClass);
 		Assert.isTrue(strictlyTyped.boolean);
@@ -436,7 +437,7 @@ class MXHXRuntimeComponentDeclarationsTest extends Test {
 		Assert.notNull(result);
 		Assert.isOfType(result, TestClass1);
 		Assert.isTrue(idMap.exists("strictlyTyped"));
-		var strictlyTyped = Std.downcast(idMap.get("strictlyTyped"), TestPropertiesClass);
+		var strictlyTyped = Std.downcast((idMap.get("strictlyTyped") : Dynamic), TestPropertiesClass);
 		Assert.notNull(strictlyTyped);
 		Assert.isOfType(strictlyTyped, TestPropertiesClass);
 		Assert.isTrue(strictlyTyped.boolean);
@@ -2021,7 +2022,7 @@ class MXHXRuntimeComponentDeclarationsTest extends Test {
 					<mx:String id="string" source="source.txt"/>
 				</mx:Declarations>
 			</tests:TestClass1>
-		'), haxe.Exception);
+		'), MXHXRuntimeComponentException);
 	}
 
 	public function testUInt():Void {
@@ -2311,7 +2312,7 @@ class MXHXRuntimeComponentDeclarationsTest extends Test {
 		Assert.notNull(result);
 		Assert.isOfType(result, TestClass1);
 		Assert.isTrue(idMap.exists("array"));
-		var array = Std.downcast(idMap.get("array"), Array);
+		var array = Std.downcast((idMap.get("array") : Dynamic), Array);
 		Assert.notNull(array);
 		Assert.equals(3, array.length);
 		Assert.equals("one", array[0]);
@@ -2335,7 +2336,7 @@ class MXHXRuntimeComponentDeclarationsTest extends Test {
 		Assert.notNull(result);
 		Assert.isOfType(result, TestClass1);
 		Assert.isTrue(idMap.exists("array"));
-		var array = Std.downcast(idMap.get("array"), Array);
+		var array = Std.downcast((idMap.get("array") : Dynamic), Array);
 		Assert.notNull(array);
 		Assert.equals(3, array.length);
 		Assert.equals("one", array[0]);
@@ -2360,7 +2361,7 @@ class MXHXRuntimeComponentDeclarationsTest extends Test {
 		Assert.notNull(result);
 		Assert.isOfType(result, TestClass1);
 		Assert.isTrue(idMap.exists("array"));
-		var array = Std.downcast(idMap.get("array"), Array);
+		var array = Std.downcast((idMap.get("array") : Dynamic), Array);
 		Assert.notNull(array);
 		Assert.equals(3, array.length);
 		Assert.equals("one", array[0]);
@@ -2385,7 +2386,7 @@ class MXHXRuntimeComponentDeclarationsTest extends Test {
 		Assert.notNull(result);
 		Assert.isOfType(result, TestClass1);
 		Assert.isTrue(idMap.exists("array"));
-		var array = Std.downcast(idMap.get("array"), Array);
+		var array = Std.downcast((idMap.get("array") : Dynamic), Array);
 		Assert.notNull(array);
 		Assert.equals(3, array.length);
 		Assert.equals("one", array[0]);
@@ -2410,7 +2411,7 @@ class MXHXRuntimeComponentDeclarationsTest extends Test {
 		Assert.notNull(result);
 		Assert.isOfType(result, TestClass1);
 		Assert.isTrue(idMap.exists("array"));
-		var array = Std.downcast(idMap.get("array"), Array);
+		var array = Std.downcast((idMap.get("array") : Dynamic), Array);
 		Assert.notNull(array);
 		Assert.equals(3, array.length);
 		Assert.equals("one", array[0]);
@@ -2430,7 +2431,7 @@ class MXHXRuntimeComponentDeclarationsTest extends Test {
 		Assert.notNull(result);
 		Assert.isOfType(result, TestClass1);
 		Assert.isTrue(idMap.exists("array"));
-		var array = Std.downcast(idMap.get("array"), Array);
+		var array = Std.downcast((idMap.get("array") : Dynamic), Array);
 		Assert.notNull(array);
 		Assert.equals(0, array.length);
 	}
@@ -2448,7 +2449,7 @@ class MXHXRuntimeComponentDeclarationsTest extends Test {
 		Assert.notNull(result);
 		Assert.isOfType(result, TestClass1);
 		Assert.isTrue(idMap.exists("array"));
-		var array = Std.downcast(idMap.get("array"), Array);
+		var array = Std.downcast((idMap.get("array") : Dynamic), Array);
 		Assert.notNull(array);
 		Assert.equals(0, array.length);
 	}
@@ -2465,7 +2466,7 @@ class MXHXRuntimeComponentDeclarationsTest extends Test {
 		Assert.notNull(result);
 		Assert.isOfType(result, TestClass1);
 		Assert.isTrue(idMap.exists("array"));
-		var array = Std.downcast(idMap.get("array"), Array);
+		var array = Std.downcast((idMap.get("array") : Dynamic), Array);
 		Assert.notNull(array);
 		Assert.equals(0, array.length);
 	}
@@ -2484,7 +2485,7 @@ class MXHXRuntimeComponentDeclarationsTest extends Test {
 		Assert.notNull(result);
 		Assert.isOfType(result, TestClass1);
 		Assert.isTrue(idMap.exists("array"));
-		var array = Std.downcast(idMap.get("array"), Array);
+		var array = Std.downcast((idMap.get("array") : Dynamic), Array);
 		Assert.notNull(array);
 		Assert.equals(0, array.length);
 	}
@@ -2504,7 +2505,7 @@ class MXHXRuntimeComponentDeclarationsTest extends Test {
 		Assert.notNull(result);
 		Assert.isOfType(result, TestClass1);
 		Assert.isTrue(idMap.exists("array"));
-		var array = Std.downcast(idMap.get("array"), Array);
+		var array = Std.downcast((idMap.get("array") : Dynamic), Array);
 		Assert.notNull(array);
 		Assert.equals(2, array.length);
 		Assert.isOfType(array[0], fixtures.TestPropertiesSubclass1);
@@ -2538,7 +2539,7 @@ class MXHXRuntimeComponentDeclarationsTest extends Test {
 		Assert.notNull(result);
 		Assert.isOfType(result, TestClass1);
 		Assert.isTrue(idMap.exists("array"));
-		var array = Std.downcast(idMap.get("array"), Array);
+		var array = Std.downcast((idMap.get("array") : Dynamic), Array);
 		Assert.notNull(array);
 		Assert.equals(8, array.length);
 		// child of most elements: empty string, child of declarations: null
@@ -2564,7 +2565,7 @@ class MXHXRuntimeComponentDeclarationsTest extends Test {
 		Assert.notNull(result);
 		Assert.isOfType(result, TestClass1);
 		Assert.isTrue(idMap.exists("xml"));
-		var xml = Std.downcast(idMap.get("xml"), Xml);
+		var xml = Std.downcast((idMap.get("xml") : Dynamic), Xml);
 		Assert.notNull(xml);
 		Assert.equals(XmlType.Document, xml.nodeType);
 		var firstChild:Xml = xml.firstChild();
@@ -2586,7 +2587,7 @@ class MXHXRuntimeComponentDeclarationsTest extends Test {
 		Assert.notNull(result);
 		Assert.isOfType(result, TestClass1);
 		Assert.isTrue(idMap.exists("xml"));
-		var xml = Std.downcast(idMap.get("xml"), Xml);
+		var xml = Std.downcast((idMap.get("xml") : Dynamic), Xml);
 		Assert.notNull(xml);
 		Assert.equals(XmlType.Document, xml.nodeType);
 		var firstElement:Xml = xml.firstChild();
@@ -2611,7 +2612,7 @@ class MXHXRuntimeComponentDeclarationsTest extends Test {
 		Assert.notNull(result);
 		Assert.isOfType(result, TestClass1);
 		Assert.isTrue(idMap.exists("xml"));
-		var xml = Std.downcast(idMap.get("xml"), Xml);
+		var xml = Std.downcast((idMap.get("xml") : Dynamic), Xml);
 		Assert.notNull(xml);
 		Assert.equals(XmlType.Document, xml.nodeType);
 		var firstElement:Xml = xml.firstChild();
@@ -2641,7 +2642,7 @@ class MXHXRuntimeComponentDeclarationsTest extends Test {
 		Assert.notNull(result);
 		Assert.isOfType(result, TestClass1);
 		Assert.isTrue(idMap.exists("xml"));
-		var xml = Std.downcast(idMap.get("xml"), Xml);
+		var xml = Std.downcast((idMap.get("xml") : Dynamic), Xml);
 		Assert.notNull(xml);
 		Assert.equals(XmlType.Document, xml.nodeType);
 		var firstElement:Xml = xml.firstChild();
@@ -2675,7 +2676,7 @@ class MXHXRuntimeComponentDeclarationsTest extends Test {
 		Assert.notNull(result);
 		Assert.isOfType(result, TestClass1);
 		Assert.isTrue(idMap.exists("xml"));
-		var xml = Std.downcast(idMap.get("xml"), Xml);
+		var xml = Std.downcast((idMap.get("xml") : Dynamic), Xml);
 		Assert.notNull(xml);
 		Assert.equals(XmlType.Document, xml.nodeType);
 		var firstElement:Xml = xml.firstChild();
@@ -2700,7 +2701,7 @@ class MXHXRuntimeComponentDeclarationsTest extends Test {
 		Assert.notNull(result);
 		Assert.isOfType(result, TestClass1);
 		Assert.isTrue(idMap.exists("xml"));
-		var xml = Std.downcast(idMap.get("xml"), Xml);
+		var xml = Std.downcast((idMap.get("xml") : Dynamic), Xml);
 		Assert.notNull(xml);
 		Assert.equals(XmlType.Document, xml.nodeType);
 		var firstElement:Xml = xml.firstChild();
@@ -2732,7 +2733,7 @@ class MXHXRuntimeComponentDeclarationsTest extends Test {
 		Assert.notNull(result);
 		Assert.isOfType(result, TestClass1);
 		Assert.isTrue(idMap.exists("xml"));
-		var xml = Std.downcast(idMap.get("xml"), Xml);
+		var xml = Std.downcast((idMap.get("xml") : Dynamic), Xml);
 		Assert.notNull(xml);
 		Assert.equals(XmlType.Document, xml.nodeType);
 		var firstElement:Xml = xml.firstChild();
@@ -2770,7 +2771,7 @@ class MXHXRuntimeComponentDeclarationsTest extends Test {
 		Assert.notNull(result);
 		Assert.isOfType(result, TestClass1);
 		Assert.isTrue(idMap.exists("xml"));
-		var xml = Std.downcast(idMap.get("xml"), Xml);
+		var xml = Std.downcast((idMap.get("xml") : Dynamic), Xml);
 		Assert.notNull(xml);
 		Assert.equals(XmlType.Document, xml.nodeType);
 		var firstElement:Xml = xml.firstChild();
@@ -2814,7 +2815,7 @@ class MXHXRuntimeComponentDeclarationsTest extends Test {
 		Assert.notNull(result);
 		Assert.isOfType(result, TestClass1);
 		Assert.isTrue(idMap.exists("xml"));
-		var xml = Std.downcast(idMap.get("xml"), Xml);
+		var xml = Std.downcast((idMap.get("xml") : Dynamic), Xml);
 		Assert.notNull(xml);
 		Assert.equals(XmlType.Document, xml.nodeType);
 		var firstChild:Xml = xml.firstChild();
@@ -2836,7 +2837,7 @@ class MXHXRuntimeComponentDeclarationsTest extends Test {
 		Assert.notNull(result);
 		Assert.isOfType(result, TestClass1);
 		Assert.isTrue(idMap.exists("xml"));
-		var xml = Std.downcast(idMap.get("xml"), Xml);
+		var xml = Std.downcast((idMap.get("xml") : Dynamic), Xml);
 		Assert.notNull(xml);
 		Assert.equals(XmlType.Document, xml.nodeType);
 		var firstElement:Xml = xml.firstChild();
@@ -2866,7 +2867,7 @@ class MXHXRuntimeComponentDeclarationsTest extends Test {
 		Assert.notNull(result);
 		Assert.isOfType(result, TestClass1);
 		Assert.isTrue(idMap.exists("xml"));
-		var xml = Std.downcast(idMap.get("xml"), Xml);
+		var xml = Std.downcast((idMap.get("xml") : Dynamic), Xml);
 		Assert.notNull(xml);
 		Assert.equals(XmlType.Document, xml.nodeType);
 		var firstChild:Xml = xml.firstChild();
@@ -2888,7 +2889,7 @@ class MXHXRuntimeComponentDeclarationsTest extends Test {
 		Assert.notNull(result);
 		Assert.isOfType(result, TestClass1);
 		Assert.isTrue(idMap.exists("xml"));
-		var xml = Std.downcast(idMap.get("xml"), Xml);
+		var xml = Std.downcast((idMap.get("xml") : Dynamic), Xml);
 		Assert.notNull(xml);
 		Assert.equals(XmlType.Document, xml.nodeType);
 		var firstElement:Xml = xml.firstChild();
@@ -2918,7 +2919,7 @@ class MXHXRuntimeComponentDeclarationsTest extends Test {
 		Assert.notNull(result);
 		Assert.isOfType(result, TestClass1);
 		Assert.isTrue(idMap.exists("xml"));
-		var xml = Std.downcast(idMap.get("xml"), Xml);
+		var xml = Std.downcast((idMap.get("xml") : Dynamic), Xml);
 		Assert.notNull(xml);
 		Assert.equals(XmlType.Document, xml.nodeType);
 		var firstChild:Xml = xml.firstChild();
@@ -2940,7 +2941,7 @@ class MXHXRuntimeComponentDeclarationsTest extends Test {
 		Assert.notNull(result);
 		Assert.isOfType(result, TestClass1);
 		Assert.isTrue(idMap.exists("xml"));
-		var xml = Std.downcast(idMap.get("xml"), Xml);
+		var xml = Std.downcast((idMap.get("xml") : Dynamic), Xml);
 		Assert.notNull(xml);
 		Assert.equals(XmlType.Document, xml.nodeType);
 		var firstElement:Xml = xml.firstChild();
@@ -2965,7 +2966,7 @@ class MXHXRuntimeComponentDeclarationsTest extends Test {
 					<mx:Xml id="xml" source="source.xml"/>
 				</mx:Declarations>
 			</tests:TestClass1>
-		'), haxe.Exception);
+		'), MXHXRuntimeComponentException);
 	}
 
 	public function testComplexEnumValueWithoutParameters():Void {
@@ -3024,7 +3025,7 @@ class MXHXRuntimeComponentDeclarationsTest extends Test {
 		Assert.notNull(result);
 		Assert.isOfType(result, TestClass1);
 		Assert.isTrue(idMap.exists("date"));
-		var date = Std.downcast(idMap.get("date"), Date);
+		var date = Std.downcast((idMap.get("date") : Dynamic), Date);
 		Assert.notNull(date);
 		var difference = now.getTime() - date.getTime();
 		Assert.isTrue(difference < 1000.0);
@@ -3043,7 +3044,7 @@ class MXHXRuntimeComponentDeclarationsTest extends Test {
 		Assert.notNull(result);
 		Assert.isOfType(result, TestClass1);
 		Assert.isTrue(idMap.exists("date"));
-		var date = Std.downcast(idMap.get("date"), Date);
+		var date = Std.downcast((idMap.get("date") : Dynamic), Date);
 		Assert.notNull(date);
 		Assert.equals(2008, date.getFullYear());
 	}
@@ -3061,7 +3062,7 @@ class MXHXRuntimeComponentDeclarationsTest extends Test {
 		Assert.notNull(result);
 		Assert.isOfType(result, TestClass1);
 		Assert.isTrue(idMap.exists("date"));
-		var date = Std.downcast(idMap.get("date"), Date);
+		var date = Std.downcast((idMap.get("date") : Dynamic), Date);
 		Assert.notNull(date);
 		Assert.equals(4, date.getMonth());
 	}
@@ -3079,7 +3080,7 @@ class MXHXRuntimeComponentDeclarationsTest extends Test {
 		Assert.notNull(result);
 		Assert.isOfType(result, TestClass1);
 		Assert.isTrue(idMap.exists("date"));
-		var date = Std.downcast(idMap.get("date"), Date);
+		var date = Std.downcast((idMap.get("date") : Dynamic), Date);
 		Assert.notNull(date);
 		Assert.equals(25, date.getDate());
 	}
@@ -3097,7 +3098,7 @@ class MXHXRuntimeComponentDeclarationsTest extends Test {
 		Assert.notNull(result);
 		Assert.isOfType(result, TestClass1);
 		Assert.isTrue(idMap.exists("date"));
-		var date = Std.downcast(idMap.get("date"), Date);
+		var date = Std.downcast((idMap.get("date") : Dynamic), Date);
 		Assert.notNull(date);
 		Assert.equals(3, date.getHours());
 	}
@@ -3115,7 +3116,7 @@ class MXHXRuntimeComponentDeclarationsTest extends Test {
 		Assert.notNull(result);
 		Assert.isOfType(result, TestClass1);
 		Assert.isTrue(idMap.exists("date"));
-		var date = Std.downcast(idMap.get("date"), Date);
+		var date = Std.downcast((idMap.get("date") : Dynamic), Date);
 		Assert.notNull(date);
 		Assert.equals(47, date.getMinutes());
 	}
@@ -3133,7 +3134,7 @@ class MXHXRuntimeComponentDeclarationsTest extends Test {
 		Assert.notNull(result);
 		Assert.isOfType(result, TestClass1);
 		Assert.isTrue(idMap.exists("date"));
-		var date = Std.downcast(idMap.get("date"), Date);
+		var date = Std.downcast((idMap.get("date") : Dynamic), Date);
 		Assert.notNull(date);
 		Assert.equals(51, date.getSeconds());
 	}
@@ -3153,7 +3154,7 @@ class MXHXRuntimeComponentDeclarationsTest extends Test {
 		Assert.notNull(result);
 		Assert.isOfType(result, TestClass1);
 		Assert.isTrue(idMap.exists("date"));
-		var date = Std.downcast(idMap.get("date"), Date);
+		var date = Std.downcast((idMap.get("date") : Dynamic), Date);
 		Assert.notNull(date);
 		Assert.equals(2008, date.getFullYear());
 	}
@@ -3173,7 +3174,7 @@ class MXHXRuntimeComponentDeclarationsTest extends Test {
 		Assert.notNull(result);
 		Assert.isOfType(result, TestClass1);
 		Assert.isTrue(idMap.exists("date"));
-		var date = Std.downcast(idMap.get("date"), Date);
+		var date = Std.downcast((idMap.get("date") : Dynamic), Date);
 		Assert.notNull(date);
 		Assert.equals(4, date.getMonth());
 	}
@@ -3193,7 +3194,7 @@ class MXHXRuntimeComponentDeclarationsTest extends Test {
 		Assert.notNull(result);
 		Assert.isOfType(result, TestClass1);
 		Assert.isTrue(idMap.exists("date"));
-		var date = Std.downcast(idMap.get("date"), Date);
+		var date = Std.downcast((idMap.get("date") : Dynamic), Date);
 		Assert.notNull(date);
 		Assert.equals(25, date.getDate());
 	}
@@ -3213,7 +3214,7 @@ class MXHXRuntimeComponentDeclarationsTest extends Test {
 		Assert.notNull(result);
 		Assert.isOfType(result, TestClass1);
 		Assert.isTrue(idMap.exists("date"));
-		var date = Std.downcast(idMap.get("date"), Date);
+		var date = Std.downcast((idMap.get("date") : Dynamic), Date);
 		Assert.notNull(date);
 		Assert.equals(3, date.getHours());
 	}
@@ -3233,7 +3234,7 @@ class MXHXRuntimeComponentDeclarationsTest extends Test {
 		Assert.notNull(result);
 		Assert.isOfType(result, TestClass1);
 		Assert.isTrue(idMap.exists("date"));
-		var date = Std.downcast(idMap.get("date"), Date);
+		var date = Std.downcast((idMap.get("date") : Dynamic), Date);
 		Assert.notNull(date);
 		Assert.equals(47, date.getMinutes());
 	}
@@ -3253,7 +3254,7 @@ class MXHXRuntimeComponentDeclarationsTest extends Test {
 		Assert.notNull(result);
 		Assert.isOfType(result, TestClass1);
 		Assert.isTrue(idMap.exists("date"));
-		var date = Std.downcast(idMap.get("date"), Date);
+		var date = Std.downcast((idMap.get("date") : Dynamic), Date);
 		Assert.notNull(date);
 		Assert.equals(51, date.getSeconds());
 	}
@@ -3275,7 +3276,7 @@ class MXHXRuntimeComponentDeclarationsTest extends Test {
 		Assert.notNull(result);
 		Assert.isOfType(result, TestClass1);
 		Assert.isTrue(idMap.exists("date"));
-		var date = Std.downcast(idMap.get("date"), Date);
+		var date = Std.downcast((idMap.get("date") : Dynamic), Date);
 		Assert.notNull(date);
 		Assert.equals(2008, date.getFullYear());
 		Assert.equals(4, date.getMonth());
@@ -3314,6 +3315,6 @@ class MXHXRuntimeComponentDeclarationsTest extends Test {
 					<mx:Function id="func">testMethod</mx:Function>
 				</mx:Declarations>
 			</tests:TestClass1>
-		'), haxe.Exception);
+		'), MXHXRuntimeComponentException);
 	}
 }

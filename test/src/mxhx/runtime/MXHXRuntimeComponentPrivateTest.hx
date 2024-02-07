@@ -1,5 +1,6 @@
 package mxhx.runtime;
 
+import mxhx.runtime.MXHXRuntimeComponent.MXHXRuntimeComponentException;
 import utest.Assert;
 import utest.Test;
 
@@ -9,6 +10,6 @@ class MXHXRuntimeComponentPrivateTest extends Test {
 			<mx:Object xmlns:mx="https://ns.mxhx.dev/2024/basic">
 				<mx:Private></mx:Private>
 			</mx:Object>
-		'), haxe.Exception);
+		'), MXHXRuntimeComponentException);
 	}
 }

@@ -1,5 +1,6 @@
 package mxhx.runtime;
 
+import mxhx.runtime.MXHXRuntimeComponent.MXHXRuntimeComponentException;
 import utest.Assert;
 import utest.Test;
 
@@ -11,6 +12,6 @@ class MXHXRuntimeComponentFullNamespaceTest extends Test {
 					<mx:String id="string">hello</mx:String>
 				</mx:Declarations>
 			</mx:Object>
-		'), haxe.Exception);
+		'), MXHXRuntimeComponentException);
 	}
 }

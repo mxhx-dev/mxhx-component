@@ -26,7 +26,7 @@ class MXHXRuntimeComponentArrayCollectionTest extends Test {
 		', idMap);
 		Assert.notNull(result);
 		Assert.isTrue(idMap.exists("collection"));
-		var collection = Std.downcast(idMap.get("collection"), ArrayCollection);
+		var collection = Std.downcast((idMap.get("collection") : Dynamic), ArrayCollection);
 		Assert.notNull(collection);
 		Assert.notNull(collection.array);
 		Assert.equals(3, collection.array.length);
@@ -56,7 +56,7 @@ class MXHXRuntimeComponentArrayCollectionTest extends Test {
 		', idMap);
 		Assert.notNull(result);
 		Assert.isTrue(idMap.exists("collection"));
-		var collection = Std.downcast(idMap.get("collection"), ArrayCollection);
+		var collection = Std.downcast((idMap.get("collection") : Dynamic), ArrayCollection);
 		Assert.notNull(collection);
 		Assert.notNull(collection.array);
 		Assert.equals(3, collection.array.length);
@@ -84,7 +84,7 @@ class MXHXRuntimeComponentArrayCollectionTest extends Test {
 		', idMap);
 		Assert.notNull(result);
 		Assert.isTrue(idMap.exists("collection"));
-		var collection = Std.downcast(idMap.get("collection"), ArrayCollection);
+		var collection = Std.downcast((idMap.get("collection") : Dynamic), ArrayCollection);
 		Assert.notNull(collection);
 		Assert.notNull(collection.array);
 		Assert.equals(3, collection.array.length);
@@ -112,7 +112,7 @@ class MXHXRuntimeComponentArrayCollectionTest extends Test {
 		', idMap);
 		Assert.notNull(result);
 		Assert.isTrue(idMap.exists("collection"));
-		var collection = Std.downcast(idMap.get("collection"), ArrayCollection);
+		var collection = Std.downcast((idMap.get("collection") : Dynamic), ArrayCollection);
 		Assert.notNull(collection);
 		Assert.notNull(collection.array);
 		Assert.equals(3, collection.array.length);
@@ -140,7 +140,7 @@ class MXHXRuntimeComponentArrayCollectionTest extends Test {
 		', idMap);
 		Assert.notNull(result);
 		Assert.isTrue(idMap.exists("collection"));
-		var collection = Std.downcast(idMap.get("collection"), ArrayCollection);
+		var collection = Std.downcast((idMap.get("collection") : Dynamic), ArrayCollection);
 		Assert.notNull(collection);
 		Assert.notNull(collection.array);
 		Assert.equals(3, collection.array.length);
@@ -166,7 +166,7 @@ class MXHXRuntimeComponentArrayCollectionTest extends Test {
 		', idMap);
 		Assert.notNull(result);
 		Assert.isTrue(idMap.exists("collection"));
-		var collection = Std.downcast(idMap.get("collection"), ArrayCollection);
+		var collection = Std.downcast((idMap.get("collection") : Dynamic), ArrayCollection);
 		Assert.notNull(collection);
 		Assert.notNull(collection.array);
 		Assert.equals(3, collection.array.length);

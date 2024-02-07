@@ -6,6 +6,7 @@ import fixtures.TestDefaultPropertyClass1;
 import fixtures.TestDefaultPropertyClass2;
 import fixtures.TestPropertiesClass;
 import fixtures.TestPropertyEnum;
+import mxhx.runtime.MXHXRuntimeComponent.MXHXRuntimeComponentException;
 import utest.Assert;
 import utest.Test;
 
@@ -19,7 +20,7 @@ class MXHXRuntimeComponentPropertyTest extends Test {
 					<mx:Struct float="123.4" float="567.8"/>
 				</tests:struct>
 			</tests:TestPropertiesClass>
-		'), haxe.Exception);
+		'), MXHXRuntimeComponentException);
 	}
 
 	public function testStructChildElementDuplicateChildren():Void {
@@ -34,7 +35,7 @@ class MXHXRuntimeComponentPropertyTest extends Test {
 					</mx:Struct>
 				</tests:struct>
 			</tests:TestPropertiesClass>
-		'), haxe.Exception);
+		'), MXHXRuntimeComponentException);
 	}
 
 	public function testStructChildElementDuplicateAttributeAndChild():Void {
@@ -48,7 +49,7 @@ class MXHXRuntimeComponentPropertyTest extends Test {
 					</mx:Struct>
 				</tests:struct>
 			</tests:TestPropertiesClass>
-		'), haxe.Exception);
+		'), MXHXRuntimeComponentException);
 	}
 
 	public function testStructChildElementAttributes():Void {
@@ -224,7 +225,7 @@ class MXHXRuntimeComponentPropertyTest extends Test {
 					<tests:TestPropertiesClass float="123.4" float="567.8"/>
 				</tests:strictlyTyped>
 			</tests:TestPropertiesClass>
-		'), haxe.Exception);
+		'), MXHXRuntimeComponentException);
 	}
 
 	public function testStrictChildElementDuplicateChildren():Void {
@@ -239,7 +240,7 @@ class MXHXRuntimeComponentPropertyTest extends Test {
 					</tests:TestPropertiesClass>
 				</tests:strictlyTyped>
 			</tests:TestPropertiesClass>
-		'), haxe.Exception);
+		'), MXHXRuntimeComponentException);
 	}
 
 	public function testStrictChildElementDuplicateAttributeAndChild():Void {
@@ -253,7 +254,7 @@ class MXHXRuntimeComponentPropertyTest extends Test {
 					</tests:TestPropertiesClass>
 				</tests:strictlyTyped>
 			</tests:TestPropertiesClass>
-		'), haxe.Exception);
+		'), MXHXRuntimeComponentException);
 	}
 
 	public function testStrictChildElement():Void {
@@ -315,7 +316,7 @@ class MXHXRuntimeComponentPropertyTest extends Test {
 	// 				<tests:TestClass1/>
 	// 			</tests:strictlyTyped>
 	// 		</tests:TestPropertiesClass>
-	// 	'), haxe.Exception);
+	// 	'), MXHXRuntimeComponentException);
 	// }
 
 	public function testArrayChildElement():Void {
@@ -396,7 +397,7 @@ class MXHXRuntimeComponentPropertyTest extends Test {
 					<mx:Array>invalid</mx:Array>
 				</tests:array>
 			</tests:TestPropertiesClass>
-		'), haxe.Exception);
+		'), MXHXRuntimeComponentException);
 	}
 
 	public function testArrayChildElementRedundantEmptyExtraWhitespace():Void {
@@ -425,7 +426,7 @@ class MXHXRuntimeComponentPropertyTest extends Test {
 				xmlns:mx="https://ns.mxhx.dev/2024/basic"
 				xmlns:tests="https://ns.mxhx.dev/2024/tests"
 				boolean=""/>
-		'), haxe.Exception);
+		'), MXHXRuntimeComponentException);
 	}
 
 	public function testBoolAttributeInvalid():Void {
@@ -434,7 +435,7 @@ class MXHXRuntimeComponentPropertyTest extends Test {
 				xmlns:mx="https://ns.mxhx.dev/2024/basic"
 				xmlns:tests="https://ns.mxhx.dev/2024/tests"
 				boolean="invalid"/>
-		'), haxe.Exception);
+		'), MXHXRuntimeComponentException);
 	}
 
 	public function testBoolChildElementEmpty():Void {
@@ -444,7 +445,7 @@ class MXHXRuntimeComponentPropertyTest extends Test {
 				xmlns:tests="https://ns.mxhx.dev/2024/tests">
 				<tests:boolean></tests:boolean>
 			</tests:TestPropertiesClass>
-		'), haxe.Exception);
+		'), MXHXRuntimeComponentException);
 	}
 
 	public function testBoolChildElementInvalid():Void {
@@ -454,7 +455,7 @@ class MXHXRuntimeComponentPropertyTest extends Test {
 				xmlns:tests="https://ns.mxhx.dev/2024/tests">
 				<tests:boolean>invalid</tests:boolean>
 			</tests:TestPropertiesClass>
-		'), haxe.Exception);
+		'), MXHXRuntimeComponentException);
 	}
 
 	public function testBoolTrueAttribute():Void {
@@ -807,7 +808,7 @@ class MXHXRuntimeComponentPropertyTest extends Test {
 				xmlns:tests="https://ns.mxhx.dev/2024/tests">
 				<tests:boolean><mx:Bool>invalid</mx:Bool></tests:boolean>
 			</tests:TestPropertiesClass>
-		'), haxe.Exception);
+		'), MXHXRuntimeComponentException);
 	}
 
 	public function testClassAttribute():Void {
@@ -832,7 +833,7 @@ class MXHXRuntimeComponentPropertyTest extends Test {
 				xmlns:mx="https://ns.mxhx.dev/2024/basic"
 				xmlns:tests="https://ns.mxhx.dev/2024/tests"
 				type=""/>
-		'), haxe.Exception);
+		'), MXHXRuntimeComponentException);
 	}
 
 	public function testClassAttributeInvalid():Void {
@@ -841,7 +842,7 @@ class MXHXRuntimeComponentPropertyTest extends Test {
 				xmlns:mx="https://ns.mxhx.dev/2024/basic"
 				xmlns:tests="https://ns.mxhx.dev/2024/tests"
 				type="fixtures.ThisClassDoesNotExist"/>
-		'), haxe.Exception);
+		'), MXHXRuntimeComponentException);
 	}
 
 	public function testClassChildElement():Void {
@@ -868,7 +869,7 @@ class MXHXRuntimeComponentPropertyTest extends Test {
 				xmlns:tests="https://ns.mxhx.dev/2024/tests">
 				<tests:type></tests:type>
 			</tests:TestPropertiesClass>
-		'), haxe.Exception);
+		'), MXHXRuntimeComponentException);
 	}
 
 	public function testClassChildElementInvalid():Void {
@@ -878,7 +879,7 @@ class MXHXRuntimeComponentPropertyTest extends Test {
 				xmlns:tests="https://ns.mxhx.dev/2024/tests">
 				<tests:type>fixtures.ThisClassDoesNotExist</tests:type>
 			</tests:TestPropertiesClass>
-		'), haxe.Exception);
+		'), MXHXRuntimeComponentException);
 	}
 
 	public function testClassChildElementComment1():Void {
@@ -1008,7 +1009,7 @@ class MXHXRuntimeComponentPropertyTest extends Test {
 				xmlns:tests="https://ns.mxhx.dev/2024/tests">
 				<tests:type><mx:Class>fixtures.ThisClassDoesNotExist</mx:Class></tests:type>
 			</tests:TestPropertiesClass>
-		'), haxe.Exception);
+		'), MXHXRuntimeComponentException);
 	}
 
 	// TODO: abstract enum value
@@ -1034,7 +1035,7 @@ class MXHXRuntimeComponentPropertyTest extends Test {
 				xmlns:mx="https://ns.mxhx.dev/2024/basic"
 				xmlns:tests="https://ns.mxhx.dev/2024/tests"
 				enumValue=""/>
-		'), haxe.Exception);
+		'), MXHXRuntimeComponentException);
 	}
 
 	public function testEnumValueAttributeInvalid():Void {
@@ -1043,7 +1044,7 @@ class MXHXRuntimeComponentPropertyTest extends Test {
 				xmlns:mx="https://ns.mxhx.dev/2024/basic"
 				xmlns:tests="https://ns.mxhx.dev/2024/tests"
 				enumValue="NotARealEnumValue"/>
-		'), haxe.Exception);
+		'), MXHXRuntimeComponentException);
 	}
 
 	public function testEnumValueChildElement():Void {
@@ -1069,7 +1070,7 @@ class MXHXRuntimeComponentPropertyTest extends Test {
 				xmlns:tests="https://ns.mxhx.dev/2024/tests">
 				<tests:enumValue></tests:enumValue>
 			</tests:TestPropertiesClass>
-		'), haxe.Exception);
+		'), MXHXRuntimeComponentException);
 	}
 
 	public function testEnumValueChildElementInvalid():Void {
@@ -1079,7 +1080,7 @@ class MXHXRuntimeComponentPropertyTest extends Test {
 				xmlns:tests="https://ns.mxhx.dev/2024/tests">
 				<tests:enumValue>NotARealEnumValue</tests:enumValue>
 			</tests:TestPropertiesClass>
-		'), haxe.Exception);
+		'), MXHXRuntimeComponentException);
 	}
 
 	public function testEnumValueChildElementComment1():Void {
@@ -1278,7 +1279,7 @@ class MXHXRuntimeComponentPropertyTest extends Test {
 				xmlns:tests="https://ns.mxhx.dev/2024/tests"
 				ereg="">
 			</tests:TestPropertiesClass>
-		'), haxe.Exception);
+		'), MXHXRuntimeComponentException);
 	}
 
 	public function testERegAttributeInvalid():Void {
@@ -1288,7 +1289,7 @@ class MXHXRuntimeComponentPropertyTest extends Test {
 				xmlns:tests="https://ns.mxhx.dev/2024/tests"
 				ereg="invalid">
 			</tests:TestPropertiesClass>
-		'), haxe.Exception);
+		'), MXHXRuntimeComponentException);
 	}
 
 	public function testERegChildElement():Void {
@@ -1317,7 +1318,7 @@ class MXHXRuntimeComponentPropertyTest extends Test {
 				xmlns:tests="https://ns.mxhx.dev/2024/tests">
 				<tests:ereg></tests:ereg>
 			</tests:TestPropertiesClass>
-		'), haxe.Exception);
+		'), MXHXRuntimeComponentException);
 	}
 
 	public function testERegChildElementInvalid():Void {
@@ -1327,7 +1328,7 @@ class MXHXRuntimeComponentPropertyTest extends Test {
 				xmlns:tests="https://ns.mxhx.dev/2024/tests">
 				<tests:ereg>invalid</tests:ereg>
 			</tests:TestPropertiesClass>
-		'), haxe.Exception);
+		'), MXHXRuntimeComponentException);
 	}
 
 	public function testERegChildElementComment1():Void {
@@ -1432,7 +1433,7 @@ class MXHXRuntimeComponentPropertyTest extends Test {
 				xmlns:tests="https://ns.mxhx.dev/2024/tests">
 				<tests:ereg><mx:EReg>invalid</mx:EReg></tests:ereg>
 			</tests:TestPropertiesClass>
-		'), haxe.Exception);
+		'), MXHXRuntimeComponentException);
 	}
 
 	public function testERegChildElementRedundantEmptyExtraWhitespace():Void {
@@ -1478,7 +1479,7 @@ class MXHXRuntimeComponentPropertyTest extends Test {
 				xmlns:mx="https://ns.mxhx.dev/2024/basic"
 				xmlns:tests="https://ns.mxhx.dev/2024/tests"
 				float=""/>
-		'), haxe.Exception);
+		'), MXHXRuntimeComponentException);
 	}
 
 	public function testFloatAttributeInvalid():Void {
@@ -1487,7 +1488,7 @@ class MXHXRuntimeComponentPropertyTest extends Test {
 				xmlns:mx="https://ns.mxhx.dev/2024/basic"
 				xmlns:tests="https://ns.mxhx.dev/2024/tests"
 				float="invalid"/>
-		'), haxe.Exception);
+		'), MXHXRuntimeComponentException);
 	}
 
 	public function testFloatAttributeExtraWhitespace():Void {
@@ -1528,7 +1529,7 @@ class MXHXRuntimeComponentPropertyTest extends Test {
 				xmlns:tests="https://ns.mxhx.dev/2024/tests">
 				<tests:float></tests:float>
 			</tests:TestPropertiesClass>
-		'), haxe.Exception);
+		'), MXHXRuntimeComponentException);
 	}
 
 	public function testFloatChildElementInvalid():Void {
@@ -1538,7 +1539,7 @@ class MXHXRuntimeComponentPropertyTest extends Test {
 				xmlns:tests="https://ns.mxhx.dev/2024/tests">
 				<tests:float>invalid</tests:float>
 			</tests:TestPropertiesClass>
-		'), haxe.Exception);
+		'), MXHXRuntimeComponentException);
 	}
 
 	public function testFloatChildElementExtraWhitespace():Void {
@@ -1681,7 +1682,7 @@ class MXHXRuntimeComponentPropertyTest extends Test {
 				xmlns:tests="https://ns.mxhx.dev/2024/tests">
 				<tests:float><mx:Float>invalid</mx:Float></tests:float>
 			</tests:TestPropertiesClass>
-		'), haxe.Exception);
+		'), MXHXRuntimeComponentException);
 	}
 
 	public function testFloatChildElementNegative():Void {
@@ -1785,7 +1786,7 @@ class MXHXRuntimeComponentPropertyTest extends Test {
 				xmlns:mx="https://ns.mxhx.dev/2024/basic"
 				xmlns:tests="https://ns.mxhx.dev/2024/tests"
 				integer=""/>
-		'), haxe.Exception);
+		'), MXHXRuntimeComponentException);
 	}
 
 	public function testIntAttributeInvalid():Void {
@@ -1794,7 +1795,7 @@ class MXHXRuntimeComponentPropertyTest extends Test {
 				xmlns:mx="https://ns.mxhx.dev/2024/basic"
 				xmlns:tests="https://ns.mxhx.dev/2024/tests"
 				integer="invalid"/>
-		'), haxe.Exception);
+		'), MXHXRuntimeComponentException);
 	}
 
 	public function testIntAttributeExtraWhitespace():Void {
@@ -1925,7 +1926,7 @@ class MXHXRuntimeComponentPropertyTest extends Test {
 				xmlns:tests="https://ns.mxhx.dev/2024/tests">
 				<tests:integer></tests:integer>
 			</tests:TestPropertiesClass>
-		'), haxe.Exception);
+		'), MXHXRuntimeComponentException);
 	}
 
 	public function testIntChildElementInvalid():Void {
@@ -1935,7 +1936,7 @@ class MXHXRuntimeComponentPropertyTest extends Test {
 				xmlns:tests="https://ns.mxhx.dev/2024/tests">
 				<tests:integer>invalid</tests:integer>
 			</tests:TestPropertiesClass>
-		'), haxe.Exception);
+		'), MXHXRuntimeComponentException);
 	}
 
 	public function testIntChildElementExtraWhitespace():Void {
@@ -2078,7 +2079,7 @@ class MXHXRuntimeComponentPropertyTest extends Test {
 				xmlns:tests="https://ns.mxhx.dev/2024/tests">
 				<tests:integer><mx:Int>invalid</mx:Int></tests:integer>
 			</tests:TestPropertiesClass>
-		'), haxe.Exception);
+		'), MXHXRuntimeComponentException);
 	}
 
 	public function testStringAttribute():Void {
@@ -2505,7 +2506,7 @@ class MXHXRuntimeComponentPropertyTest extends Test {
 				xmlns:mx="https://ns.mxhx.dev/2024/basic"
 				xmlns:tests="https://ns.mxhx.dev/2024/tests"
 				unsignedInteger=""/>
-		'), haxe.Exception);
+		'), MXHXRuntimeComponentException);
 	}
 
 	public function testUIntAttributeInvalid():Void {
@@ -2514,7 +2515,7 @@ class MXHXRuntimeComponentPropertyTest extends Test {
 				xmlns:mx="https://ns.mxhx.dev/2024/basic"
 				xmlns:tests="https://ns.mxhx.dev/2024/tests"
 				unsignedInteger="invalid"/>
-		'), haxe.Exception);
+		'), MXHXRuntimeComponentException);
 	}
 
 	public function testUIntAttributeExtraWhitespacee():Void {
@@ -2565,7 +2566,7 @@ class MXHXRuntimeComponentPropertyTest extends Test {
 				xmlns:tests="https://ns.mxhx.dev/2024/tests">
 				<tests:unsignedInteger></tests:unsignedInteger>
 			</tests:TestPropertiesClass>
-		'), haxe.Exception);
+		'), MXHXRuntimeComponentException);
 	}
 
 	public function testUIntChildElementInvalid():Void {
@@ -2575,7 +2576,7 @@ class MXHXRuntimeComponentPropertyTest extends Test {
 				xmlns:tests="https://ns.mxhx.dev/2024/tests">
 				<tests:unsignedInteger>invalid</tests:unsignedInteger>
 			</tests:TestPropertiesClass>
-		'), haxe.Exception);
+		'), MXHXRuntimeComponentException);
 	}
 
 	public function testUIntChildElementExtraWhitespace():Void {
@@ -2748,7 +2749,7 @@ class MXHXRuntimeComponentPropertyTest extends Test {
 				xmlns:tests="https://ns.mxhx.dev/2024/tests">
 				<tests:unsignedInteger><mx:UInt>invalid</mx:UInt></tests:unsignedInteger>
 			</tests:TestPropertiesClass>
-		'), haxe.Exception);
+		'), MXHXRuntimeComponentException);
 	}
 
 	public function testDefaultPropertyClassWithSimpleValue():Void {
@@ -3040,7 +3041,7 @@ class MXHXRuntimeComponentPropertyTest extends Test {
 				xmlns:tests="https://ns.mxhx.dev/2024/tests">
 				<tests:canBeNull><mx:Float>invalid</mx:Float></tests:canBeNull>
 			</tests:TestPropertiesClass>
-		'), haxe.Exception);
+		'), MXHXRuntimeComponentException);
 	}
 
 	public function testXmlChildElementEmpty():Void {
@@ -3112,7 +3113,7 @@ class MXHXRuntimeComponentPropertyTest extends Test {
 				xmlns:mx="https://ns.mxhx.dev/2024/basic"
 				xmlns:tests="https://ns.mxhx.dev/2024/tests"
 				func="testMethod"/>
-		'), haxe.Exception);
+		'), MXHXRuntimeComponentException);
 	}
 
 	public function testFunctionAttributeEmpty():Void {
@@ -3121,7 +3122,7 @@ class MXHXRuntimeComponentPropertyTest extends Test {
 				xmlns:mx="https://ns.mxhx.dev/2024/basic"
 				xmlns:tests="https://ns.mxhx.dev/2024/tests"
 				func=""/>
-		'), haxe.Exception);
+		'), MXHXRuntimeComponentException);
 	}
 
 	public function testFunctionChildElement():Void {
@@ -3131,7 +3132,7 @@ class MXHXRuntimeComponentPropertyTest extends Test {
 				xmlns:tests="https://ns.mxhx.dev/2024/tests">
 				<tests:func>testMethod</tests:func>
 			</tests:TestPropertiesClass>
-		'), haxe.Exception);
+		'), MXHXRuntimeComponentException);
 	}
 
 	public function testFunctionChildElementEmpty():Void {
@@ -3141,7 +3142,7 @@ class MXHXRuntimeComponentPropertyTest extends Test {
 				xmlns:tests="https://ns.mxhx.dev/2024/tests">
 				<tests:func></tests:func>
 			</tests:TestPropertiesClass>
-		'), haxe.Exception);
+		'), MXHXRuntimeComponentException);
 	}
 
 	public function testFunctionTypedAttribute():Void {
@@ -3150,7 +3151,7 @@ class MXHXRuntimeComponentPropertyTest extends Test {
 				xmlns:mx="https://ns.mxhx.dev/2024/basic"
 				xmlns:tests="https://ns.mxhx.dev/2024/tests"
 				funcTyped="testMethod"/>
-		'), haxe.Exception);
+		'), MXHXRuntimeComponentException);
 	}
 
 	public function testFunctionTypedAttributeEmpty():Void {
@@ -3159,7 +3160,7 @@ class MXHXRuntimeComponentPropertyTest extends Test {
 				xmlns:mx="https://ns.mxhx.dev/2024/basic"
 				xmlns:tests="https://ns.mxhx.dev/2024/tests"
 				funcTyped=""/>
-		'), haxe.Exception);
+		'), MXHXRuntimeComponentException);
 	}
 
 	public function testFunctionTypedChildElement():Void {
@@ -3169,7 +3170,7 @@ class MXHXRuntimeComponentPropertyTest extends Test {
 				xmlns:tests="https://ns.mxhx.dev/2024/tests">
 				<tests:funcTyped>testMethod</tests:funcTyped>
 			</tests:TestPropertiesClass>
-		'), haxe.Exception);
+		'), MXHXRuntimeComponentException);
 	}
 
 	public function testFunctionTypedChildElementEmpty():Void {
@@ -3179,6 +3180,6 @@ class MXHXRuntimeComponentPropertyTest extends Test {
 				xmlns:tests="https://ns.mxhx.dev/2024/tests">
 				<tests:funcTyped></tests:funcTyped>
 			</tests:TestPropertiesClass>
-		'), haxe.Exception);
+		'), MXHXRuntimeComponentException);
 	}
 }

@@ -1,5 +1,6 @@
 package mxhx.runtime;
 
+import mxhx.runtime.MXHXRuntimeComponent.MXHXRuntimeComponentException;
 import utest.Assert;
 import utest.Test;
 
@@ -13,6 +14,6 @@ class MXHXRuntimeComponentInlineComponentTest extends Test {
 					</mx:Component>
 				</tests:classProperty>
 			</tests:TestInlineComponentClass>
-		'), haxe.Exception);
+		'), MXHXRuntimeComponentException);
 	}
 }

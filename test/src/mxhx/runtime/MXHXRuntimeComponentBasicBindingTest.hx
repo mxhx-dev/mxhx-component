@@ -3,6 +3,7 @@ package mxhx.runtime;
 import fixtures.TestClass1;
 import fixtures.TestPropertiesClass;
 import fixtures.TestPropertyEnum;
+import mxhx.runtime.MXHXRuntimeComponent.MXHXRuntimeComponentException;
 import utest.Assert;
 import utest.Test;
 
@@ -13,7 +14,7 @@ class MXHXRuntimeComponentBasicBindingTest extends Test {
 				<mx:Declarations>
 					<mx:String id="string">{realBinding}</mx:String>
 				</mx:Declarations>
-			</tests:TestClass1>'), haxe.Exception);
+			</tests:TestClass1>'), MXHXRuntimeComponentException);
 	}
 
 	public function tesRaisesExceptionForUnescapedBinding2():Void {
@@ -22,7 +23,7 @@ class MXHXRuntimeComponentBasicBindingTest extends Test {
 				<mx:Declarations>
 					<mx:Struct id="struct" field="{realBinding}"/>
 				</mx:Declarations>
-			</tests:TestClass1>'), haxe.Exception);
+			</tests:TestClass1>'), MXHXRuntimeComponentException);
 	}
 
 	public function tesRaisesExceptionForUnescapedBinding3():Void {
@@ -33,7 +34,7 @@ class MXHXRuntimeComponentBasicBindingTest extends Test {
 						<mx:field>{realBinding}</mx:field>
 					</mx:Struct>
 				</mx:Declarations>
-			</tests:TestClass1>'), haxe.Exception);
+			</tests:TestClass1>'), MXHXRuntimeComponentException);
 	}
 
 	public function testEscapedBindingInsideElement():Void {
@@ -112,7 +113,7 @@ class MXHXRuntimeComponentBasicBindingTest extends Test {
 		Assert.notNull(result);
 		Assert.isOfType(result, TestClass1);
 		Assert.isTrue(idMap.exists("strictlyTyped"));
-		var strictlyTyped = Std.downcast(idMap.get("strictlyTyped"), TestPropertiesClass);
+		var strictlyTyped = Std.downcast((idMap.get("strictlyTyped") : Dynamic), TestPropertiesClass);
 		Assert.equals("{this is not binding}", strictlyTyped.string);
 	}
 
@@ -128,7 +129,7 @@ class MXHXRuntimeComponentBasicBindingTest extends Test {
 		Assert.notNull(result);
 		Assert.isOfType(result, TestClass1);
 		Assert.isTrue(idMap.exists("strictlyTyped"));
-		var strictlyTyped = Std.downcast(idMap.get("strictlyTyped"), TestPropertiesClass);
+		var strictlyTyped = Std.downcast((idMap.get("strictlyTyped") : Dynamic), TestPropertiesClass);
 		Assert.equals("{this is not binding} {nor is this}", strictlyTyped.string);
 	}
 
@@ -144,7 +145,7 @@ class MXHXRuntimeComponentBasicBindingTest extends Test {
 		Assert.notNull(result);
 		Assert.isOfType(result, TestClass1);
 		Assert.isTrue(idMap.exists("strictlyTyped"));
-		var strictlyTyped = Std.downcast(idMap.get("strictlyTyped"), TestPropertiesClass);
+		var strictlyTyped = Std.downcast((idMap.get("strictlyTyped") : Dynamic), TestPropertiesClass);
 		Assert.equals("{{", strictlyTyped.string);
 	}
 
@@ -160,7 +161,7 @@ class MXHXRuntimeComponentBasicBindingTest extends Test {
 		Assert.notNull(result);
 		Assert.isOfType(result, TestClass1);
 		Assert.isTrue(idMap.exists("strictlyTyped"));
-		var strictlyTyped = Std.downcast(idMap.get("strictlyTyped"), TestPropertiesClass);
+		var strictlyTyped = Std.downcast((idMap.get("strictlyTyped") : Dynamic), TestPropertiesClass);
 		Assert.equals("{this is not binding", strictlyTyped.string);
 	}
 }

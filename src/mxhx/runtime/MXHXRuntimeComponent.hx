@@ -1,7 +1,5 @@
 package mxhx.runtime;
 
-import mxhx.resolver.MXHXSymbolTools;
-import haxe.Exception;
 import mxhx.parser.MXHXParser;
 import mxhx.resolver.IMXHXAbstractSymbol;
 import mxhx.resolver.IMXHXClassSymbol;
@@ -11,6 +9,7 @@ import mxhx.resolver.IMXHXEventSymbol;
 import mxhx.resolver.IMXHXFieldSymbol;
 import mxhx.resolver.IMXHXResolver;
 import mxhx.resolver.IMXHXTypeSymbol;
+import mxhx.resolver.MXHXSymbolTools;
 import mxhx.resolver.rtti.MXHXRttiResolver;
 
 class MXHXRuntimeComponent {
@@ -540,7 +539,7 @@ class MXHXRuntimeComponent {
 			return;
 		}
 		if (isComponentTag(tagData)) {
-			throw new Exception("Component tag not implemented");
+			reportError("Component tag not implemented", tagData);
 			return;
 		}
 		if (isLanguageTag(TAG_MODEL, tagData)) {
@@ -667,7 +666,7 @@ class MXHXRuntimeComponent {
 		if (typeSymbol != null && typeSymbol.pack.length == 0 && typeSymbol.name == TYPE_STRING) {
 			var sourceAttr = tagData.getAttributeData(ATTRIBUTE_SOURCE);
 			if (sourceAttr != null) {
-				throw new Exception("String source attribute is not supported");
+				reportError("String source attribute is not supported", sourceAttr);
 			}
 		}
 		var child = tagData.getFirstChildUnit();
@@ -920,7 +919,7 @@ class MXHXRuntimeComponent {
 		}
 		var sourceAttr = tagData.getAttributeData(ATTRIBUTE_SOURCE);
 		if (sourceAttr != null) {
-			throw new Exception("Xml source attribute is not supported");
+			reportError("Xml source attribute is not supported", sourceAttr);
 		}
 
 		var xmlDoc = Xml.createDocument();
@@ -1007,7 +1006,7 @@ class MXHXRuntimeComponent {
 		var current:IMXHXUnitData = null;
 		var sourceAttr = tagData.getAttributeData(ATTRIBUTE_SOURCE);
 		if (sourceAttr != null) {
-			throw new Exception("Model source attribute is not supported");
+			reportError("Model source attribute is not supported", sourceAttr);
 		}
 		if (current == null) {
 			current = tagData.getFirstChildUnit();
@@ -1600,7 +1599,7 @@ class MXHXRuntimeComponent {
 		if ((unitData is IMXHXTagData)) {
 			var tagData:IMXHXTagData = cast unitData;
 			if (isComponentTag(tagData)) {
-				throw new Exception("Component tag not implemented");
+				reportError("Component tag not implemented", tagData);
 			}
 			if (isLanguageTag(TAG_MODEL, tagData)) {
 				handleModelTag(tagData, idMap);
@@ -1675,7 +1674,7 @@ class MXHXRuntimeComponent {
 		if (typeSymbol.pack.length == 1 && typeSymbol.pack[0] == "haxe") {
 			switch (typeSymbol.name) {
 				case TYPE_FUNCTION:
-					throw new Exception("Function tag not supported");
+					reportError("Function tag not supported", location);
 				default:
 			}
 		} else if (typeSymbol.pack.length == 0) {
@@ -1973,13 +1972,27 @@ class MXHXRuntimeComponent {
 	}
 
 	private static function reportError(message:String, sourceLocation:IMXHXSourceLocation):Void {
-		throw new Exception('${message} (${sourceLocation.line}, ${sourceLocation.column})');
+		throw new MXHXRuntimeComponentException(message, sourceLocation);
 	}
 
 	private static function reportWarning(message:String, sourceLocation:IMXHXSourceLocation):Void {
 		var line = sourceLocation.line;
 		var column = sourceLocation.column;
 		trace('Warning: ${message} (${line}, ${column})');
+	}
+}
+
+class MXHXRuntimeComponentException {
+	public var message:String;
+	public var location:IMXHXSourceLocation;
+
+	public function new(message:String, location:IMXHXSourceLocation) {
+		this.message = message;
+		this.location = location;
+	}
+
+	public function toString():String {
+		return '${message} (${location.line}, ${location.column})';
 	}
 }
 

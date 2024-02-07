@@ -1,5 +1,6 @@
 package mxhx.runtime;
 
+import mxhx.runtime.MXHXRuntimeComponent.MXHXRuntimeComponentException;
 import utest.Assert;
 import utest.Test;
 
@@ -14,6 +15,6 @@ class MXHXRuntimeComponentBindingTagTest extends Test {
 				</mx:Declarations>
 				<mx:Binding source="string1" destination="string2"/>
 			</tests:TestClass1>
-		'), haxe.Exception);
+		'), MXHXRuntimeComponentException);
 	}
 }

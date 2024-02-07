@@ -1,5 +1,6 @@
 package mxhx.runtime;
 
+import mxhx.runtime.MXHXRuntimeComponent.MXHXRuntimeComponentException;
 import utest.Assert;
 import utest.Test;
 
@@ -27,7 +28,7 @@ class MXHXRuntimeComponentModelTest extends Test {
 					<mx:Model id="model">hello</mx:Model>
 				</mx:Declarations>
 			</tests:TestClass1>
-		'), haxe.Exception);
+		'), MXHXRuntimeComponentException);
 	}
 
 	public function testModelRootTagOnly1():Void {
@@ -1020,6 +1021,6 @@ class MXHXRuntimeComponentModelTest extends Test {
 					<mx:Model id="model" source="source.xml"/>
 				</mx:Declarations>
 			</tests:TestClass1>
-		'), haxe.Exception);
+		'), MXHXRuntimeComponentException);
 	}
 }
