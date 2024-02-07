@@ -576,7 +576,7 @@ class MXHXComponentDeclarationsTest extends Test {
 		Assert.notNull(result);
 		Assert.isOfType(result, TestClass1);
 		Assert.isOfType(result.ereg, EReg);
-		#if eval
+		#if interp
 		Assert.equals("~/[a-z]+/g", Std.string(result.ereg));
 		#end
 	}
@@ -594,7 +594,7 @@ class MXHXComponentDeclarationsTest extends Test {
 		Assert.notNull(result);
 		Assert.isOfType(result, TestClass1);
 		Assert.isOfType(result.ereg, EReg);
-		#if eval
+		#if interp
 		Assert.equals("~/[a-z]+/g", Std.string(result.ereg));
 		#end
 	}
@@ -610,7 +610,7 @@ class MXHXComponentDeclarationsTest extends Test {
 		Assert.notNull(result);
 		Assert.isOfType(result, TestClass1);
 		Assert.isOfType(result.ereg, EReg);
-		#if eval
+		#if interp
 		Assert.equals("~/[a-z]+/g", Std.string(result.ereg));
 		#end
 	}
@@ -626,7 +626,7 @@ class MXHXComponentDeclarationsTest extends Test {
 		Assert.notNull(result);
 		Assert.isOfType(result, TestClass1);
 		Assert.isOfType(result.ereg, EReg);
-		#if eval
+		#if interp
 		Assert.equals("~/[a-z]+/g", Std.string(result.ereg));
 		#end
 	}
@@ -642,7 +642,7 @@ class MXHXComponentDeclarationsTest extends Test {
 		Assert.notNull(result);
 		Assert.isOfType(result, TestClass1);
 		Assert.isOfType(result.ereg, EReg);
-		#if eval
+		#if interp
 		Assert.equals("~//", Std.string(result.ereg));
 		#end
 	}
@@ -659,7 +659,7 @@ class MXHXComponentDeclarationsTest extends Test {
 		Assert.notNull(result);
 		Assert.isOfType(result, TestClass1);
 		Assert.isOfType(result.ereg, EReg);
-		#if eval
+		#if interp
 		Assert.equals("~//", Std.string(result.ereg));
 		#end
 	}
@@ -675,7 +675,7 @@ class MXHXComponentDeclarationsTest extends Test {
 		Assert.notNull(result);
 		Assert.isOfType(result, TestClass1);
 		Assert.isOfType(result.ereg, EReg);
-		#if eval
+		#if interp
 		Assert.equals("~//", Std.string(result.ereg));
 		#end
 	}
@@ -693,7 +693,7 @@ class MXHXComponentDeclarationsTest extends Test {
 		Assert.notNull(result);
 		Assert.isOfType(result, TestClass1);
 		Assert.isOfType(result.ereg, EReg);
-		#if eval
+		#if interp
 		Assert.equals("~//", Std.string(result.ereg));
 		#end
 	}
@@ -709,7 +709,7 @@ class MXHXComponentDeclarationsTest extends Test {
 		Assert.notNull(result);
 		Assert.isOfType(result, TestClass1);
 		Assert.isOfType(result.ereg, EReg);
-		#if eval
+		#if interp
 		Assert.equals("~//", Std.string(result.ereg));
 		#end
 	}
@@ -727,7 +727,7 @@ class MXHXComponentDeclarationsTest extends Test {
 		Assert.notNull(result);
 		Assert.isOfType(result, TestClass1);
 		Assert.isOfType(result.ereg, EReg);
-		#if eval
+		#if interp
 		Assert.equals("~//", Std.string(result.ereg));
 		#end
 	}
@@ -743,7 +743,7 @@ class MXHXComponentDeclarationsTest extends Test {
 		Assert.notNull(result);
 		Assert.isOfType(result, TestClass1);
 		Assert.isOfType(result.ereg, EReg);
-		#if eval
+		#if interp
 		Assert.equals("~//", Std.string(result.ereg));
 		#end
 	}
@@ -759,7 +759,7 @@ class MXHXComponentDeclarationsTest extends Test {
 		Assert.notNull(result);
 		Assert.isOfType(result, TestClass1);
 		Assert.isOfType(result.ereg, EReg);
-		#if eval
+		#if interp
 		Assert.equals("~/[a-z]+/g", Std.string(result.ereg));
 		#end
 	}
