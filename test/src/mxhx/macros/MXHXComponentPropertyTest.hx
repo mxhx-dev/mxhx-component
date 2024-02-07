@@ -1053,6 +1053,71 @@ class MXHXComponentPropertyTest extends Test {
 		Assert.isTrue(Math.isNaN(result.float));
 	}
 
+	public function testFloatChildElementNegative():Void {
+		var result = MXHXComponent.withMarkup('
+			<tests:TestPropertiesClass
+				xmlns:mx="https://ns.mxhx.dev/2024/basic"
+				xmlns:tests="https://ns.mxhx.dev/2024/tests">
+				<tests:float>-123.4</tests:float>
+			</tests:TestPropertiesClass>
+		');
+		Assert.notNull(result);
+		Assert.isOfType(result.float, Float);
+		Assert.equals(-123.4, result.float);
+	}
+
+	public function testFloatChildElementHex():Void {
+		var result = MXHXComponent.withMarkup('
+			<tests:TestPropertiesClass
+				xmlns:mx="https://ns.mxhx.dev/2024/basic"
+				xmlns:tests="https://ns.mxhx.dev/2024/tests">
+				<tests:float>0xbeef</tests:float>
+			</tests:TestPropertiesClass>
+		');
+		Assert.notNull(result);
+		Assert.isOfType(result.float, Float);
+		Assert.equals(0xbeef, result.float);
+	}
+
+	public function testFloatChildElementHexUpperCase():Void {
+		var result = MXHXComponent.withMarkup('
+			<tests:TestPropertiesClass
+				xmlns:mx="https://ns.mxhx.dev/2024/basic"
+				xmlns:tests="https://ns.mxhx.dev/2024/tests">
+				<tests:float>0xBEEF</tests:float>
+			</tests:TestPropertiesClass>
+		');
+		Assert.notNull(result);
+		Assert.isOfType(result.float, Float);
+		Assert.equals(0xbeef, result.float);
+	}
+
+	public function testFloatChildElementHexMixedCase():Void {
+		var result = MXHXComponent.withMarkup('
+			<tests:TestPropertiesClass
+				xmlns:mx="https://ns.mxhx.dev/2024/basic"
+				xmlns:tests="https://ns.mxhx.dev/2024/tests">
+				<tests:float>0xbEeF</tests:float>
+			</tests:TestPropertiesClass>
+		');
+		Assert.notNull(result);
+		Assert.isOfType(result.float, Float);
+		Assert.equals(0xbeef, result.float);
+	}
+
+	public function testFloatChildElementHexNegative():Void {
+		var result = MXHXComponent.withMarkup('
+			<tests:TestPropertiesClass
+				xmlns:mx="https://ns.mxhx.dev/2024/basic"
+				xmlns:tests="https://ns.mxhx.dev/2024/tests">
+				<tests:float>-0xbeef</tests:float>
+			</tests:TestPropertiesClass>
+		');
+		Assert.notNull(result);
+		Assert.isOfType(result.float, Float);
+		Assert.equals(-0xbeef, result.float);
+	}
+
 	public function testIntAttribute():Void {
 		var result = MXHXComponent.withMarkup('
 			<tests:TestPropertiesClass
@@ -1107,6 +1172,18 @@ class MXHXComponentPropertyTest extends Test {
 				xmlns:mx="https://ns.mxhx.dev/2024/basic"
 				xmlns:tests="https://ns.mxhx.dev/2024/tests"
 				integer="0xBEEF"/>
+		');
+		Assert.notNull(result);
+		Assert.isOfType(result.integer, Int);
+		Assert.equals(0xbeef, result.integer);
+	}
+
+	public function testIntAttributeHexMixedCase():Void {
+		var result = MXHXComponent.withMarkup('
+			<tests:TestPropertiesClass
+				xmlns:mx="https://ns.mxhx.dev/2024/basic"
+				xmlns:tests="https://ns.mxhx.dev/2024/tests"
+				integer="0xbEeF"/>
 		');
 		Assert.notNull(result);
 		Assert.isOfType(result.integer, Int);

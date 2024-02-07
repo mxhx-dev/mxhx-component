@@ -995,6 +995,20 @@ class MXHXComponentDeclarationsTest extends Test {
 		Assert.equals(0xbeef, result.float);
 	}
 
+	public function testFloatHexMixedCase():Void {
+		var result = MXHXComponent.withMarkup('
+			<tests:TestClass1 xmlns:mx="https://ns.mxhx.dev/2024/basic" xmlns:tests="https://ns.mxhx.dev/2024/tests">
+				<mx:Declarations>
+					<mx:Float id="float">0xbEeF</mx:Float>
+				</mx:Declarations>
+			</tests:TestClass1>
+		');
+		Assert.notNull(result);
+		Assert.isOfType(result, TestClass1);
+		Assert.isOfType(result.float, Float);
+		Assert.equals(0xbeef, result.float);
+	}
+
 	public function testFloatHexNegative():Void {
 		var result = MXHXComponent.withMarkup('
 			<tests:TestClass1 xmlns:mx="https://ns.mxhx.dev/2024/basic" xmlns:tests="https://ns.mxhx.dev/2024/tests">
@@ -1535,6 +1549,20 @@ class MXHXComponentDeclarationsTest extends Test {
 			<tests:TestClass1 xmlns:mx="https://ns.mxhx.dev/2024/basic" xmlns:tests="https://ns.mxhx.dev/2024/tests">
 				<mx:Declarations>
 					<mx:Int id="integer">0xBEEF</mx:Int>
+				</mx:Declarations>
+			</tests:TestClass1>
+		');
+		Assert.notNull(result);
+		Assert.isOfType(result, TestClass1);
+		Assert.isOfType(result.integer, Int);
+		Assert.equals(0xbeef, result.integer);
+	}
+
+	public function testIntHexMixedCase():Void {
+		var result = MXHXComponent.withMarkup('
+			<tests:TestClass1 xmlns:mx="https://ns.mxhx.dev/2024/basic" xmlns:tests="https://ns.mxhx.dev/2024/tests">
+				<mx:Declarations>
+					<mx:Int id="integer">0xbEeF</mx:Int>
 				</mx:Declarations>
 			</tests:TestClass1>
 		');

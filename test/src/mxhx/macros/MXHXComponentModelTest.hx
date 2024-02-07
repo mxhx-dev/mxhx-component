@@ -466,6 +466,25 @@ class MXHXComponentModelTest extends Test {
 		Assert.equals(0xbeef, result.model.child);
 	}
 
+	public function testModelIntHexMixedCase():Void {
+		var result = MXHXComponent.withMarkup('
+			<tests:TestClass1 xmlns:mx="https://ns.mxhx.dev/2024/basic" xmlns:tests="https://ns.mxhx.dev/2024/tests">
+				<mx:Declarations>
+					<mx:Model id="model">
+						<root>
+							<child>0xbEeF</child>
+						</root>
+					</mx:Model>
+				</mx:Declarations>
+			</tests:TestClass1>
+		');
+		Assert.notNull(result);
+		Assert.notNull(result.model);
+		Assert.equals(1, Reflect.fields(result.model).length);
+		Assert.isOfType(result.model.child, Int);
+		Assert.equals(0xbeef, result.model.child);
+	}
+
 	public function testModelIntHexNegative():Void {
 		var result = MXHXComponent.withMarkup('
 			<tests:TestClass1 xmlns:mx="https://ns.mxhx.dev/2024/basic" xmlns:tests="https://ns.mxhx.dev/2024/tests">
