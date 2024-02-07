@@ -28,6 +28,9 @@ class MXHXComponentArrayCollectionTest extends Test {
 		Assert.isOfType(result.collection, ArrayCollection);
 		Assert.notNull(result.collection.array);
 		Assert.equals(3, result.collection.array.length);
+		Assert.equals("One", result.collection.array[0]);
+		Assert.equals("Two", result.collection.array[1]);
+		Assert.equals("Three", result.collection.array[2]);
 	}
 
 	public function testSetArrayPropertyArrayWrapperInferredType():Void {
@@ -53,6 +56,9 @@ class MXHXComponentArrayCollectionTest extends Test {
 		Assert.isOfType(result.collection, ArrayCollection);
 		Assert.notNull(result.collection.array);
 		Assert.equals(3, result.collection.array.length);
+		Assert.equals("One", result.collection.array[0]);
+		Assert.equals("Two", result.collection.array[1]);
+		Assert.equals("Three", result.collection.array[2]);
 	}
 
 	public function testSetArrayPropertyInferredType():Void {
@@ -76,6 +82,9 @@ class MXHXComponentArrayCollectionTest extends Test {
 		Assert.isOfType(result.collection, ArrayCollection);
 		Assert.notNull(result.collection.array);
 		Assert.equals(3, result.collection.array.length);
+		Assert.equals("One", result.collection.array[0]);
+		Assert.equals("Two", result.collection.array[1]);
+		Assert.equals("Three", result.collection.array[2]);
 	}
 
 	public function testSetDefaultPropertyArrayWrapperExplicitType():Void {
@@ -99,6 +108,9 @@ class MXHXComponentArrayCollectionTest extends Test {
 		Assert.isOfType(result.collection, ArrayCollection);
 		Assert.notNull(result.collection.array);
 		Assert.equals(3, result.collection.array.length);
+		Assert.equals("One", result.collection.array[0]);
+		Assert.equals("Two", result.collection.array[1]);
+		Assert.equals("Three", result.collection.array[2]);
 	}
 
 	public function testSetDefaultPropertyArrayWrapperInferredType():Void {
@@ -122,6 +134,9 @@ class MXHXComponentArrayCollectionTest extends Test {
 		Assert.isOfType(result.collection, ArrayCollection);
 		Assert.notNull(result.collection.array);
 		Assert.equals(3, result.collection.array.length);
+		Assert.equals("One", result.collection.array[0]);
+		Assert.equals("Two", result.collection.array[1]);
+		Assert.equals("Three", result.collection.array[2]);
 	}
 
 	public function testSetDefaultPropertyInferredType():Void {
@@ -143,5 +158,8 @@ class MXHXComponentArrayCollectionTest extends Test {
 		Assert.isOfType(result.collection, ArrayCollection);
 		Assert.notNull(result.collection.array);
 		Assert.equals(3, result.collection.array.length);
+		Assert.equals("One", result.collection.array[0]);
+		Assert.equals("Two", result.collection.array[1]);
+		Assert.equals("Three", result.collection.array[2]);
 	}
 }

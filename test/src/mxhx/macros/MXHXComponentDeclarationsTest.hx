@@ -1,6 +1,7 @@
 package mxhx.macros;
 
 import Xml.XmlType;
+import fixtures.TestClass1;
 import fixtures.TestComplexEnum;
 import fixtures.TestPropertyAbstractEnum;
 import fixtures.TestPropertyEnum;
