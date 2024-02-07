@@ -784,6 +784,21 @@ class MXHXComponentPropertyTest extends Test {
 		}
 	}
 
+	public function testERegAttribute():Void {
+		var result = MXHXComponent.withMarkup('
+			<tests:TestPropertiesClass
+				xmlns:mx="https://ns.mxhx.dev/2024/basic"
+				xmlns:tests="https://ns.mxhx.dev/2024/tests"
+				ereg="~/[a-z]+/g">
+			</tests:TestPropertiesClass>
+		');
+		Assert.notNull(result);
+		Assert.isOfType(result.ereg, EReg);
+		#if eval
+		Assert.equals("~/[a-z]+/g", Std.string(result.ereg));
+		#end
+	}
+
 	public function testERegChildElement():Void {
 		var result = MXHXComponent.withMarkup('
 			<tests:TestPropertiesClass
