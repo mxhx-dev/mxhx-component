@@ -402,6 +402,123 @@ class MXHXComponentPropertyTest extends Test {
 		Assert.isTrue(result.boolean);
 	}
 
+	public function testBoolFalseAttribute():Void {
+		var result = MXHXComponent.withMarkup('
+			<tests:TestPropertiesClass
+				xmlns:mx="https://ns.mxhx.dev/2024/basic"
+				xmlns:tests="https://ns.mxhx.dev/2024/tests"
+				boolean="false"/>
+		');
+		Assert.notNull(result);
+		Assert.isOfType(result.boolean, Bool);
+		Assert.isFalse(result.boolean);
+	}
+
+	public function testBoolFalseAttributeExtraWhitespace():Void {
+		var result = MXHXComponent.withMarkup('
+			<tests:TestPropertiesClass
+				xmlns:mx="https://ns.mxhx.dev/2024/basic"
+				xmlns:tests="https://ns.mxhx.dev/2024/tests"
+				boolean=" false "/>
+		');
+		Assert.notNull(result);
+		Assert.isOfType(result.boolean, Bool);
+		Assert.isFalse(result.boolean);
+	}
+
+	public function testBoolFalseChildElement():Void {
+		var result = MXHXComponent.withMarkup('
+			<tests:TestPropertiesClass
+				xmlns:mx="https://ns.mxhx.dev/2024/basic"
+				xmlns:tests="https://ns.mxhx.dev/2024/tests">
+				<tests:boolean>false</tests:boolean>
+			</tests:TestPropertiesClass>
+		');
+		Assert.notNull(result);
+		Assert.isOfType(result.boolean, Bool);
+		Assert.isFalse(result.boolean);
+	}
+
+	public function testBoolFalseChildElementExtraWhitespace():Void {
+		var result = MXHXComponent.withMarkup('
+			<tests:TestPropertiesClass
+				xmlns:mx="https://ns.mxhx.dev/2024/basic"
+				xmlns:tests="https://ns.mxhx.dev/2024/tests">
+				<tests:boolean>
+					false
+				</tests:boolean>
+			</tests:TestPropertiesClass>
+		');
+		Assert.notNull(result);
+		Assert.isOfType(result.boolean, Bool);
+		Assert.isFalse(result.boolean);
+	}
+
+	public function testBoolFalseChildElementComment1():Void {
+		var result = MXHXComponent.withMarkup('
+			<tests:TestPropertiesClass
+				xmlns:mx="https://ns.mxhx.dev/2024/basic"
+				xmlns:tests="https://ns.mxhx.dev/2024/tests">
+				<tests:boolean>false<!-- comment --></tests:boolean>
+			</tests:TestPropertiesClass>
+		');
+		Assert.notNull(result);
+		Assert.isOfType(result.boolean, Bool);
+		Assert.isFalse(result.boolean);
+	}
+
+	public function testBoolFalseChildElementComment2():Void {
+		var result = MXHXComponent.withMarkup('
+			<tests:TestPropertiesClass
+				xmlns:mx="https://ns.mxhx.dev/2024/basic"
+				xmlns:tests="https://ns.mxhx.dev/2024/tests">
+				<tests:boolean><!-- comment -->false</tests:boolean>
+			</tests:TestPropertiesClass>
+		');
+		Assert.notNull(result);
+		Assert.isOfType(result.boolean, Bool);
+		Assert.isFalse(result.boolean);
+	}
+
+	public function testBoolFalseChildElementComment3():Void {
+		var result = MXHXComponent.withMarkup('
+			<tests:TestPropertiesClass
+				xmlns:mx="https://ns.mxhx.dev/2024/basic"
+				xmlns:tests="https://ns.mxhx.dev/2024/tests">
+				<tests:boolean>fa<!-- comment -->lse</tests:boolean>
+			</tests:TestPropertiesClass>
+		');
+		Assert.notNull(result);
+		Assert.isOfType(result.boolean, Bool);
+		Assert.isFalse(result.boolean);
+	}
+
+	public function testBoolFalseChildElementCData():Void {
+		var result = MXHXComponent.withMarkup('
+			<tests:TestPropertiesClass
+				xmlns:mx="https://ns.mxhx.dev/2024/basic"
+				xmlns:tests="https://ns.mxhx.dev/2024/tests">
+				<tests:boolean><![CDATA[false]]></tests:boolean>
+			</tests:TestPropertiesClass>
+		');
+		Assert.notNull(result);
+		Assert.isOfType(result.boolean, Bool);
+		Assert.isFalse(result.boolean);
+	}
+
+	public function testBoolFalseChildElementRedundant():Void {
+		var result = MXHXComponent.withMarkup('
+			<tests:TestPropertiesClass
+				xmlns:mx="https://ns.mxhx.dev/2024/basic"
+				xmlns:tests="https://ns.mxhx.dev/2024/tests">
+				<tests:boolean><mx:Bool>false</mx:Bool></tests:boolean>
+			</tests:TestPropertiesClass>
+		');
+		Assert.notNull(result);
+		Assert.isOfType(result.boolean, Bool);
+		Assert.isFalse(result.boolean);
+	}
+
 	public function testBoolChildElementRedundantEmpty():Void {
 		var result = MXHXComponent.withMarkup('
 			<tests:TestPropertiesClass
