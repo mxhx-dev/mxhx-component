@@ -1043,7 +1043,7 @@ class MXHXComponent {
 		if (current == null) {
 			current = tagData.getFirstChildUnit();
 		}
-		var model:ModelObject;
+		var model:ModelObject = null;
 		var rootTag:IMXHXTagData = null;
 		var parentStack:Array<ModelObject> = [new ModelObject()];
 		var tagDataStack:Array<IMXHXTagData> = [];
