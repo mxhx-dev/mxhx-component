@@ -509,8 +509,8 @@ class MXHXComponent {
 							if (attrData != null) {
 								if (!Context.defined("mxhx-disable-experimental-warning")
 									&& !Context.defined("mxhx_disable_experimental_warning")) {
-									Context.warning('Namespace \'$uri\' is experimental. Using namespace \'$LANGUAGE_URI_BASIC_2024\' instead is recommended.',
-										sourceLocationToContextPosition(attrData));
+									reportWarning('Namespace \'$uri\' is experimental. Using namespace \'$LANGUAGE_URI_BASIC_2024\' instead is recommended.',
+										attrData);
 								}
 							}
 						}
@@ -1073,7 +1073,7 @@ class MXHXComponent {
 						}
 					} else {
 						for (attrData in tagData.attributeData) {
-							Context.warning('Ignoring attribute \'${attrData.name}\' on root tag', sourceLocationToContextPosition(attrData));
+							reportWarning('Ignoring attribute \'${attrData.name}\' on root tag', attrData);
 						}
 						model = elementChild;
 					}
@@ -1164,13 +1164,12 @@ class MXHXComponent {
 			var pendingText:String = "";
 			for (textData in model.text) {
 				if (hasFields || hasMultipleTextTypes) {
-					Context.warning('Ignoring text \'${textData.content}\' because other XML content exists', sourceLocationToContextPosition(textData));
+					reportWarning('Ignoring text \'${textData.content}\' because other XML content exists', textData);
 					continue;
 				}
 				for (fieldName => models in model.fields) {
 					for (current in models) {
-						Context.warning('Ignoring attribute \'${fieldName}\' because other XML content exists',
-							sourceLocationToContextPosition(current.location));
+						reportWarning('Ignoring attribute \'${fieldName}\' because other XML content exists', current.location);
 					}
 				}
 				if (textContentContainsBinding(textData.content)) {
@@ -2901,6 +2900,10 @@ class MXHXComponent {
 		#else
 		Context.error(message, pos);
 		#end
+	}
+
+	private static function reportWarning(message:String, sourceLocation:IMXHXSourceLocation):Void {
+		Context.warning(message, sourceLocationToContextPosition(sourceLocation));
 	}
 
 	private static function errorUnexpected(unitData:IMXHXUnitData):Void {

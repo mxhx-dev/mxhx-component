@@ -1042,7 +1042,7 @@ class MXHXRuntimeComponent {
 						}
 					} else {
 						for (attrData in tagData.attributeData) {
-							trace('Ignoring attribute \'${attrData.name}\' on root tag');
+							reportWarning('Ignoring attribute \'${attrData.name}\' on root tag', attrData);
 						}
 						model = elementChild;
 					}
@@ -1063,6 +1063,10 @@ class MXHXRuntimeComponent {
 			} else if ((current is IMXHXTextData)) {
 				var textData:IMXHXTextData = cast current;
 				if (!canIgnoreTextData(textData)) {
+					if (rootTag == null) {
+						reportError("Model must not contain only scalar content", tagData);
+						return null;
+					}
 					var currentParent = parentStack[parentStack.length - 1];
 					currentParent.text.push(textData);
 				}
@@ -1127,12 +1131,12 @@ class MXHXRuntimeComponent {
 			var pendingText:String = "";
 			for (textData in model.text) {
 				if (hasFields || hasMultipleTextTypes) {
-					trace('Ignoring text \'${textData.content}\' because other XML content exists');
+					reportWarning('Ignoring text \'${textData.content}\' because other XML content exists', textData);
 					continue;
 				}
 				for (fieldName => models in model.fields) {
 					for (current in models) {
-						trace('Ignoring attribute \'${fieldName}\' because other XML content exists');
+						reportWarning('Ignoring attribute \'${fieldName}\' because other XML content exists', current.location);
 					}
 				}
 				if (textContentContainsBinding(textData.content)) {
@@ -1970,6 +1974,12 @@ class MXHXRuntimeComponent {
 
 	private static function reportError(message:String, sourceLocation:IMXHXSourceLocation):Void {
 		throw new Exception('${message} (${sourceLocation.line}, ${sourceLocation.column})');
+	}
+
+	private static function reportWarning(message:String, sourceLocation:IMXHXSourceLocation):Void {
+		var line = sourceLocation.line;
+		var column = sourceLocation.column;
+		trace('Warning: ${message} (${line}, ${column})');
 	}
 }
 
