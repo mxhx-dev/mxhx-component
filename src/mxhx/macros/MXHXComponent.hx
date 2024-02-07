@@ -1094,6 +1094,10 @@ class MXHXComponent {
 			} else if ((current is IMXHXTextData)) {
 				var textData:IMXHXTextData = cast current;
 				if (!canIgnoreTextData(textData)) {
+					if (rootTag == null) {
+						reportError("Model must not contain only scalar content", tagData);
+						return null;
+					}
 					var currentParent = parentStack[parentStack.length - 1];
 					currentParent.text.push(textData);
 				}
