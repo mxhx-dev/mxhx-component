@@ -20,6 +20,16 @@ class MXHXRuntimeComponentModelTest extends Test {
 		Assert.equals(0, Reflect.fields(model).length);
 	}
 
+	public function testModelTextContent():Void {
+		Assert.raises(() -> MXHXRuntimeComponent.withMarkup('
+			<tests:TestClass1 xmlns:mx="https://ns.mxhx.dev/2024/basic" xmlns:tests="https://ns.mxhx.dev/2024/tests">
+				<mx:Declarations>
+					<mx:Model id="model">hello</mx:Model>
+				</mx:Declarations>
+			</tests:TestClass1>
+		'), haxe.Exception);
+	}
+
 	public function testModelRootTagOnly1():Void {
 		var idMap:Map<String, Any> = [];
 		var result = MXHXRuntimeComponent.withMarkup('

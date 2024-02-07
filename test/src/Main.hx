@@ -18,6 +18,7 @@ class Main {
 		runner.addCase(new mxhx.macros.MXHXComponentArrayCollectionTest());
 		runner.addCase(new mxhx.macros.MXHXComponentModelTest());
 
+		runner.addCase(new mxhx.runtime.MXHXRuntimeComponentInvalidXmlTest());
 		runner.addCase(new mxhx.runtime.MXHXRuntimeComponentObjectTest());
 		runner.addCase(new mxhx.runtime.MXHXRuntimeComponentDeclarationsTest());
 		runner.addCase(new mxhx.runtime.MXHXRuntimeComponentPropertyTest());
@@ -27,6 +28,13 @@ class Main {
 		runner.addCase(new mxhx.runtime.MXHXRuntimeComponentArrayCollectionTest());
 		runner.addCase(new mxhx.runtime.MXHXRuntimeComponentModelTest());
 		runner.addCase(new mxhx.runtime.MXHXRuntimeComponentFullNamespaceTest());
+		runner.addCase(new mxhx.runtime.MXHXRuntimeComponentDesignLayerTest());
+		runner.addCase(new mxhx.runtime.MXHXRuntimeComponentLibraryTest());
+		runner.addCase(new mxhx.runtime.MXHXRuntimeComponentMetadataTest());
+		runner.addCase(new mxhx.runtime.MXHXRuntimeComponentPrivateTest());
+		runner.addCase(new mxhx.runtime.MXHXRuntimeComponentReparentTest());
+		runner.addCase(new mxhx.runtime.MXHXRuntimeComponentScriptTest());
+		runner.addCase(new mxhx.runtime.MXHXRuntimeComponentStyleTest());
 
 		#if (html5 && playwright)
 		// special case: see below for details

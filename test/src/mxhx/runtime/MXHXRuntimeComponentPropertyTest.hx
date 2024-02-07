@@ -10,6 +10,47 @@ import utest.Assert;
 import utest.Test;
 
 class MXHXRuntimeComponentPropertyTest extends Test {
+	public function testStructChildElementDuplicateAttributes():Void {
+		Assert.raises(() -> MXHXRuntimeComponent.withMarkup('
+			<tests:TestPropertiesClass
+				xmlns:mx="https://ns.mxhx.dev/2024/basic"
+				xmlns:tests="https://ns.mxhx.dev/2024/tests">
+				<tests:struct>
+					<mx:Struct float="123.4" float="567.8"/>
+				</tests:struct>
+			</tests:TestPropertiesClass>
+		'), haxe.Exception);
+	}
+
+	public function testStructChildElementDuplicateChildren():Void {
+		Assert.raises(() -> MXHXRuntimeComponent.withMarkup('
+			<tests:TestPropertiesClass
+				xmlns:mx="https://ns.mxhx.dev/2024/basic"
+				xmlns:tests="https://ns.mxhx.dev/2024/tests">
+				<tests:struct>
+					<mx:Struct>
+						<mx:float>123.4</mx:float>
+						<mx:float>567.8</mx:float>
+					</mx:Struct>
+				</tests:struct>
+			</tests:TestPropertiesClass>
+		'), haxe.Exception);
+	}
+
+	public function testStructChildElementDuplicateAttributeAndChild():Void {
+		Assert.raises(() -> MXHXRuntimeComponent.withMarkup('
+			<tests:TestPropertiesClass
+				xmlns:mx="https://ns.mxhx.dev/2024/basic"
+				xmlns:tests="https://ns.mxhx.dev/2024/tests">
+				<tests:struct>
+					<mx:Struct float="123.4">
+						<mx:float>567.8</mx:float>
+					</mx:Struct>
+				</tests:struct>
+			</tests:TestPropertiesClass>
+		'), haxe.Exception);
+	}
+
 	public function testStructChildElementAttributes():Void {
 		var idMap:Map<String, Any> = [];
 		var result = MXHXRuntimeComponent.withMarkup('
@@ -174,6 +215,47 @@ class MXHXRuntimeComponentPropertyTest extends Test {
 		Assert.equals(567, Reflect.field(Reflect.field(struct, "object"), "integer"));
 	}
 
+	public function testStrictChildElementDuplicateAttributes():Void {
+		Assert.raises(() -> MXHXRuntimeComponent.withMarkup('
+			<tests:TestPropertiesClass
+				xmlns:mx="https://ns.mxhx.dev/2024/basic"
+				xmlns:tests="https://ns.mxhx.dev/2024/tests">
+				<tests:strictlyTyped>
+					<tests:TestPropertiesClass float="123.4" float="567.8"/>
+				</tests:strictlyTyped>
+			</tests:TestPropertiesClass>
+		'), haxe.Exception);
+	}
+
+	public function testStrictChildElementDuplicateChildren():Void {
+		Assert.raises(() -> MXHXRuntimeComponent.withMarkup('
+			<tests:TestPropertiesClass
+				xmlns:mx="https://ns.mxhx.dev/2024/basic"
+				xmlns:tests="https://ns.mxhx.dev/2024/tests">
+				<tests:strictlyTyped>
+					<tests:TestPropertiesClass>
+						<mx:float>123.4</mx:float>
+						<mx:float>567.8</mx:float>
+					</tests:TestPropertiesClass>
+				</tests:strictlyTyped>
+			</tests:TestPropertiesClass>
+		'), haxe.Exception);
+	}
+
+	public function testStrictChildElementDuplicateAttributeAndChild():Void {
+		Assert.raises(() -> MXHXRuntimeComponent.withMarkup('
+			<tests:TestPropertiesClass
+				xmlns:mx="https://ns.mxhx.dev/2024/basic"
+				xmlns:tests="https://ns.mxhx.dev/2024/tests">
+				<tests:strictlyTyped>
+					<tests:TestPropertiesClass float="123.4">
+						<mx:float>567.8</mx:float>
+					</tests:TestPropertiesClass>
+				</tests:strictlyTyped>
+			</tests:TestPropertiesClass>
+		'), haxe.Exception);
+	}
+
 	public function testStrictChildElement():Void {
 		var idMap:Map<String, Any> = [];
 		var result = MXHXRuntimeComponent.withMarkup('
@@ -221,6 +303,20 @@ class MXHXRuntimeComponentPropertyTest extends Test {
 		Assert.notNull(Reflect.field(strictlyTyped.struct, "object"));
 		Assert.equals(567, Reflect.field(Reflect.field(strictlyTyped.struct, "object"), "integer"));
 	}
+
+	// TODO: check if type is correct before assigning
+	// probably in handleInstanceTag?
+	// public function testStrictChildElementInvalid():Void {
+	// 	Assert.raises(() -> MXHXRuntimeComponent.withMarkup('
+	// 		<tests:TestPropertiesClass
+	// 			xmlns:mx="https://ns.mxhx.dev/2024/basic"
+	// 			xmlns:tests="https://ns.mxhx.dev/2024/tests">
+	// 			<tests:strictlyTyped>
+	// 				<tests:TestClass1/>
+	// 			</tests:strictlyTyped>
+	// 		</tests:TestPropertiesClass>
+	// 	'), haxe.Exception);
+	// }
 
 	public function testArrayChildElement():Void {
 		var idMap:Map<String, Any> = [];

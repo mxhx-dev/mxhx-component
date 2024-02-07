@@ -74,6 +74,14 @@ class MXHXRuntimeComponentDeclarationsTest extends Test {
 		Assert.isOfType(result, TestClass1);
 	}
 
+	public function testDeclarationsText():Void {
+		Assert.raises(() -> MXHXRuntimeComponent.withMarkup('
+			<tests:TestClass1 xmlns:mx="https://ns.mxhx.dev/2024/basic" xmlns:tests="https://ns.mxhx.dev/2024/tests">
+				<mx:Declarations>text</mx:Declarations>
+			</tests:TestClass1>
+		'), haxe.Exception);
+	}
+
 	public function testStructAttributes():Void {
 		var idMap:Map<String, Any> = [];
 		var result:TestClass1 = MXHXRuntimeComponent.withMarkup('
