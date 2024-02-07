@@ -4,6 +4,27 @@ import utest.Assert;
 import utest.Test;
 
 class MXHXComponentObjectTest extends Test {
+	public function testEmptyTag():Void {
+		var result = MXHXComponent.withMarkup('
+			<mx:Object xmlns:mx="https://ns.mxhx.dev/2024/basic"/>
+		');
+		Assert.notNull(result);
+	}
+
+	public function testOpenAndCloseTag():Void {
+		var result = MXHXComponent.withMarkup('
+			<mx:Object xmlns:mx="https://ns.mxhx.dev/2024/basic"></mx:Object>
+		');
+		Assert.notNull(result);
+	}
+
+	public function testOpenAndCloseTagWhitespace():Void {
+		var result = MXHXComponent.withMarkup('
+			<mx:Object xmlns:mx="https://ns.mxhx.dev/2024/basic"> </mx:Object>
+		');
+		Assert.notNull(result);
+	}
+
 	public function testDeclarationsEmpty():Void {
 		var result = MXHXComponent.withMarkup('
 			<mx:Object xmlns:mx="https://ns.mxhx.dev/2024/basic">
