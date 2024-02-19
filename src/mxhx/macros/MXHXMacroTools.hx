@@ -17,7 +17,7 @@ package mxhx.macros;
 #if macro
 import haxe.macro.Context;
 import haxe.macro.Type;
-import mxhx.resolver.IMXHXTypeSymbol;
+import mxhx.symbols.IMXHXTypeSymbol;
 
 /**
 	Utility functions for MXHX macros.
