@@ -2,7 +2,7 @@
 
 A macro library for developing compile-time components with [MXHX](https://mxhx.dev/).
 
-This library provides the [core language tags](https://mxhx.dev/learn/language-tags/) the [core language types](https://mxhx.dev/learn/core-types/) only. To build GUIs with MXHX, another library that uses mxhx-component as a dependency is needed to provide a [manifest](https://mxhx.dev/learn/manifests/) of GUI components. Some examples:
+This _mxhx-component_ library provides the [core language tags](https://mxhx.dev/learn/language-tags/) the [core language types](https://mxhx.dev/learn/core-types/) of MXHX only. To build GUIs with MXHX, you must install an additional library for the GUI framework of your choice. For example:
 
 - [mxhx-feathersui](https://github.com/mxhx-dev/mxhx-feathersui)
 - [mxhx-minimalcomps](https://github.com/mxhx-dev/mxhx-minimalcomps)
