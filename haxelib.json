@@ -7,8 +7,7 @@
   "version": "1.0.0",
   "classPath": "src",
   "dependencies": {
-    "mxhx-parser": "git:https://github.com/mxhx-dev/mxhx-parser.git",
-    "mxhx-resolver": "git:https://github.com/mxhx-dev/mxhx-resolver.git"
+    "mxhx-macro-resolver": "git:https://github.com/mxhx-dev/mxhx-macro-resolver.git"
   },
   "contributors": ["bowlerhat"],
   "releasenote": "Initial release"

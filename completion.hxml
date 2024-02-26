@@ -1,7 +1,6 @@
 -cp src
 -cp src-dev
--lib mxhx-parser
--lib mxhx-resolver
+-lib mxhx-macro-resolver
 -D mxhx-disable-experimental-warning
 --macro mxhx.resolver.MXHXResolvers.registerManifestFile("https://ns.example.com/mxhx", "src-dev/dev-manifest.xml")
 --main Main
