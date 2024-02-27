@@ -2735,6 +2735,10 @@ class MXHXComponent {
 			var currentChildType:IMXHXTypeSymbol = null;
 			if ((currentChildSymbol is IMXHXTypeSymbol)) {
 				currentChildType = cast currentChildSymbol;
+			} else if ((currentChildSymbol is IMXHXFieldSymbol)) {
+				// ignore child tags that are fields
+				currentChild = currentChild.getNextSiblingTag(true);
+				continue;
 			}
 			resolvedChildType = MXHXSymbolTools.getUnifiedType(currentChildType, resolvedChildType);
 			if (resolvedChildType == null) {
