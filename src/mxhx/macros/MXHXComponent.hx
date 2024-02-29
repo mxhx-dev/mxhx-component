@@ -1507,30 +1507,37 @@ class MXHXComponent {
 	}
 
 	private static function createEnumFieldInitExpr(tagData:IMXHXTagData, outerDocumentTypePath:TypePath, generatedFields:Array<Field>):Expr {
-		var child = tagData.getFirstChildUnit();
-		var childTag:IMXHXTagData = null;
-		do {
-			if ((child is IMXHXTagData)) {
-				if (childTag != null) {
-					errorTagUnexpected(cast child);
-					break;
+		var resolvedTag = mxhxResolver.resolveTag(tagData);
+		var childTag:IMXHXTagData = tagData;
+		if (!(resolvedTag is IMXHXEnumFieldSymbol)) {
+			resolvedTag = null;
+			childTag = null;
+			var child = tagData.getFirstChildUnit();
+			while (child != null) {
+				if ((child is IMXHXTagData)) {
+					if (childTag != null) {
+						errorTagUnexpected(cast child);
+						break;
+					}
+					childTag = cast child;
+				} else if ((child is IMXHXTextData)) {
+					var textData:IMXHXTextData = cast child;
+					if (!canIgnoreTextData(textData)) {
+						errorTextUnexpected(textData);
+						break;
+					}
 				}
-				childTag = cast child;
-			} else if ((child is IMXHXTextData)) {
-				var textData:IMXHXTextData = cast child;
-				if (!canIgnoreTextData(textData)) {
-					errorTextUnexpected(textData);
-					break;
-				}
+				child = child.getNextSiblingUnit();
 			}
-			child = child.getNextSiblingUnit();
-		} while (child != null);
-		if (childTag == null) {
-			errorTagUnexpected(tagData);
+			if (childTag == null) {
+				errorTagUnexpected(tagData);
+				return null;
+			}
+			resolvedTag = mxhxResolver.resolveTag(childTag);
 		}
-		var resolvedTag = mxhxResolver.resolveTag(childTag);
 		if (resolvedTag == null) {
 			errorTagUnexpected(childTag);
+			return null;
 		}
 		if ((resolvedTag is IMXHXEnumFieldSymbol)) {
 			var enumFieldSymbol:IMXHXEnumFieldSymbol = cast resolvedTag;
@@ -1856,7 +1863,7 @@ class MXHXComponent {
 			initExpr = Context.parse(handleInstanceTagAssignableFromText(tagData, typeSymbol, generatedFields),
 				sourceLocationToContextPosition(getTagTextSourceLocation(tagData)));
 		} else {
-			initExpr = handleInstanceTag(tagData, null, outerDocumentTypePath, generatedFields);
+			initExpr = handleInstanceTag(tagData, typeSymbol, outerDocumentTypePath, generatedFields);
 		}
 		return initExpr;
 	}
@@ -1902,19 +1909,9 @@ class MXHXComponent {
 			errorTagUnexpected(tagData);
 			return;
 		} else {
-			if ((resolvedTag is IMXHXClassSymbol)) {
-				var classSymbol:IMXHXClassSymbol = cast resolvedTag;
-				var initExpr = createInitExpr(tagData, classSymbol, outerDocumentTypePath, generatedFields);
-				initExprs.push(initExpr);
-				return;
-			} else if ((resolvedTag is IMXHXAbstractSymbol)) {
-				var abstractSymbol:IMXHXAbstractSymbol = cast resolvedTag;
-				var initExpr = createInitExpr(tagData, abstractSymbol, outerDocumentTypePath, generatedFields);
-				initExprs.push(initExpr);
-				return;
-			} else if ((resolvedTag is IMXHXEnumSymbol)) {
-				var enumSymbol:IMXHXEnumSymbol = cast resolvedTag;
-				var initExpr = createInitExpr(tagData, enumSymbol, outerDocumentTypePath, generatedFields);
+			if ((resolvedTag is IMXHXTypeSymbol)) {
+				var typeSymbol:IMXHXTypeSymbol = cast resolvedTag;
+				var initExpr = createInitExpr(tagData, typeSymbol, outerDocumentTypePath, generatedFields);
 				initExprs.push(initExpr);
 				return;
 			} else {
@@ -2387,7 +2384,7 @@ class MXHXComponent {
 			if (isLanguageTag(TAG_MODEL, tagData)) {
 				return Context.parse(handleModelTag(tagData, generatedFields), sourceLocationToContextPosition(tagData));
 			}
-			return handleInstanceTag(tagData, assignedToType, outerDocumentTypePath, generatedFields);
+			return createInitExpr(tagData, assignedToType, outerDocumentTypePath, generatedFields);
 		} else if ((unitData is IMXHXTextData)) {
 			var textData:IMXHXTextData = cast unitData;
 			if (canIgnoreTextData(textData)) {
