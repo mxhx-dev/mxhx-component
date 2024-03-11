@@ -23,7 +23,7 @@ jobs:
           haxelib install utest --quiet
           haxelib install hxcpp --quiet
           haxelib git mxhx-macro-resolver https://github.com/mxhx-dev/mxhx-macro-resolver.git --quiet
-          haxelib dev mxhx-component $GITHUB_WORKSPACE
+          haxelib dev mxhx-component ${{ github.workspace }}
       - name: Run Interpreter Tests
         working-directory: test
         run: haxe test.hxml --interp

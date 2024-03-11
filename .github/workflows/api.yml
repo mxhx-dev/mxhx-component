@@ -19,7 +19,7 @@ jobs:
         run: |
           haxelib install dox --quiet
           haxelib git mxhx-macro-resolver https://github.com/mxhx-dev/mxhx-macro-resolver.git --quiet
-          haxelib dev mxhx-component $GITHUB_WORKSPACE
+          haxelib dev mxhx-component ${{ github.workspace }}
       - name: Build API reference
         working-directory: docs
         run: haxe docs.hxml
