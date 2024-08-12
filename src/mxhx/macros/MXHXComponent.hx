@@ -21,6 +21,7 @@ import haxe.macro.Context;
 import haxe.macro.Expr;
 import haxe.macro.PositionTools;
 import haxe.macro.Type.ClassType;
+import mxhx.internal.MXHXTagData;
 import mxhx.parser.MXHXParser;
 import mxhx.resolver.IMXHXResolver;
 import mxhx.resolver.macro.MXHXMacroResolver;
@@ -342,61 +343,7 @@ class MXHXComponent {
 			case EDisplay(e, displayKind):
 				switch (displayKind) {
 					case DKMarked:
-						var offset = Compiler.getDisplayPos().pos - posInfos.min - 1;
-						if (offset < 0) {
-							return {expr: EDisplay({expr: EConst(CString("")), pos: Context.currentPos()}, displayKind), pos: Context.currentPos()};
-						}
-
-						var mxhxText = switch (e.expr) {
-							case EConst(CString(s)): s;
-							default: null;
-						}
-						if (mxhxText == null) {
-							return {expr: EDisplay({expr: EConst(CString("")), pos: Context.currentPos()}, displayKind), pos: Context.currentPos()};
-						}
-						var mxhxParser = new MXHXParser(mxhxText, posInfos.file);
-						var mxhxData = mxhxParser.parse();
-						if (mxhxData == null || mxhxData.rootTag == null) {
-							return {expr: EDisplay({expr: EConst(CString("")), pos: Context.currentPos()}, displayKind), pos: Context.currentPos()};
-						}
-
-						var tagData = mxhxData.findTagOrSurroundingTagContainingOffset(offset);
-						if (tagData == null) {
-							return {expr: EDisplay({expr: EConst(CString("")), pos: Context.currentPos()}, displayKind), pos: Context.currentPos()};
-						}
-
-						if (mxhxResolver == null) {
-							createResolver();
-						}
-						var resolvedSymbol = MXHXComponentCompletion.getSymbolForMXHXNameAtOffset(tagData, offset, mxhxResolver);
-						if (resolvedSymbol == null) {
-							return {expr: EDisplay({expr: EConst(CString("")), pos: Context.currentPos()}, displayKind), pos: Context.currentPos()};
-						}
-
-						if ((resolvedSymbol is IMXHXTypeSymbol)) {
-							var typeSymbol:IMXHXTypeSymbol = cast resolvedSymbol;
-							var customPos = Context.makePosition({min: 0, max: 0, file: posInfos.file});
-							var newExpr:Expr = {expr: ENew({name: typeSymbol.name, pack: typeSymbol.pack}, []), pos: Context.currentPos()};
-							return {expr: EDisplay(newExpr, displayKind), pos: customPos};
-						}
-
-						if ((resolvedSymbol is IMXHXFieldSymbol)) {
-							var fieldSymbol:IMXHXFieldSymbol = cast resolvedSymbol;
-							var fieldOwner = fieldSymbol.parent;
-							if (fieldOwner != null) {
-								var fieldName = fieldSymbol.name;
-								// ensure that only the field name is positioned at currentPos()
-								var customPos = Context.makePosition({min: 0, max: 0, file: posInfos.file});
-								var newExpr:Expr = {expr: ENew({name: fieldOwner.name, pack: fieldOwner.pack}, []), pos: customPos};
-								var fieldExpr:Expr = {
-									expr: EField(newExpr, fieldName),
-									pos: Context.currentPos()
-								};
-								return {expr: EDisplay(fieldExpr, displayKind), pos: customPos};
-							}
-						}
-
-						return {expr: EDisplay({expr: EConst(CString("")), pos: Context.currentPos()}, displayKind), pos: Context.currentPos()};
+						return handleCompletionForExpr(e, displayKind);
 					default:
 						throw new haxe.macro.Expr.Error("Expected markup or string literal", input.pos);
 				}
@@ -3023,6 +2970,135 @@ class MXHXComponent {
 			current = current.getNextSiblingUnit();
 		}
 		return tagData;
+	}
+
+	private static function handleCompletionForExpr(e:Expr, displayKind:DisplayKind):Expr {
+		var offset = Compiler.getDisplayPos().pos - posInfos.min - 1;
+		if (offset < 0) {
+			return {expr: EDisplay({expr: EConst(CString("")), pos: Context.currentPos()}, displayKind), pos: Context.currentPos()};
+		}
+
+		var mxhxText = switch (e.expr) {
+			case EConst(CString(s)): s;
+			default: null;
+		}
+		if (mxhxText == null) {
+			return {expr: EDisplay({expr: EConst(CString("")), pos: Context.currentPos()}, displayKind), pos: Context.currentPos()};
+		}
+		var mxhxParser = new MXHXParser(mxhxText, posInfos.file);
+		var mxhxData = mxhxParser.parse();
+		if (mxhxData == null || mxhxData.rootTag == null) {
+			return {expr: EDisplay({expr: EConst(CString("")), pos: Context.currentPos()}, displayKind), pos: Context.currentPos()};
+		}
+
+		var tagData = mxhxData.findTagOrSurroundingTagContainingOffset(offset);
+		if (tagData == null) {
+			var unitData = mxhxData.findUnitContainingOffset(offset);
+			if (unitData != null) {
+				var parentTag:IMXHXTagData = null;
+				var currentUnit = unitData.parentUnit;
+				do {
+					parentTag = Std.downcast(currentUnit, MXHXTagData);
+					currentUnit = currentUnit.parentUnit;
+				} while (parentTag == null && currentUnit != null);
+				return handleCompletionForParentTag(parentTag, "", displayKind, offset);
+			}
+			return {expr: EDisplay({expr: EConst(CString("")), pos: Context.currentPos()}, displayKind), pos: Context.currentPos()};
+		}
+
+		if (mxhxResolver == null) {
+			createResolver();
+		}
+		var resolvedSymbol = MXHXComponentCompletion.getSymbolForMXHXNameAtOffset(tagData, offset, mxhxResolver);
+		if (resolvedSymbol == null) {
+			if (offset < tagData.contentStart) {
+				var parentTag = tagData.parentTag;
+				return handleCompletionForParentTag(parentTag, tagData.shortName, displayKind, offset);
+			}
+			resolvedSymbol = mxhxResolver.resolveTag(tagData);
+			if (resolvedSymbol == null) {
+				return {expr: EDisplay({expr: EConst(CString("")), pos: Context.currentPos()}, displayKind), pos: Context.currentPos()};
+			}
+
+			var attrData = MXHXComponentCompletion.getMXHXTagAttributeWithNameAtOffset(tagData, offset, false);
+
+			if ((resolvedSymbol is IMXHXTypeSymbol)) {
+				var fieldOwner:IMXHXTypeSymbol = cast resolvedSymbol;
+				var fieldName = attrData != null ? attrData.name : "";
+				if (fieldName.length == 0) {
+					fieldName = "_";
+				}
+
+				var customPos = Context.makePosition({min: 0, max: 0, file: posInfos.file});
+				var newExpr:Expr = {expr: ENew({name: fieldOwner.name, pack: fieldOwner.pack}, []), pos: customPos};
+				var fieldExpr:Expr = {
+					expr: EField(newExpr, fieldName),
+					pos: Context.currentPos()
+				};
+				return {expr: EDisplay(fieldExpr, displayKind), pos: customPos};
+			}
+
+			return {expr: EDisplay({expr: EConst(CString("")), pos: Context.currentPos()}, displayKind), pos: Context.currentPos()};
+		}
+
+		if ((resolvedSymbol is IMXHXTypeSymbol)) {
+			var typeSymbol:IMXHXTypeSymbol = cast resolvedSymbol;
+			var customPos = Context.makePosition({min: 0, max: 0, file: posInfos.file});
+			var newExpr:Expr = {expr: ENew({name: typeSymbol.name, pack: typeSymbol.pack}, []), pos: Context.currentPos()};
+			return {expr: EDisplay(newExpr, displayKind), pos: customPos};
+		}
+
+		if ((resolvedSymbol is IMXHXFieldSymbol)) {
+			var fieldSymbol:IMXHXFieldSymbol = cast resolvedSymbol;
+			var fieldOwner = fieldSymbol.parent;
+			if (fieldOwner != null) {
+				var fieldName = fieldSymbol.name;
+				// ensure that only the field name is positioned at currentPos()
+				var customPos = Context.makePosition({min: 0, max: 0, file: posInfos.file});
+				var newExpr:Expr = {expr: ENew({name: fieldOwner.name, pack: fieldOwner.pack}, []), pos: customPos};
+				var fieldExpr:Expr = {
+					expr: EField(newExpr, fieldName),
+					pos: Context.currentPos()
+				};
+				return {expr: EDisplay(fieldExpr, displayKind), pos: customPos};
+			}
+		}
+
+		return {expr: EDisplay({expr: EConst(CString("")), pos: Context.currentPos()}, displayKind), pos: Context.currentPos()};
+	}
+
+	private static function handleCompletionForParentTag(parentTag:IMXHXTagData, unresolvedName:String, displayKind:DisplayKind, offset:Int):Expr {
+		if (parentTag == null) {
+			return {expr: EDisplay({expr: EConst(CString("")), pos: Context.currentPos()}, displayKind), pos: Context.currentPos()};
+		}
+
+		var resolvedSymbol = MXHXComponentCompletion.getSymbolForMXHXNameAtOffset(parentTag, offset, mxhxResolver);
+		if (resolvedSymbol == null) {
+			return {expr: EDisplay({expr: EConst(CString("")), pos: Context.currentPos()}, displayKind), pos: Context.currentPos()};
+		}
+		if ((resolvedSymbol is IMXHXTypeSymbol)) {
+			var fieldOwner:IMXHXTypeSymbol = cast resolvedSymbol;
+			var fieldName = unresolvedName;
+			if (fieldName.length == 0) {
+				fieldName = "_";
+			}
+
+			var customPos = Context.makePosition({min: 0, max: 0, file: posInfos.file});
+			var newExpr:Expr = {expr: ENew({name: fieldOwner.name, pack: fieldOwner.pack}, []), pos: customPos};
+			var fieldExpr:Expr = {
+				expr: EField(newExpr, fieldName),
+				pos: Context.currentPos()
+			};
+			return {expr: EDisplay(fieldExpr, displayKind), pos: customPos};
+		}
+
+		if ((resolvedSymbol is IMXHXFieldSymbol) && unresolvedName.length > 0) {
+			var customPos = Context.makePosition({min: 0, max: 0, file: posInfos.file});
+			var newExpr:Expr = {expr: ENew({name: unresolvedName, pack: []}, []), pos: Context.currentPos()};
+			return {expr: EDisplay(newExpr, displayKind), pos: customPos};
+		}
+
+		return {expr: EDisplay({expr: EConst(CString("")), pos: Context.currentPos()}, displayKind), pos: Context.currentPos()};
 	}
 
 	private static function resolveFilePath(filePath:String):String {

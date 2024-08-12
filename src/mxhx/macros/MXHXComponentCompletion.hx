@@ -67,8 +67,11 @@ class MXHXComponentCompletion {
 
 	public static function getMXHXTagAttributeWithNameAtOffset(tagData:IMXHXTagData, offset:Int, includeEnd:Bool):IMXHXTagAttributeData {
 		for (attributeData in tagData.attributeData) {
+			trace(attributeData, offset, attributeData.valueStart);
 			if (offset >= attributeData.start) {
 				if (includeEnd && offset <= attributeData.end) {
+					return attributeData;
+				} else if (attributeData.valueStart == -1 && offset <= attributeData.end) {
 					return attributeData;
 				} else if (offset < attributeData.valueStart) {
 					return attributeData;
