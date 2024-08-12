@@ -16,6 +16,7 @@ package mxhx.macros;
 
 #if macro
 import haxe.io.Path;
+import haxe.macro.Compiler;
 import haxe.macro.Context;
 import haxe.macro.Expr;
 import haxe.macro.PositionTools;
@@ -336,11 +337,69 @@ class MXHXComponent {
 	**/
 	public macro static function withMarkup(input:ExprOf<String>, ?typePath:TypePath):Expr {
 		posInfos = PositionTools.getInfos(input.pos);
-		// skip the quotes
-		posInfos.min++;
-		posInfos.max--;
 		var mxhxText:String = null;
 		switch (input.expr) {
+			case EDisplay(e, displayKind):
+				switch (displayKind) {
+					case DKMarked:
+						var offset = Compiler.getDisplayPos().pos - posInfos.min - 1;
+						if (offset < 0) {
+							return {expr: EDisplay({expr: EConst(CString("")), pos: Context.currentPos()}, displayKind), pos: Context.currentPos()};
+						}
+
+						var mxhxText = switch (e.expr) {
+							case EConst(CString(s)): s;
+							default: null;
+						}
+						if (mxhxText == null) {
+							return {expr: EDisplay({expr: EConst(CString("")), pos: Context.currentPos()}, displayKind), pos: Context.currentPos()};
+						}
+						var mxhxParser = new MXHXParser(mxhxText, posInfos.file);
+						var mxhxData = mxhxParser.parse();
+						if (mxhxData == null || mxhxData.rootTag == null) {
+							return {expr: EDisplay({expr: EConst(CString("")), pos: Context.currentPos()}, displayKind), pos: Context.currentPos()};
+						}
+
+						var tagData = mxhxData.findTagOrSurroundingTagContainingOffset(offset);
+						if (tagData == null) {
+							return {expr: EDisplay({expr: EConst(CString("")), pos: Context.currentPos()}, displayKind), pos: Context.currentPos()};
+						}
+
+						if (mxhxResolver == null) {
+							createResolver();
+						}
+						var resolvedSymbol = MXHXComponentCompletion.getSymbolForMXHXNameAtOffset(tagData, offset, mxhxResolver);
+						if (resolvedSymbol == null) {
+							return {expr: EDisplay({expr: EConst(CString("")), pos: Context.currentPos()}, displayKind), pos: Context.currentPos()};
+						}
+
+						if ((resolvedSymbol is IMXHXTypeSymbol)) {
+							var typeSymbol:IMXHXTypeSymbol = cast resolvedSymbol;
+							var customPos = Context.makePosition({min: 0, max: 0, file: posInfos.file});
+							var newExpr:Expr = {expr: ENew({name: typeSymbol.name, pack: typeSymbol.pack}, []), pos: Context.currentPos()};
+							return {expr: EDisplay(newExpr, displayKind), pos: customPos};
+						}
+
+						if ((resolvedSymbol is IMXHXFieldSymbol)) {
+							var fieldSymbol:IMXHXFieldSymbol = cast resolvedSymbol;
+							var fieldOwner = fieldSymbol.parent;
+							if (fieldOwner != null) {
+								var fieldName = fieldSymbol.name;
+								// ensure that only the field name is positioned at currentPos()
+								var customPos = Context.makePosition({min: 0, max: 0, file: posInfos.file});
+								var newExpr:Expr = {expr: ENew({name: fieldOwner.name, pack: fieldOwner.pack}, []), pos: customPos};
+								var fieldExpr:Expr = {
+									expr: EField(newExpr, fieldName),
+									pos: Context.currentPos()
+								};
+								return {expr: EDisplay(fieldExpr, displayKind), pos: customPos};
+							}
+						}
+
+						return {expr: EDisplay({expr: EConst(CString("")), pos: Context.currentPos()}, displayKind), pos: Context.currentPos()};
+					default:
+						throw new haxe.macro.Expr.Error("Expected markup or string literal", input.pos);
+				}
 			case EMeta({name: META_MARKUP}, {expr: EConst(CString(s))}):
 				mxhxText = s;
 			case EConst(CString(s)):
@@ -348,6 +407,10 @@ class MXHXComponent {
 			case _:
 				throw new haxe.macro.Expr.Error("Expected markup or string literal", input.pos);
 		}
+
+		// skip the quotes
+		posInfos.min++;
+		posInfos.max--;
 		if (typePath == null) {
 			var name = 'MXHXComponent_${componentCounter}';
 			componentCounter++;
