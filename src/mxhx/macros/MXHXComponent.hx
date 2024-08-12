@@ -2604,6 +2604,7 @@ class MXHXComponent {
 		// when parsing text, string may be empty, but not other types
 		if (typeSymbol.qname != TYPE_STRING && value.length == 0) {
 			reportError('Value of type \'${typeSymbol.qname}\' cannot be empty', location);
+			return null;
 		}
 		if (typeSymbol.pack.length == 1 && typeSymbol.pack[0] == "haxe") {
 			switch (typeSymbol.name) {
