@@ -714,6 +714,10 @@ class MXHXComponent {
 			var fieldSymbol:IMXHXFieldSymbol = cast resolved;
 			var fieldName = fieldSymbol.name;
 			var valueExpr = handleTextContentAsExpr(attrData.rawValue, fieldSymbol.type, attrData.valueStart, getAttributeValueSourceLocation(attrData));
+			if (valueExpr == null) {
+				// an error will have already been reported
+				return;
+			}
 			if (dataBindingCallback != null && textContentContainsBinding(attrData.rawValue)) {
 				var destination = '${targetIdentifier}.${fieldName}';
 				var bindingExpr = Context.parse(dataBindingCallback(valueExpr, destination, KEYWORD_THIS),
@@ -2263,7 +2267,11 @@ class MXHXComponent {
 			if ((current is IMXHXTextData)) {
 				var textData = cast(current, IMXHXTextData);
 				if (textData == firstChild && next == null && textData.textType == Text && isLanguageTypeAssignableFromText(fieldType)) {
-					return Context.parse(handleTextContentAsExpr(textData.content, fieldType, 0, textData), sourceLocationToContextPosition(textData));
+					var contentExpr = handleTextContentAsExpr(textData.content, fieldType, 0, textData);
+					if (contentExpr == null) {
+						return null;
+					}
+					return Context.parse(contentExpr, sourceLocationToContextPosition(textData));
 				}
 				if (!canIgnoreTextData(textData)) {
 					if (valueExprs.length > 0) {
