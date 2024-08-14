@@ -18,6 +18,8 @@ class Main {
 		runner.addCase(new mxhx.macros.MXHXComponentArrayCollectionTest());
 		runner.addCase(new mxhx.macros.MXHXComponentModelTest());
 		runner.addCase(new mxhx.macros.MXHXComponentPrivateTest());
+		runner.addCase(new mxhx.macros.MXHXComponentSetCallbackTest());
+		runner.addCase(new mxhx.macros.MXHXComponentMapToCallbackTest());
 
 		#if (html5 && playwright)
 		// special case: see below for details

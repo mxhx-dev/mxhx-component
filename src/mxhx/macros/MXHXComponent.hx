@@ -94,6 +94,8 @@ class MXHXComponent {
 	private static final ATTRIBUTE_TWO_WAY = "twoWay";
 	private static final ATTRIBUTE_TYPE = "type";
 	private static final ATTRIBUTE_XMLNS = "xmlns";
+	private static final ATTRIBUTE_TARGET = "target";
+	private static final ATTRIBUTE_PROPERTY = "property";
 	private static final ATTRIBUTES_THAT_CAN_BE_UNRESOLVED = [
 		// @:formatter:off
 		ATTRIBUTE_ID,
@@ -151,6 +153,8 @@ class MXHXComponent {
 	private static final TAG_SCRIPT = "Script";
 	private static final TAG_STRUCT = "Struct";
 	private static final TAG_STYLE = "Style";
+	private static final TAG_SET_CALLBACK = "SetCallback";
+	private static final TAG_MAP_TO_CALLBACK = "MapToCallback";
 	private static final INIT_FUNCTION_NAME = "MXHXComponent_initMXHX";
 	private static final FIELD_FULL_YEAR = "fullYear";
 	private static final FIELD_MONTH = "month";
@@ -1224,6 +1228,128 @@ class MXHXComponent {
 		}';
 	}
 
+	private static function handleSetCallbackTag(tagData:IMXHXTagData, generatedFields:Array<Field>):Expr {
+		var valueExpr:Expr = null;
+
+		var target:String = null;
+		var targetAttr = tagData.getAttributeData(ATTRIBUTE_TARGET);
+		if (targetAttr == null) {
+			reportError("SetCallback target attribute is required", tagData);
+			valueExpr = macro null;
+		} else {
+			target = targetAttr.rawValue;
+			if (target.length == 0) {
+				reportError("SetCallback target attribute cannot be empty", tagData);
+				valueExpr = macro null;
+			}
+		}
+
+		var propertyName:String = null;
+		var propertyAttr = tagData.getAttributeData(ATTRIBUTE_PROPERTY);
+		if (propertyAttr == null) {
+			reportError("MapToCallback property attribute is required", tagData);
+			valueExpr = macro null;
+		} else {
+			propertyName = propertyAttr.rawValue;
+			if (propertyName.length == 0) {
+				reportError("MapToCallback property attribute cannot be empty", tagData);
+				valueExpr = macro null;
+			}
+		}
+
+		if (valueExpr == null) {
+			valueExpr = macro function(value:Dynamic):Dynamic {
+				return $i{target}.$propertyName = value;
+			};
+		}
+
+		for (attribute in tagData.attributeData) {
+			if (attribute.name != ATTRIBUTE_ID && attribute.name != ATTRIBUTE_TARGET && attribute.name != ATTRIBUTE_PROPERTY) {
+				errorAttributeUnexpected(attribute);
+			}
+		}
+
+		var current = tagData.getFirstChildUnit();
+		while (current != null) {
+			if ((current is IMXHXTextData)) {
+				var textData:IMXHXTextData = cast current;
+				if (!canIgnoreTextData(textData)) {
+					errorTextUnexpected(textData);
+				}
+			} else {
+				errorUnexpected(current);
+			}
+			current = current.getNextSiblingUnit();
+		}
+
+		var id:String = null;
+		var idAttr = tagData.getAttributeData(ATTRIBUTE_ID);
+		if (idAttr != null) {
+			id = idAttr.rawValue;
+		}
+
+		if (id != null) {
+			var dynamicType = TPath({name: TYPE_DYNAMIC, pack: []});
+			addFieldForID(id, TFunction([dynamicType], dynamicType), idAttr, generatedFields);
+			return macro this.$id = $valueExpr;
+		}
+		return valueExpr;
+	}
+
+	private static function handleMapToCallbackTag(tagData:IMXHXTagData, generatedFields:Array<Field>):Expr {
+		var valueExpr:Expr = null;
+
+		var propertyName:String = null;
+		var propertyAttr = tagData.getAttributeData(ATTRIBUTE_PROPERTY);
+		if (propertyAttr == null) {
+			reportError("MapToCallback property attribute is required", tagData);
+			valueExpr = macro null;
+		} else {
+			propertyName = propertyAttr.rawValue;
+			if (propertyName.length == 0) {
+				reportError("MapToCallback property attribute cannot be empty", tagData);
+				valueExpr = macro null;
+			}
+		}
+
+		if (valueExpr == null) {
+			valueExpr = macro function(value:Dynamic):Dynamic {
+				return value.$propertyName;
+			};
+		}
+
+		for (attribute in tagData.attributeData) {
+			if (attribute.name != ATTRIBUTE_ID && attribute.name != ATTRIBUTE_PROPERTY) {
+				errorAttributeUnexpected(attribute);
+			}
+		}
+
+		var current = tagData.getFirstChildUnit();
+		while (current != null) {
+			if ((current is IMXHXTextData)) {
+				var textData:IMXHXTextData = cast current;
+				if (!canIgnoreTextData(textData)) {
+					errorTextUnexpected(textData);
+				}
+			} else {
+				errorUnexpected(current);
+			}
+			current = current.getNextSiblingUnit();
+		}
+
+		var id:String = null;
+		var idAttr = tagData.getAttributeData(ATTRIBUTE_ID);
+		if (idAttr != null) {
+			id = idAttr.rawValue;
+		}
+		if (id != null) {
+			var dynamicType = TPath({name: TYPE_DYNAMIC, pack: []});
+			addFieldForID(id, TFunction([dynamicType], dynamicType), idAttr, generatedFields);
+			return macro this.$id = $valueExpr;
+		}
+		return valueExpr;
+	}
+
 	private static function handlePrivateTag(tagData:IMXHXTagData):Void {
 		if (tagData.getNextSiblingTag(true) != null) {
 			reportError('Private must be the last tag of the root', tagData);
@@ -1928,6 +2054,16 @@ class MXHXComponent {
 			initExprs.push(initExpr);
 			return;
 		}
+		if (isLanguageTag(TAG_SET_CALLBACK, tagData)) {
+			var initExpr = handleSetCallbackTag(tagData, generatedFields);
+			initExprs.push(initExpr);
+			return;
+		}
+		if (isLanguageTag(TAG_MAP_TO_CALLBACK, tagData)) {
+			var initExpr = handleMapToCallbackTag(tagData, generatedFields);
+			initExprs.push(initExpr);
+			return;
+		}
 		var resolvedTag = mxhxResolver.resolveTag(tagData);
 		if (resolvedTag == null) {
 			errorTagUnexpected(tagData);
@@ -2415,6 +2551,12 @@ class MXHXComponent {
 			}
 			if (isLanguageTag(TAG_MODEL, tagData)) {
 				return Context.parse(handleModelTag(tagData, generatedFields), sourceLocationToContextPosition(tagData));
+			}
+			if (isLanguageTag(TAG_SET_CALLBACK, tagData)) {
+				return handleSetCallbackTag(tagData, generatedFields);
+			}
+			if (isLanguageTag(TAG_MAP_TO_CALLBACK, tagData)) {
+				return handleMapToCallbackTag(tagData, generatedFields);
 			}
 			return createInitExpr(tagData, assignedToType, outerDocumentTypePath, generatedFields);
 		} else if ((unitData is IMXHXTextData)) {
