@@ -2234,6 +2234,9 @@ class MXHXComponent {
 						return;
 					}
 					attributeAndChildNames.set(fieldName, true);
+					if (parentIsRoot) {
+						addFieldForID(fieldName, TPath({name: "Dynamic", pack: []}), tagData, generatedFields);
+					}
 					var valueExpr = createValueExprForFieldTag(tagData, null, null, null, outerDocumentTypePath, generatedFields);
 					var initExpr = macro $i{targetIdentifier}.$fieldName = ${valueExpr};
 					initExprs.push(initExpr);
