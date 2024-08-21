@@ -249,7 +249,7 @@ class MXHXComponent {
 			reportErrorForContextPosition('Could not resolve super class for \'${localClass.name}\' from tag \'<${rootTag.name}>\'', localClass.pos);
 			return null;
 		}
-		if (!isObjectTag(rootTag)) {
+		if (!isLanguageTag(TAG_OBJECT, rootTag)) {
 			var expectedSuperClass = resolvedType.qname;
 			if (superClass == null || Std.string(superClass.t) != expectedSuperClass) {
 				reportErrorForContextPosition('Class ${localClass.name} must extend ${expectedSuperClass}', localClass.pos);
@@ -456,7 +456,7 @@ class MXHXComponent {
 			var superClassTypePath = typeSymbolToTypePath(resolvedClass);
 			typeDef = macro class $componentName extends $superClassTypePath {};
 		} else if (resolvedType != null) {
-			if (!isObjectTag(rootTag)) {
+			if (!isLanguageTag(TAG_OBJECT, rootTag)) {
 				reportError('Tag ${rootTag.name} cannot be used as a base class', rootTag);
 			}
 			typeDef = macro class $componentName {};
@@ -596,7 +596,7 @@ class MXHXComponent {
 				default:
 			}
 		} else {
-			if (resolvedTag != null && (resolvedTag is IMXHXClassSymbol) && !isObjectTag(tagData)) {
+			if (resolvedTag != null && (resolvedTag is IMXHXClassSymbol) && !isLanguageTag(TAG_OBJECT, tagData)) {
 				constructorExprs.unshift(macro super());
 			}
 			buildFields.push({
@@ -1435,7 +1435,7 @@ class MXHXComponent {
 
 	private static function handleInstanceTag(tagData:IMXHXTagData, assignedToType:IMXHXTypeSymbol, outerDocumentTypePath:TypePath,
 			generatedFields:Array<Field>):Expr {
-		if (isObjectTag(tagData)) {
+		if (isLanguageTag(TAG_OBJECT, tagData)) {
 			reportError('Tag \'<${tagData.name}>\' must only be used as a base class. Did you mean \'<${tagData.prefix}:${TAG_STRUCT}/>\'?', tagData);
 		}
 		var resolvedTag = mxhxResolver.resolveTag(tagData);
@@ -1472,6 +1472,11 @@ class MXHXComponent {
 			} else {
 				errorTagUnexpected(tagData);
 			}
+		}
+
+		if (isLanguageTypeAssignableFromText(resolvedType)) {
+			return Context.parse(handleInstanceTagAssignableFromText(tagData, resolvedType, generatedFields),
+				sourceLocationToContextPosition(getTagTextSourceLocation(tagData)));
 		}
 
 		// some tags have special parsing rules, such as when there are
@@ -1570,12 +1575,14 @@ class MXHXComponent {
 			// handleChildUnitsOfInstanceTag() checks for too many children
 			// so no need to worry about that here
 			return setFieldExprs[0];
-		} else if (resolvedClass == null) {
+		} else if (isLanguageTag(TAG_STRUCT, tagData)) {
 			bodyExpr = macro {
 				var $localVarName:Dynamic = {};
 				$b{setFieldExprs};
 				return $i{localVarName};
 			}
+		} else if (resolvedClass == null) {
+			errorTagUnexpected(tagData);
 		} else {
 			bodyExpr = macro {
 				var $localVarName = new $instanceTypePath();
@@ -2010,9 +2017,6 @@ class MXHXComponent {
 				initExpr = Context.parse(handleInstanceTagAssignableFromText(tagData, typeSymbol, generatedFields),
 					sourceLocationToContextPosition(getTagTextSourceLocation(tagData)));
 			}
-		} else if (isLanguageTypeAssignableFromText(typeSymbol)) {
-			initExpr = Context.parse(handleInstanceTagAssignableFromText(tagData, typeSymbol, generatedFields),
-				sourceLocationToContextPosition(getTagTextSourceLocation(tagData)));
 		} else {
 			initExpr = handleInstanceTag(tagData, typeSymbol, outerDocumentTypePath, generatedFields);
 		}
@@ -2584,10 +2588,6 @@ class MXHXComponent {
 			errorUnexpected(unitData);
 			return null;
 		}
-	}
-
-	private static function isObjectTag(tagData:IMXHXTagData):Bool {
-		return tagData != null && tagData.shortName == TAG_OBJECT && LANGUAGE_URIS.indexOf(tagData.uri) != -1;
 	}
 
 	private static function isComponentTag(tagData:IMXHXTagData):Bool {
