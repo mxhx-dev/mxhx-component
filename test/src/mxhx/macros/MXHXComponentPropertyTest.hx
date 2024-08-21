@@ -11,66 +11,234 @@ import utest.Assert;
 import utest.Test;
 
 class MXHXComponentPropertyTest extends Test {
-	public function testStructChildElementAttributes():Void {
+	public function testDynamicAttributeBool():Void {
+		var result = MXHXComponent.withMarkup('
+			<tests:TestPropertiesClass
+				xmlns:mx="https://ns.mxhx.dev/2024/basic"
+				xmlns:tests="https://ns.mxhx.dev/2024/tests"
+				dyn="true">
+			</tests:TestPropertiesClass>
+		');
+		Assert.notNull(result);
+		Assert.notNull(result.dyn);
+		Assert.isOfType(result.dyn, Bool);
+		Assert.equals(true, result.dyn);
+	}
+
+	public function testDynamicAttributeFloat():Void {
+		var result = MXHXComponent.withMarkup('
+			<tests:TestPropertiesClass
+				xmlns:mx="https://ns.mxhx.dev/2024/basic"
+				xmlns:tests="https://ns.mxhx.dev/2024/tests"
+				dyn="123.4">
+			</tests:TestPropertiesClass>
+		');
+		Assert.notNull(result);
+		Assert.notNull(result.dyn);
+		Assert.isOfType(result.dyn, Float);
+		Assert.equals(123.4, result.dyn);
+	}
+
+	public function testDynamicAttributeInt():Void {
+		var result = MXHXComponent.withMarkup('
+			<tests:TestPropertiesClass
+				xmlns:mx="https://ns.mxhx.dev/2024/basic"
+				xmlns:tests="https://ns.mxhx.dev/2024/tests"
+				dyn="567">
+			</tests:TestPropertiesClass>
+		');
+		Assert.notNull(result);
+		Assert.notNull(result.dyn);
+		Assert.isOfType(result.dyn, Int);
+		Assert.equals(567, result.dyn);
+	}
+
+	public function testDynamicAttributeString():Void {
+		var result = MXHXComponent.withMarkup('
+			<tests:TestPropertiesClass
+				xmlns:mx="https://ns.mxhx.dev/2024/basic"
+				xmlns:tests="https://ns.mxhx.dev/2024/tests"
+				dyn="hello">
+			</tests:TestPropertiesClass>
+		');
+		Assert.notNull(result);
+		Assert.notNull(result.dyn);
+		Assert.isOfType(result.dyn, String);
+		Assert.equals("hello", result.dyn);
+	}
+
+	public function testDynamicChildElementBool():Void {
 		var result = MXHXComponent.withMarkup('
 			<tests:TestPropertiesClass
 				xmlns:mx="https://ns.mxhx.dev/2024/basic"
 				xmlns:tests="https://ns.mxhx.dev/2024/tests">
-				<tests:struct>
+				<tests:dyn>true</tests:dyn>
+			</tests:TestPropertiesClass>
+		');
+		Assert.notNull(result);
+		Assert.notNull(result.dyn);
+		Assert.isOfType(result.dyn, Bool);
+		Assert.equals(true, result.dyn);
+	}
+
+	public function testDynamicChildElementRedundantBool():Void {
+		var result = MXHXComponent.withMarkup('
+			<tests:TestPropertiesClass
+				xmlns:mx="https://ns.mxhx.dev/2024/basic"
+				xmlns:tests="https://ns.mxhx.dev/2024/tests">
+				<tests:dyn><mx:Bool>true</mx:Bool></tests:dyn>
+			</tests:TestPropertiesClass>
+		');
+		Assert.notNull(result);
+		Assert.notNull(result.dyn);
+		Assert.isOfType(result.dyn, Bool);
+		Assert.equals(true, result.dyn);
+	}
+
+	public function testDynamicChildElementFloat():Void {
+		var result = MXHXComponent.withMarkup('
+			<tests:TestPropertiesClass
+				xmlns:mx="https://ns.mxhx.dev/2024/basic"
+				xmlns:tests="https://ns.mxhx.dev/2024/tests">
+				<tests:dyn>123.4</tests:dyn>
+			</tests:TestPropertiesClass>
+		');
+		Assert.notNull(result);
+		Assert.notNull(result.dyn);
+		Assert.isOfType(result.dyn, Float);
+		Assert.equals(123.4, result.dyn);
+	}
+
+	public function testDynamicChildElementRedundantFloat():Void {
+		var result = MXHXComponent.withMarkup('
+			<tests:TestPropertiesClass
+				xmlns:mx="https://ns.mxhx.dev/2024/basic"
+				xmlns:tests="https://ns.mxhx.dev/2024/tests">
+				<tests:dyn><mx:Float>123.4</mx:Float></tests:dyn>
+			</tests:TestPropertiesClass>
+		');
+		Assert.notNull(result);
+		Assert.notNull(result.dyn);
+		Assert.isOfType(result.dyn, Float);
+		Assert.equals(123.4, result.dyn);
+	}
+
+	public function testDynamicChildElementInt():Void {
+		var result = MXHXComponent.withMarkup('
+			<tests:TestPropertiesClass
+				xmlns:mx="https://ns.mxhx.dev/2024/basic"
+				xmlns:tests="https://ns.mxhx.dev/2024/tests">
+				<tests:dyn>567</tests:dyn>
+			</tests:TestPropertiesClass>
+		');
+		Assert.notNull(result);
+		Assert.notNull(result.dyn);
+		Assert.isOfType(result.dyn, Int);
+		Assert.equals(567, result.dyn);
+	}
+
+	public function testDynamicChildElementRedundantInt():Void {
+		var result = MXHXComponent.withMarkup('
+			<tests:TestPropertiesClass
+				xmlns:mx="https://ns.mxhx.dev/2024/basic"
+				xmlns:tests="https://ns.mxhx.dev/2024/tests">
+				<tests:dyn><mx:Int>567</mx:Int></tests:dyn>
+			</tests:TestPropertiesClass>
+		');
+		Assert.notNull(result);
+		Assert.notNull(result.dyn);
+		Assert.isOfType(result.dyn, Int);
+		Assert.equals(567, result.dyn);
+	}
+
+	public function testDynamicChildElementString():Void {
+		var result = MXHXComponent.withMarkup('
+			<tests:TestPropertiesClass
+				xmlns:mx="https://ns.mxhx.dev/2024/basic"
+				xmlns:tests="https://ns.mxhx.dev/2024/tests">
+				<tests:dyn>hello</tests:dyn>
+			</tests:TestPropertiesClass>
+		');
+		Assert.notNull(result);
+		Assert.notNull(result.dyn);
+		Assert.isOfType(result.dyn, String);
+		Assert.equals("hello", result.dyn);
+	}
+
+	public function testDynamicChildElementRedundantString():Void {
+		var result = MXHXComponent.withMarkup('
+			<tests:TestPropertiesClass
+				xmlns:mx="https://ns.mxhx.dev/2024/basic"
+				xmlns:tests="https://ns.mxhx.dev/2024/tests">
+				<tests:dyn><mx:String>hello</mx:String></tests:dyn>
+			</tests:TestPropertiesClass>
+		');
+		Assert.notNull(result);
+		Assert.notNull(result.dyn);
+		Assert.isOfType(result.dyn, String);
+		Assert.equals("hello", result.dyn);
+	}
+
+	public function testDynamicChildElementStructAttributes():Void {
+		var result = MXHXComponent.withMarkup('
+			<tests:TestPropertiesClass
+				xmlns:mx="https://ns.mxhx.dev/2024/basic"
+				xmlns:tests="https://ns.mxhx.dev/2024/tests">
+				<tests:dyn>
 					<mx:Struct float="123.4" float_hex="0xbeef" nan="NaN" boolean_true="true" boolean_false="false" string="hello"/>
-				</tests:struct>
+				</tests:dyn>
 			</tests:TestPropertiesClass>
 		');
 		Assert.notNull(result);
-		Assert.notNull(result.struct);
-		Assert.equals(6, Reflect.fields(result.struct).length);
-		Assert.isTrue(Reflect.hasField(result.struct, "float"));
-		Assert.isTrue(Reflect.hasField(result.struct, "float_hex"));
-		Assert.isTrue(Reflect.hasField(result.struct, "nan"));
-		Assert.isTrue(Reflect.hasField(result.struct, "boolean_true"));
-		Assert.isTrue(Reflect.hasField(result.struct, "boolean_false"));
-		Assert.isTrue(Reflect.hasField(result.struct, "string"));
-		Assert.equals(123.4, Reflect.field(result.struct, "float"));
-		Assert.equals(0xbeef, Reflect.field(result.struct, "float_hex"));
-		Assert.isTrue(Math.isNaN(Reflect.field(result.struct, "nan")));
-		Assert.isTrue(Reflect.field(result.struct, "boolean_true"));
-		Assert.isFalse(Reflect.field(result.struct, "boolean_false"));
-		Assert.equals("hello", Reflect.field(result.struct, "string"));
+		Assert.notNull(result.dyn);
+		Assert.equals(6, Reflect.fields(result.dyn).length);
+		Assert.isTrue(Reflect.hasField(result.dyn, "float"));
+		Assert.isTrue(Reflect.hasField(result.dyn, "float_hex"));
+		Assert.isTrue(Reflect.hasField(result.dyn, "nan"));
+		Assert.isTrue(Reflect.hasField(result.dyn, "boolean_true"));
+		Assert.isTrue(Reflect.hasField(result.dyn, "boolean_false"));
+		Assert.isTrue(Reflect.hasField(result.dyn, "string"));
+		Assert.equals(123.4, Reflect.field(result.dyn, "float"));
+		Assert.equals(0xbeef, Reflect.field(result.dyn, "float_hex"));
+		Assert.isTrue(Math.isNaN(Reflect.field(result.dyn, "nan")));
+		Assert.isTrue(Reflect.field(result.dyn, "boolean_true"));
+		Assert.isFalse(Reflect.field(result.dyn, "boolean_false"));
+		Assert.equals("hello", Reflect.field(result.dyn, "string"));
 	}
 
-	public function testStructChildElementAttributesExtraWhitespace():Void {
+	public function testDynamicChildElementStructAttributesExtraWhitespace():Void {
 		var result = MXHXComponent.withMarkup('
 			<tests:TestPropertiesClass
 				xmlns:mx="https://ns.mxhx.dev/2024/basic"
 				xmlns:tests="https://ns.mxhx.dev/2024/tests">
-				<tests:struct>
+				<tests:dyn>
 					<mx:Struct float=" 123.4 " float_hex=" 0xbeef " nan=" NaN " boolean_true=" true " boolean_false=" false " string=" hello "/>
-				</tests:struct>
+				</tests:dyn>
 			</tests:TestPropertiesClass>
 		');
 		Assert.notNull(result);
-		Assert.notNull(result.struct);
-		Assert.equals(6, Reflect.fields(result.struct).length);
-		Assert.isTrue(Reflect.hasField(result.struct, "float"));
-		Assert.isTrue(Reflect.hasField(result.struct, "float_hex"));
-		Assert.isTrue(Reflect.hasField(result.struct, "nan"));
-		Assert.isTrue(Reflect.hasField(result.struct, "boolean_true"));
-		Assert.isTrue(Reflect.hasField(result.struct, "boolean_false"));
-		Assert.isTrue(Reflect.hasField(result.struct, "string"));
-		Assert.equals(123.4, Reflect.field(result.struct, "float"));
-		Assert.equals(0xbeef, Reflect.field(result.struct, "float_hex"));
-		Assert.isTrue(Math.isNaN(Reflect.field(result.struct, "nan")));
-		Assert.isTrue(Reflect.field(result.struct, "boolean_true"));
-		Assert.isFalse(Reflect.field(result.struct, "boolean_false"));
-		Assert.equals(" hello ", Reflect.field(result.struct, "string"));
+		Assert.notNull(result.dyn);
+		Assert.equals(6, Reflect.fields(result.dyn).length);
+		Assert.isTrue(Reflect.hasField(result.dyn, "float"));
+		Assert.isTrue(Reflect.hasField(result.dyn, "float_hex"));
+		Assert.isTrue(Reflect.hasField(result.dyn, "nan"));
+		Assert.isTrue(Reflect.hasField(result.dyn, "boolean_true"));
+		Assert.isTrue(Reflect.hasField(result.dyn, "boolean_false"));
+		Assert.isTrue(Reflect.hasField(result.dyn, "string"));
+		Assert.equals(123.4, Reflect.field(result.dyn, "float"));
+		Assert.equals(0xbeef, Reflect.field(result.dyn, "float_hex"));
+		Assert.isTrue(Math.isNaN(Reflect.field(result.dyn, "nan")));
+		Assert.isTrue(Reflect.field(result.dyn, "boolean_true"));
+		Assert.isFalse(Reflect.field(result.dyn, "boolean_false"));
+		Assert.equals(" hello ", Reflect.field(result.dyn, "string"));
 	}
 
-	public function testStructChildElementChildren():Void {
+	public function testDynamicChildElementStructChildren():Void {
 		var result = MXHXComponent.withMarkup('
 			<tests:TestPropertiesClass
 				xmlns:mx="https://ns.mxhx.dev/2024/basic"
 				xmlns:tests="https://ns.mxhx.dev/2024/tests">
-				<tests:struct>
+				<tests:dyn>
 					<mx:Struct>
 						<mx:float>123.4</mx:float>
 						<mx:float_hex>0xbeef</mx:float_hex>
@@ -84,36 +252,36 @@ class MXHXComponentPropertyTest extends Test {
 							</mx:Struct>
 						</mx:object>
 					</mx:Struct>
-				</tests:struct>
+				</tests:dyn>
 			</tests:TestPropertiesClass>
 		');
 		Assert.notNull(result);
-		Assert.notNull(result.struct);
-		Assert.equals(7, Reflect.fields(result.struct).length);
-		Assert.isTrue(Reflect.hasField(result.struct, "float"));
-		Assert.isTrue(Reflect.hasField(result.struct, "float_hex"));
-		Assert.isTrue(Reflect.hasField(result.struct, "nan"));
-		Assert.isTrue(Reflect.hasField(result.struct, "boolean_true"));
-		Assert.isTrue(Reflect.hasField(result.struct, "boolean_false"));
-		Assert.isTrue(Reflect.hasField(result.struct, "string"));
-		Assert.isTrue(Reflect.hasField(result.struct, "object"));
-		Assert.equals(123.4, Reflect.field(result.struct, "float"));
-		Assert.equals(0xbeef, Reflect.field(result.struct, "float_hex"));
-		Assert.isTrue(Math.isNaN(Reflect.field(result.struct, "nan")));
-		Assert.isTrue(Reflect.field(result.struct, "boolean_true"));
-		Assert.isFalse(Reflect.field(result.struct, "boolean_false"));
-		Assert.equals("hello", Reflect.field(result.struct, "string"));
-		Assert.notNull(Reflect.field(result.struct, "object"));
-		Assert.equals(1, Reflect.fields(result.struct.object).length);
-		Assert.equals(567, Reflect.field(Reflect.field(result.struct, "object"), "integer"));
+		Assert.notNull(result.dyn);
+		Assert.equals(7, Reflect.fields(result.dyn).length);
+		Assert.isTrue(Reflect.hasField(result.dyn, "float"));
+		Assert.isTrue(Reflect.hasField(result.dyn, "float_hex"));
+		Assert.isTrue(Reflect.hasField(result.dyn, "nan"));
+		Assert.isTrue(Reflect.hasField(result.dyn, "boolean_true"));
+		Assert.isTrue(Reflect.hasField(result.dyn, "boolean_false"));
+		Assert.isTrue(Reflect.hasField(result.dyn, "string"));
+		Assert.isTrue(Reflect.hasField(result.dyn, "object"));
+		Assert.equals(123.4, Reflect.field(result.dyn, "float"));
+		Assert.equals(0xbeef, Reflect.field(result.dyn, "float_hex"));
+		Assert.isTrue(Math.isNaN(Reflect.field(result.dyn, "nan")));
+		Assert.isTrue(Reflect.field(result.dyn, "boolean_true"));
+		Assert.isFalse(Reflect.field(result.dyn, "boolean_false"));
+		Assert.equals("hello", Reflect.field(result.dyn, "string"));
+		Assert.notNull(Reflect.field(result.dyn, "object"));
+		Assert.equals(1, Reflect.fields(result.dyn.object).length);
+		Assert.equals(567, Reflect.field(Reflect.field(result.dyn, "object"), "integer"));
 	}
 
-	public function testStructChildElementChildrenExtraWhitespace():Void {
+	public function testDynamicChildElementStructChildrenExtraWhitespace():Void {
 		var result = MXHXComponent.withMarkup('
 			<tests:TestPropertiesClass
 				xmlns:mx="https://ns.mxhx.dev/2024/basic"
 				xmlns:tests="https://ns.mxhx.dev/2024/tests">
-				<tests:struct>
+				<tests:dyn>
 					<mx:Struct>
 						<mx:float>
 							123.4
@@ -139,28 +307,28 @@ class MXHXComponentPropertyTest extends Test {
 							</mx:Struct>
 						</mx:object>
 					</mx:Struct>
-				</tests:struct>
+				</tests:dyn>
 			</tests:TestPropertiesClass>
 		');
 		Assert.notNull(result);
-		Assert.notNull(result.struct);
-		Assert.equals(7, Reflect.fields(result.struct).length);
-		Assert.isTrue(Reflect.hasField(result.struct, "float"));
-		Assert.isTrue(Reflect.hasField(result.struct, "float_hex"));
-		Assert.isTrue(Reflect.hasField(result.struct, "nan"));
-		Assert.isTrue(Reflect.hasField(result.struct, "boolean_true"));
-		Assert.isTrue(Reflect.hasField(result.struct, "boolean_false"));
-		Assert.isTrue(Reflect.hasField(result.struct, "string"));
-		Assert.isTrue(Reflect.hasField(result.struct, "object"));
-		Assert.equals(123.4, Reflect.field(result.struct, "float"));
-		Assert.equals(0xbeef, Reflect.field(result.struct, "float_hex"));
-		Assert.isTrue(Math.isNaN(Reflect.field(result.struct, "nan")));
-		Assert.isTrue(Reflect.field(result.struct, "boolean_true"));
-		Assert.isFalse(Reflect.field(result.struct, "boolean_false"));
-		Assert.equals(" hello ", Reflect.field(result.struct, "string"));
-		Assert.notNull(Reflect.field(result.struct, "object"));
-		Assert.equals(1, Reflect.fields(result.struct.object).length);
-		Assert.equals(567, Reflect.field(Reflect.field(result.struct, "object"), "integer"));
+		Assert.notNull(result.dyn);
+		Assert.equals(7, Reflect.fields(result.dyn).length);
+		Assert.isTrue(Reflect.hasField(result.dyn, "float"));
+		Assert.isTrue(Reflect.hasField(result.dyn, "float_hex"));
+		Assert.isTrue(Reflect.hasField(result.dyn, "nan"));
+		Assert.isTrue(Reflect.hasField(result.dyn, "boolean_true"));
+		Assert.isTrue(Reflect.hasField(result.dyn, "boolean_false"));
+		Assert.isTrue(Reflect.hasField(result.dyn, "string"));
+		Assert.isTrue(Reflect.hasField(result.dyn, "object"));
+		Assert.equals(123.4, Reflect.field(result.dyn, "float"));
+		Assert.equals(0xbeef, Reflect.field(result.dyn, "float_hex"));
+		Assert.isTrue(Math.isNaN(Reflect.field(result.dyn, "nan")));
+		Assert.isTrue(Reflect.field(result.dyn, "boolean_true"));
+		Assert.isFalse(Reflect.field(result.dyn, "boolean_false"));
+		Assert.equals(" hello ", Reflect.field(result.dyn, "string"));
+		Assert.notNull(Reflect.field(result.dyn, "object"));
+		Assert.equals(1, Reflect.fields(result.dyn.object).length);
+		Assert.equals(567, Reflect.field(Reflect.field(result.dyn, "object"), "integer"));
 	}
 
 	public function testStrictChildElement():Void {
@@ -175,7 +343,7 @@ class MXHXComponentPropertyTest extends Test {
 						integer="567"
 						string="hello"
 						canBeNull="890.1">
-						<tests:struct>
+						<tests:dyn>
 							<mx:Struct float="123.4" boolean="true" string="hello">
 								<mx:object>
 									<mx:Struct>
@@ -183,7 +351,7 @@ class MXHXComponentPropertyTest extends Test {
 									</mx:Struct>
 								</mx:object>
 							</mx:Struct>
-						</tests:struct>
+						</tests:dyn>
 					</tests:TestPropertiesClass>
 				</tests:strictlyTyped>
 			</tests:TestPropertiesClass>
@@ -195,17 +363,17 @@ class MXHXComponentPropertyTest extends Test {
 		Assert.equals("hello", result.strictlyTyped.string);
 		Assert.equals(567, result.strictlyTyped.integer);
 		Assert.equals(890.1, result.strictlyTyped.canBeNull);
-		Assert.notNull(result.strictlyTyped.struct);
-		Assert.equals(4, Reflect.fields(result.strictlyTyped.struct).length);
-		Assert.isTrue(Reflect.hasField(result.strictlyTyped.struct, "float"));
-		Assert.isTrue(Reflect.hasField(result.strictlyTyped.struct, "boolean"));
-		Assert.isTrue(Reflect.hasField(result.strictlyTyped.struct, "string"));
-		Assert.isTrue(Reflect.hasField(result.strictlyTyped.struct, "object"));
-		Assert.equals(123.4, Reflect.field(result.strictlyTyped.struct, "float"));
-		Assert.isTrue(Reflect.field(result.strictlyTyped.struct, "boolean"));
-		Assert.equals("hello", Reflect.field(result.strictlyTyped.struct, "string"));
-		Assert.notNull(Reflect.field(result.strictlyTyped.struct, "object"));
-		Assert.equals(567, Reflect.field(Reflect.field(result.strictlyTyped.struct, "object"), "integer"));
+		Assert.notNull(result.strictlyTyped.dyn);
+		Assert.equals(4, Reflect.fields(result.strictlyTyped.dyn).length);
+		Assert.isTrue(Reflect.hasField(result.strictlyTyped.dyn, "float"));
+		Assert.isTrue(Reflect.hasField(result.strictlyTyped.dyn, "boolean"));
+		Assert.isTrue(Reflect.hasField(result.strictlyTyped.dyn, "string"));
+		Assert.isTrue(Reflect.hasField(result.strictlyTyped.dyn, "object"));
+		Assert.equals(123.4, Reflect.field(result.strictlyTyped.dyn, "float"));
+		Assert.isTrue(Reflect.field(result.strictlyTyped.dyn, "boolean"));
+		Assert.equals("hello", Reflect.field(result.strictlyTyped.dyn, "string"));
+		Assert.notNull(Reflect.field(result.strictlyTyped.dyn, "object"));
+		Assert.equals(567, Reflect.field(Reflect.field(result.strictlyTyped.dyn, "object"), "integer"));
 	}
 
 	public function testArrayChildElement():Void {

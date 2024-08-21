@@ -2726,6 +2726,12 @@ class MXHXComponent {
 	}
 
 	private static function createValueExprForTypeSymbol(typeSymbol:IMXHXTypeSymbol, value:String, fromCdata:Bool, location:IMXHXSourceLocation):String {
+		var isAnyOrDynamic = typeSymbol != null
+			&& typeSymbol.pack.length == 0
+			&& (typeSymbol.name == TYPE_ANY || typeSymbol.name == TYPE_DYNAMIC);
+		if (isAnyOrDynamic) {
+			return createValueExprForDynamic(value);
+		}
 		var current = typeSymbol;
 		while ((current is IMXHXAbstractSymbol)) {
 			var abstractSymbol:IMXHXAbstractSymbol = cast current;

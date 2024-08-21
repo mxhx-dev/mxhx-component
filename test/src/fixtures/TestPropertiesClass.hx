@@ -8,7 +8,7 @@ class TestPropertiesClass {
 	public function new() {}
 
 	public var any:Any;
-	public var struct:Dynamic;
+	public var dyn:Dynamic;
 	public var boolean:Bool;
 	public var ereg:EReg;
 	public var float:Float;
