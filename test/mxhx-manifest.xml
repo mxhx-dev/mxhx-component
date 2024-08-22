@@ -13,4 +13,5 @@
   <component id="TestBuildMacro" class="fixtures.TestBuildMacro"/>
   <component id="ArrayCollection" class="fixtures.ArrayCollection"/>
   <component id="ThisClassHasADifferentNameThanItsModule" class="fixtures.ModuleWithClassThatHasDifferentName.ThisClassHasADifferentNameThanItsModule"/>
+  <component id="TestCallbacksClass" class="fixtures.TestCallbacksClass"/>
 </componentPackage>

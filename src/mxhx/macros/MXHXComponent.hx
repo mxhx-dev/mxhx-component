@@ -1229,18 +1229,18 @@ class MXHXComponent {
 		}';
 	}
 
-	private static function handleSetCallbackTag(tagData:IMXHXTagData, generatedFields:Array<Field>):Expr {
+	private static function handleSetCallbackTag(tagData:IMXHXTagData, assignedToType:IMXHXTypeSymbol, generatedFields:Array<Field>):Expr {
 		var valueExpr:Expr = null;
 
 		var target:String = null;
 		var targetAttr = tagData.getAttributeData(ATTRIBUTE_TARGET);
 		if (targetAttr == null) {
-			reportError("SetCallback target attribute is required", tagData);
+			reportError('\'<${tagData.name}>\' target attribute is required', tagData);
 			valueExpr = macro null;
 		} else {
 			target = targetAttr.rawValue;
 			if (target.length == 0) {
-				reportError("SetCallback target attribute cannot be empty", tagData);
+				reportError('\'<${tagData.name}>\' target attribute cannot be empty', tagData);
 				valueExpr = macro null;
 			}
 		}
@@ -1248,12 +1248,12 @@ class MXHXComponent {
 		var propertyName:String = null;
 		var propertyAttr = tagData.getAttributeData(ATTRIBUTE_PROPERTY);
 		if (propertyAttr == null) {
-			reportError("MapToCallback property attribute is required", tagData);
+			reportError('\'<${tagData.name}>\' property attribute is required', tagData);
 			valueExpr = macro null;
 		} else {
 			propertyName = propertyAttr.rawValue;
 			if (propertyName.length == 0) {
-				reportError("MapToCallback property attribute cannot be empty", tagData);
+				reportError('\'<${tagData.name}>\' property attribute cannot be empty', tagData);
 				valueExpr = macro null;
 			}
 		}
@@ -1297,25 +1297,39 @@ class MXHXComponent {
 		return valueExpr;
 	}
 
-	private static function handleMapToCallbackTag(tagData:IMXHXTagData, generatedFields:Array<Field>):Expr {
+	private static function handleMapToCallbackTag(tagData:IMXHXTagData, assignedToType:IMXHXTypeSymbol, generatedFields:Array<Field>):Expr {
 		var valueExpr:Expr = null;
 
 		var propertyName:String = null;
 		var propertyAttr = tagData.getAttributeData(ATTRIBUTE_PROPERTY);
 		if (propertyAttr == null) {
-			reportError("MapToCallback property attribute is required", tagData);
+			reportError('\'<${tagData.name}>\' property attribute is required', tagData);
 			valueExpr = macro null;
 		} else {
 			propertyName = propertyAttr.rawValue;
 			if (propertyName.length == 0) {
-				reportError("MapToCallback property attribute cannot be empty", tagData);
+				reportError('\'<${tagData.name}>\' property attribute cannot be empty', tagData);
 				valueExpr = macro null;
 			}
 		}
 
+		if (valueExpr == null && assignedToType != null && (assignedToType is IMXHXFunctionTypeSymbol)) {
+			var functionTypeSymbol:IMXHXFunctionTypeSymbol = cast assignedToType;
+			var returnType = functionTypeSymbol.returnType;
+			if (returnType != null) {
+				if (returnType.name == TYPE_STRING && returnType.pack.length == 0) {
+					// anything can be converted to a string!
+					valueExpr = macro function(value:Any):String {
+						var propertyValue = Reflect.getProperty(value, $v{propertyName});
+						return Std.string(propertyValue);
+					}
+				}
+			}
+		}
+
 		if (valueExpr == null) {
-			valueExpr = macro function(value:Dynamic):Dynamic {
-				return value.$propertyName;
+			valueExpr = macro function(value:Any):Any {
+				return Reflect.getProperty(value, $v{propertyName});
 			};
 		}
 
@@ -2060,12 +2074,12 @@ class MXHXComponent {
 			return;
 		}
 		if (isLanguageTag(TAG_SET_CALLBACK, tagData)) {
-			var initExpr = handleSetCallbackTag(tagData, generatedFields);
+			var initExpr = handleSetCallbackTag(tagData, null, generatedFields);
 			initExprs.push(initExpr);
 			return;
 		}
 		if (isLanguageTag(TAG_MAP_TO_CALLBACK, tagData)) {
-			var initExpr = handleMapToCallbackTag(tagData, generatedFields);
+			var initExpr = handleMapToCallbackTag(tagData, null, generatedFields);
 			initExprs.push(initExpr);
 			return;
 		}
@@ -2561,10 +2575,10 @@ class MXHXComponent {
 				return Context.parse(handleModelTag(tagData, generatedFields), sourceLocationToContextPosition(tagData));
 			}
 			if (isLanguageTag(TAG_SET_CALLBACK, tagData)) {
-				return handleSetCallbackTag(tagData, generatedFields);
+				return handleSetCallbackTag(tagData, assignedToType, generatedFields);
 			}
 			if (isLanguageTag(TAG_MAP_TO_CALLBACK, tagData)) {
-				return handleMapToCallbackTag(tagData, generatedFields);
+				return handleMapToCallbackTag(tagData, assignedToType, generatedFields);
 			}
 			return createInitExpr(tagData, assignedToType, outerDocumentTypePath, generatedFields);
 		} else if ((unitData is IMXHXTextData)) {
