@@ -2756,9 +2756,9 @@ class MXHXComponent {
 					continue;
 				}
 			} else if (!isLanguageTypeAssignableFromText(abstractSymbol)) {
-				var fromTypes = abstractSymbol.from.filter(from -> {
-					return isLanguageTypeAssignableFromText(from);
-				});
+				var fromTypes = abstractSymbol.from.filter(toOrFromInfo -> {
+					return isLanguageTypeAssignableFromText(toOrFromInfo.type);
+				}).map(toOrFromInfo -> toOrFromInfo.type);
 				if (fromTypes.length > 0) {
 					// TODO: if there's more than one, which is the best?
 					current = fromTypes[0];
