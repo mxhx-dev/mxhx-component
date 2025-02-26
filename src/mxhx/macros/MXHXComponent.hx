@@ -691,10 +691,11 @@ class MXHXComponent {
 				}
 				return;
 			}
-			if (attrData.name == ATTRIBUTE_TYPE) {
-				// type is a special attribute of Array that doesn't need to resolve
-				var isArray = parentSymbol != null && parentSymbol.pack.length == 0 && parentSymbol.name == TYPE_ARRAY;
-				if (isArray) {
+			if (parentSymbol.params.length > 0) {
+				var paramNames = mxhxResolver.getParamsForQname(parentSymbol.qname);
+				if (paramNames.indexOf(attrData.name) != -1) {
+					// this attribute is a parameter that doesn't need to resolve
+					// as a field
 					return;
 				}
 			}
