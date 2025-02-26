@@ -188,4 +188,136 @@ class MXHXComponentArrayCollectionTest extends Test {
 		Assert.equals("Three", result.collection.array[2]);
 		Assert.equals("hello", result.collection.nonDefaultProperty);
 	}
+
+	public function testSetTypeParameterOnCollection():Void {
+		var result = MXHXComponent.withMarkup('
+			<mx:Object
+				xmlns:mx="https://ns.mxhx.dev/2024/basic"
+				xmlns:tests="https://ns.mxhx.dev/2024/tests">
+				<mx:Declarations>
+					<tests:ArrayCollection id="collection" type="String">
+						<mx:String>One</mx:String>
+						<mx:String>Two</mx:String>
+						<mx:String>Three</mx:String>
+					</tests:ArrayCollection>
+				</mx:Declarations>
+			</mx:Object>
+		');
+		Assert.notNull(result);
+		Assert.notNull(result.collection);
+		Assert.isOfType(result.collection, ArrayCollection);
+		Assert.notNull(result.collection.array);
+		Assert.equals(3, result.collection.array.length);
+		Assert.equals("One", result.collection.array[0]);
+		Assert.equals("Two", result.collection.array[1]);
+		Assert.equals("Three", result.collection.array[2]);
+	}
+
+	public function testSetTypeParameterOnCollectionArrayWrapperInferredType():Void {
+		var result = MXHXComponent.withMarkup('
+			<mx:Object
+				xmlns:mx="https://ns.mxhx.dev/2024/basic"
+				xmlns:tests="https://ns.mxhx.dev/2024/tests">
+				<mx:Declarations>
+					<tests:ArrayCollection id="collection" type="String">
+						<mx:Array>
+							<mx:String>One</mx:String>
+							<mx:String>Two</mx:String>
+							<mx:String>Three</mx:String>
+						</mx:Array>
+					</tests:ArrayCollection>
+				</mx:Declarations>
+			</mx:Object>
+		');
+		Assert.notNull(result);
+		Assert.notNull(result.collection);
+		Assert.isOfType(result.collection, ArrayCollection);
+		Assert.notNull(result.collection.array);
+		Assert.equals(3, result.collection.array.length);
+		Assert.equals("One", result.collection.array[0]);
+		Assert.equals("Two", result.collection.array[1]);
+		Assert.equals("Three", result.collection.array[2]);
+	}
+
+	public function testSetTypeParameterOnCollectionArrayWrapperExplicitType():Void {
+		var result = MXHXComponent.withMarkup('
+			<mx:Object
+				xmlns:mx="https://ns.mxhx.dev/2024/basic"
+				xmlns:tests="https://ns.mxhx.dev/2024/tests">
+				<mx:Declarations>
+					<tests:ArrayCollection id="collection" type="String">
+						<mx:Array type="String">
+							<mx:String>One</mx:String>
+							<mx:String>Two</mx:String>
+							<mx:String>Three</mx:String>
+						</mx:Array>
+					</tests:ArrayCollection>
+				</mx:Declarations>
+			</mx:Object>
+		');
+		Assert.notNull(result);
+		Assert.notNull(result.collection);
+		Assert.isOfType(result.collection, ArrayCollection);
+		Assert.notNull(result.collection.array);
+		Assert.equals(3, result.collection.array.length);
+		Assert.equals("One", result.collection.array[0]);
+		Assert.equals("Two", result.collection.array[1]);
+		Assert.equals("Three", result.collection.array[2]);
+	}
+
+	public function testSetTypeParameterOnCollectionArrayPropertyArrayWrapperInferredType():Void {
+		var result = MXHXComponent.withMarkup('
+			<mx:Object
+				xmlns:mx="https://ns.mxhx.dev/2024/basic"
+				xmlns:tests="https://ns.mxhx.dev/2024/tests">
+				<mx:Declarations>
+					<tests:ArrayCollection id="collection" type="String">
+						<tests:array>
+							<mx:Array>
+								<mx:String>One</mx:String>
+								<mx:String>Two</mx:String>
+								<mx:String>Three</mx:String>
+							</mx:Array>
+						</tests:array>
+					</tests:ArrayCollection>
+				</mx:Declarations>
+			</mx:Object>
+		');
+		Assert.notNull(result);
+		Assert.notNull(result.collection);
+		Assert.isOfType(result.collection, ArrayCollection);
+		Assert.notNull(result.collection.array);
+		Assert.equals(3, result.collection.array.length);
+		Assert.equals("One", result.collection.array[0]);
+		Assert.equals("Two", result.collection.array[1]);
+		Assert.equals("Three", result.collection.array[2]);
+	}
+
+	public function testSetTypeParameterOnCollectionArrayPropertyArrayWrapperExplicitType():Void {
+		var result = MXHXComponent.withMarkup('
+			<mx:Object
+				xmlns:mx="https://ns.mxhx.dev/2024/basic"
+				xmlns:tests="https://ns.mxhx.dev/2024/tests">
+				<mx:Declarations>
+					<tests:ArrayCollection id="collection" type="String">
+						<tests:array>
+							<mx:Array type="String">
+								<mx:String>One</mx:String>
+								<mx:String>Two</mx:String>
+								<mx:String>Three</mx:String>
+							</mx:Array>
+						</tests:array>
+					</tests:ArrayCollection>
+				</mx:Declarations>
+			</mx:Object>
+		');
+		Assert.notNull(result);
+		Assert.notNull(result.collection);
+		Assert.isOfType(result.collection, ArrayCollection);
+		Assert.notNull(result.collection.array);
+		Assert.equals(3, result.collection.array.length);
+		Assert.equals("One", result.collection.array[0]);
+		Assert.equals("Two", result.collection.array[1]);
+		Assert.equals("Three", result.collection.array[2]);
+	}
 }

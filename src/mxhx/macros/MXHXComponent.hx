@@ -2527,10 +2527,13 @@ class MXHXComponent {
 					}
 				}
 
-				var attrData = tagData.getAttributeData(ATTRIBUTE_TYPE);
-				if (paramType == null && attrData != null) {
-					reportError('The type parameter \'${attrData.rawValue}\' for tag \'<${tagData.name}>\' cannot be resolved',
-						getAttributeValueSourceLocation(attrData));
+				// default properties don't need explicit tags
+				if (tagData.shortName == fieldName) {
+					var attrData = tagData.getAttributeData(ATTRIBUTE_TYPE);
+					if (paramType == null && attrData != null) {
+						reportError('The type parameter \'${attrData.rawValue}\' for tag \'<${tagData.name}>\' cannot be resolved',
+							getAttributeValueSourceLocation(attrData));
+					}
 				}
 
 				if (paramType == null) {
