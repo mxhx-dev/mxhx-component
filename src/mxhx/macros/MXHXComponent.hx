@@ -2139,7 +2139,7 @@ class MXHXComponent {
 			currentClass = superClass;
 		}
 		if (defaultProperty != null) {
-			handleChildUnitsOfInstanceTagWithDefaultProperty(tagData, parentSymbol, defaultProperty, targetIdentifier, outerDocumentTypePath, generatedFields,
+			handleChildUnitsOfInstanceTagWithDefaultProperty(tagData, parentClass, defaultProperty, targetIdentifier, outerDocumentTypePath, generatedFields,
 				initExprs, attributeAndChildNames);
 			return;
 		}
@@ -2166,13 +2166,13 @@ class MXHXComponent {
 		}
 	}
 
-	private static function handleChildUnitsOfInstanceTagWithDefaultProperty(tagData:IMXHXTagData, parentSymbol:IMXHXTypeSymbol, defaultProperty:String,
+	private static function handleChildUnitsOfInstanceTagWithDefaultProperty(tagData:IMXHXTagData, parentClass:IMXHXClassSymbol, defaultProperty:String,
 			targetIdentifier:String, outerDocumentTypePath:TypePath, generatedFields:Array<Field>, initExprs:Array<Expr>,
 			attributeAndChildNames:Map<String, Bool>):Void {
 		var defaultChildren:Array<IMXHXUnitData> = [];
 		var current = tagData.getFirstChildUnit();
 		while (current != null) {
-			handleChildUnitOfInstanceTag(current, parentSymbol, targetIdentifier, outerDocumentTypePath, generatedFields, initExprs, attributeAndChildNames,
+			handleChildUnitOfInstanceTag(current, parentClass, targetIdentifier, outerDocumentTypePath, generatedFields, initExprs, attributeAndChildNames,
 				defaultChildren);
 			current = current.getNextSiblingUnit();
 		}
@@ -2180,7 +2180,7 @@ class MXHXComponent {
 		if (defaultChildren.length == 0) {
 			return;
 		}
-		var resolvedField = mxhxResolver.resolveTagField(tagData, defaultProperty);
+		var resolvedField = MXHXSymbolTools.resolveFieldByName(parentClass, defaultProperty);
 		if (resolvedField == null) {
 			reportError('Default property \'${defaultProperty}\' not found for tag \'<${tagData.name}>\'', tagData);
 			return;
