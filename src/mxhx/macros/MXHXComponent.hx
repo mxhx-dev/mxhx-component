@@ -1629,8 +1629,13 @@ class MXHXComponent {
 
 	private static function typeSymbolToTypePath(typeSymbol:IMXHXTypeSymbol):TypePath {
 		var params:Array<TypeParam> = null;
-		if (typeSymbol.params.length > 0) {
-			params = typeSymbol.params.map(paramType -> TPType(TPath({pack: [], name: TYPE_DYNAMIC})));
+		if (typeSymbol.params.length > 0 && !(typeSymbol.pack.length == 0 && typeSymbol.name == TYPE_DYNAMIC)) {
+			params = typeSymbol.params.map(paramType -> {
+				if (paramType == null) {
+					return TPType(TPath({pack: [], name: TYPE_DYNAMIC}));
+				}
+				return TPType(TPath(typeSymbolToTypePath(paramType)));
+			});
 		}
 		if (typeSymbol.qname != typeSymbol.module) {
 			var moduleParts = typeSymbol.module.split(".");
@@ -2544,7 +2549,7 @@ class MXHXComponent {
 					}
 				}
 				if (paramType == null) {
-					// finally, default to null
+					// finally, default to Dynamic
 					paramType = TPath({name: TYPE_DYNAMIC, pack: []});
 				}
 
